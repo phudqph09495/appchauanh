@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: BlocBuilder<BlocCheckLogin, StateBloc>(
         builder: (context, StateBloc state) {
           final     check = state is LoadSuccess ? state.data as bool : false;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'bloc/bloc/auth/bloc_check_login.dart';
+import 'bloc/bloc/counter_observer.dart';
 import 'bloc/event_bloc.dart';
 import 'config/path/share_pref_path.dart';
 import 'config/share_pref.dart';
@@ -14,7 +15,7 @@ import 'home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefs.init();
-await SharedPrefs.saveBool(SharePrefsKeys.login, false);
+  Bloc.observer = CounterObserver();
   await SharedPrefs.saveString('mdh', '0');
   runApp(
        MyApp());
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => BlocCheckLogin()..add(GetData())),
+
         ],
         child: MultiProvider(
           providers: [

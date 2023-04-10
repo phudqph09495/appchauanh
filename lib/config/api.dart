@@ -67,7 +67,7 @@ class Api {
       headers['Content-Type'] = "application/json";
       if (isToken) {
         var token = await SharedPrefs.readString(SharePrefsKeys.user_token);
-        headers['token'] = token;
+        headers['Authorization'] = 'Bearer ${token}';
       }
 
       FormData formData = FormData.fromMap(req);
@@ -79,17 +79,7 @@ class Api {
         ),
       );
 
-      if(res.data['code'] == 1){
-        return res.data;
-      }
-      if(res.data['code'] == 0){
-       // throw "Code: ${res.data['code']} => ${res.data['error']}";
-        throw res.data['error'];
-      }
-      if(res.data['code'] != 0 || res.data['code'] != 1){
-        throw res.data['message'];
-        //throw "Code: ${res.data['code']} => ${res.data['message']}";
-      }
+      return res.data;
     } catch (e) {
       rethrow;
     }
@@ -98,17 +88,14 @@ class Api {
   static getAsync(
       {required String endPoint,
       bool isToken = true,
-      String? tokenStart}) async {
+      }) async {
     try {
       Map<String, dynamic> headers = Map();
       headers['Content-Type'] = "application/json";
 
       if (isToken) {
         var token = await SharedPrefs.readString(SharePrefsKeys.user_token);
-        headers['token'] = token;
-      }
-      if (tokenStart != null) {
-        headers['token'] = tokenStart;
+        headers['Authorization'] = 'Bearer ${token}';
       }
       var res = await dio.get(
         Const.api_host + endPoint,

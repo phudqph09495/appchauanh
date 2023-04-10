@@ -17,7 +17,7 @@ class Const {
 
   static const image_host = '';
 
-  static const api_host = '';
+  static const api_host = 'http://chauanh.sotavn.com';
 
   static const domain = "";
 
