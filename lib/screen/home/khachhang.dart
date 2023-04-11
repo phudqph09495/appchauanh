@@ -1,8 +1,14 @@
+import 'package:ChauAnh/home.dart';
 import 'package:flutter/material.dart';
 import 'package:ChauAnh/config/path/image_path.dart';
 import 'package:ChauAnh/screen/home/item/khachhang_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
+import '../../bloc/bloc/KhachHang/bloc_listKH.dart';
+import '../../bloc/event_bloc.dart';
+import '../../bloc/state_bloc.dart';
+import '../../model/model_listKH.dart';
 import '../../model/model_local.dart';
 import '../../style/init_style.dart';
 import '../../widget/item/input/text_filed.dart';
@@ -15,6 +21,7 @@ class KhachHang extends StatefulWidget {
 }
 
 class _KhachHangState extends State<KhachHang> {
+  BlocListKH blocListKH=BlocListKH()..add(GetData());
   final list = [
     ModelKH(
       id: 'KH0001',
@@ -113,10 +120,10 @@ class _KhachHangState extends State<KhachHang> {
                     ClipOval(
                         child: LoadImage(
                       url:
-                          'https://pbs.twimg.com/profile_images/1576047166275059713/8k-7wKr8_400x400.jpg',
+                          'https://pbs.twimg.com/media/FsF1CjHacAAW-bR?format=jpg&name=large',
                       height: 50,
                       width: 50,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                     )),
                   ],
                 ),
@@ -182,36 +189,77 @@ class _KhachHangState extends State<KhachHang> {
                Expanded(
                 child: TabBarView(
                   children: <Widget>[
-            ListView(
-              children: [
-                for (var entry in groupedLists.entries)
-                  SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
-                        ),
-                        ListView.builder(itemBuilder: (context,index){
-                          return InkWell(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach()));
-                            },
-                            child: ItemKhachHang(entry.value[index].name, entry.value[
-                            index].phone, entry.value[index].id),
+
+                    BlocBuilder(bloc: blocListKH,builder: (_,StateBloc state){
+                      if(state is LoadSuccess){
+                        ModelListKH model=state.data;
+                        final Map<String, List<Customers>> groupedLists = {};
+                        for (var person in model.customers!) {
+
+                          if (groupedLists['${person.fullName![0]}'] == null) {
+                            groupedLists['${person.fullName![0]}'] = <Customers>[];
+                          }
+                          groupedLists['${person.fullName![0]}']?.add(person);
+
+                        }
+                        return  ListView(
+                            children: [
+                              for (var entry in groupedLists.entries)
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
+                                      ),
+                                      ListView.builder(itemBuilder: (context,index){
+                                        return InkWell(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach()));
+                                          },
+                                          child: ItemKhachHang(
+                                              '${entry.value[index].fullName}', '${entry.value[
+    index].phone}', '${entry.value[index].id}'),
+                                        );
+                                      },
+                                        itemCount: entry.value.length,shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                            ],
                           );
-                        },
-                          itemCount: entry.value.length,shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                        )
-                      ],
-                    ),
-                  ),
-              ],
-            ),
+                      }
+                      if(state is LoadFail){
+                        return Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 100,),
+                              Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                                  ''),
+                              SizedBox(height: 10,),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all()),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return Container();
+                    }),
                     ListView(
                       children: [
                         for (var entry in groupedLists.entries)

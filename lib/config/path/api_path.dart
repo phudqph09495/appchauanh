@@ -3,4 +3,7 @@ class ApiPath {
  static const login="/api/login";
  static const profile="/api/user/profile";
  static const logout="/api/logout";
+
+ ///Customer
+static const listKH="/api/customer";
 }

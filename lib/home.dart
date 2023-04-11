@@ -15,12 +15,14 @@ import 'bloc/event_bloc.dart';
 import 'config/path/image_path.dart';
 
 class MyHomePage extends StatefulWidget {
+  int index ;
+  MyHomePage({this.index=0});
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int index = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, StateBloc state) {
           final     check = state is LoadSuccess ? state.data as bool : false;
           return IndexedStack(
-            index: index,
+            index: widget.index,
             children: [
               HomeScreen(),
               WorkScreen(),
@@ -47,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+
         items: const [
           BottomNavigationBarItem(
               icon: ImageIcon(AssetImage(ImagePath.bottomBarHome)),
@@ -62,11 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
               label: "Tài khoản"),
         ],
         onTap: (val) {
-          index = val;
+          widget.index = val;
           setState(() {});
         },
         backgroundColor: Colors.white,
-        currentIndex: index,
+        currentIndex: widget.index,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: ColorApp.main,
         selectedLabelStyle:

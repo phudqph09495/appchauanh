@@ -82,10 +82,10 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     ClipOval(
                         child: LoadImage(
                           url:
-                          'https://pbs.twimg.com/profile_images/1576047166275059713/8k-7wKr8_400x400.jpg',
+                          'https://pbs.twimg.com/media/FsF1CjHacAAW-bR?format=jpg&name=large',
                           height: 50,
                           width: 50,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                         )),
                   ],
                 ),

@@ -7,21 +7,24 @@ import '../../../widget/item/input/text_filed.dart';
 import 'lichsu_khach.dart';
 
 class Info_Khach extends StatefulWidget {
-  const Info_Khach({Key? key}) : super(key: key);
+
 
   @override
   State<Info_Khach> createState() => _Info_KhachState();
 }
 
 class _Info_KhachState extends State<Info_Khach> {
+  List<ModelLocal> multipleSelected = <ModelLocal>[];
   List<ModelLocal> checkListItems = [
     ModelLocal(
       name: 'Khách thợ',
       id: '01',
+      value: true
     ),
     ModelLocal(
       name: 'Khách buôn',
       id: '02',
+        value: true
     ),
     ModelLocal(
       name: 'Khách dân',
@@ -66,15 +69,39 @@ class _Info_KhachState extends State<Info_Khach> {
                 'Nhóm khách hàng',
                 style: StyleApp.textStyle700(fontSize: 18,color: ColorApp.blue00),
               ),
-              ListView.builder(itemBuilder: (context,index){
-                return  Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    checkListItems[index].name ?? '',
-                    style: StyleApp.textStyle500(color: ColorApp.black49),
-                  ),
-                );
-              },itemCount: 2,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),
+              GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 4,
+                    crossAxisSpacing: 0),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return CheckboxListTile(
+                    checkboxShape: CircleBorder(),
+                    activeColor: Colors.green,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(
+                      checkListItems[index].name ?? '',
+                      style: StyleApp.textStyle500(),
+                    ),
+                    value: checkListItems[index].value,
+                    onChanged: (value) {
+                      setState(() {
+                        checkListItems[index].value = value;
+                        if (multipleSelected.contains(checkListItems[index])) {
+                          multipleSelected.remove(checkListItems[index]);
+                        } else {
+                          multipleSelected.add(checkListItems[index]);
+                        }
+                      });
+                    },
+                  );
+                },
+                itemCount: checkListItems.length,
+              ),
               Divider(),
               Text(
                 'Mã khách hàng',
