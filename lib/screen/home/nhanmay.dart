@@ -17,7 +17,7 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
   String a = '';
   @override
   void initState() {
-    _tabController = TabController(length: 8, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController2 = TabController(length: 2, vsync: this);
     super.initState();
     a = '0';

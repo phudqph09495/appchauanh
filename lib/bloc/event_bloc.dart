@@ -36,6 +36,7 @@ class GetData extends EventBloc {
   int? delete;
   bool? isUser = true;
   int limit, page;
+  String param;
   bool cleanList, loadMore;
 
   GetData(
@@ -50,7 +51,7 @@ class GetData extends EventBloc {
       this.bankName,
       this.name,
       this.number,
-
+this.param='',
       this.money,
       this.delete,
       this.cleanList = false,
@@ -102,7 +103,16 @@ class LoginApp extends EventBloc {
 }
 
 class AddCustomer extends EventBloc{
-  
+  String? id;
+  String? fullName;
+  String? phone;
+  String? address;
+  String? fbURL;
+  String? deliPhone;
+  String? deliMethod;
+  String? note;
+  List<int>?  types;
+  AddCustomer({this.note,this.address,this.phone,this.fullName,this.deliMethod,this.deliPhone,this.fbURL,this.types,this.id});
 }
 
 

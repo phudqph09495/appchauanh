@@ -1,9 +1,12 @@
+import 'package:ChauAnh/model/model_tonKho.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../style/init_style.dart';
 import '../../../widget/item/input/text_filed.dart';
-
 class InfoTonKho extends StatefulWidget {
+  Materials materials;
+  InfoTonKho({required this.materials});
 
 
   @override
@@ -11,6 +14,13 @@ class InfoTonKho extends StatefulWidget {
 }
 
 class _InfoTonKhoState extends State<InfoTonKho> {
+  double sum=0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sum=widget.materials.totalAmount!.toDouble()*double.parse(widget.materials.averagePrice??'0');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +28,7 @@ class _InfoTonKhoState extends State<InfoTonKho> {
         backgroundColor: ColorApp.whiteF7,
         centerTitle: true,
         title: Text(
-          'Chi tiết sản phẩm tồn kho',
+          '${widget.materials.name}',
           style: StyleApp.textStyle600(color: ColorApp.blue00, fontSize: 18),
         ),
         leading: InkWell(
@@ -45,39 +55,70 @@ class _InfoTonKhoState extends State<InfoTonKho> {
               ),
             ),
             ListView.builder(itemBuilder: (context,index){
-              return Column(
-                children: [
-                  Row(
+              return Container(
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide()),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Ngày nhập - ',style: StyleApp.textStyle500(),),
-                      Text('07/12/2022',style: StyleApp.textStyle500(color: ColorApp.redText),)
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      Text('Số lô - ',style: StyleApp.textStyle500(),),
-                      Text('10',style: StyleApp.textStyle500(color: ColorApp.redText),)
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Số lượng - ',style: StyleApp.textStyle500(),),
-                          Text('10',style: StyleApp.textStyle500(color: ColorApp.redText),)
+                          Row(
+                            children: [
+                              Text('Ngày nhập - ',style: StyleApp.textStyle500(),),
+                              Text(widget.materials.materialAttrs![index].importDate??'',style: StyleApp.textStyle500(color: ColorApp.redText),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              Text('Số lô - ',style: StyleApp.textStyle500(),),
+                              Text(widget.materials.materialAttrs![index].materialId.toString(),style: StyleApp.textStyle500(color: ColorApp.redText),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              Text('Số lượng - ',style: StyleApp.textStyle500(),),
+                              Text(widget.materials.materialAttrs![index].amount.toString(),style: StyleApp.textStyle500(color: ColorApp.redText),)
+                            ],
+                          ),
+
+
                         ],
                       ),
-                      Text('1.500.000vnđ',style: StyleApp.textStyle500(color: ColorApp.redText),)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text('Giá nhập: ',style: StyleApp.textStyle500(),),
+                              Text('${NumberFormat("###,###.###", 'vi_VN').format(double.parse(widget.materials.materialAttrs![index].importPrice ?? '0'))} đ',style: StyleApp.textStyle500(color: ColorApp.redText),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              Text('Giá bán  : ',style: StyleApp.textStyle500(),),
+                              Text('${NumberFormat("###,###.###", 'vi_VN').format(double.parse(widget.materials.materialAttrs![index].salePrice ?? '0'))} đ',style: StyleApp.textStyle500(color: ColorApp.redText),)
+                            ],
+                          ),
+
+
+
+                        ],
+                      ),
                     ],
                   ),
-                  Divider()
-
-                ],
+                ),
               );
-            },itemCount: 3,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),SizedBox(height: 15,),
-            Text('Tổng lô: 100.000.000vnđ',style: StyleApp.textStyle500(color: ColorApp.blue3D),)
+            },itemCount: widget.materials.materialAttrs!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),SizedBox(height: 15,),
+            Text('Tổng lô: ${NumberFormat("###,###.###", 'vi_VN').format(sum)} đ',style: StyleApp.textStyle500(color: ColorApp.blue3D),)
           ],
         ),
       ),

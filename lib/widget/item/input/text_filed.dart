@@ -125,7 +125,7 @@ inputFormatters: widget.inputformater,
                       color: ColorApp.black.withOpacity(0.5)),
                 )
               : widget.suffix,
-          errorText: null,errorStyle: TextStyle(color: Colors.white)
+          errorText: null,errorStyle: TextStyle(color: Colors.red)
         ),
         validator: (val) {
           if (val != null && widget.validator != null) {

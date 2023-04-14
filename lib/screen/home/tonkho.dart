@@ -1,7 +1,13 @@
 import 'package:ChauAnh/screen/home/info/info_tonkho.dart';
 import 'package:flutter/material.dart';
 import 'package:ChauAnh/widget/item/input/text_filed.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
+import '../../bloc/bloc/tonkho/bloc_ListtonKho.dart';
+import '../../bloc/event_bloc.dart';
+import '../../bloc/state_bloc.dart';
+import '../../model/model_tonKho.dart';
 import '../../style/init_style.dart';
 import 'item/tonkho_item.dart';
 
@@ -12,6 +18,7 @@ class TonKhoScreen extends StatefulWidget {
 
 class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderStateMixin{
   TabController? _tabController;
+  BlocListTonKho blocListTonKho=BlocListTonKho();
 
   String a = '';
 
@@ -20,6 +27,7 @@ class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderSt
     _tabController = TabController(length: 4, vsync: this);
     super.initState();
     a = '0';
+    blocListTonKho.add(GetData());
   }
 
   @override
@@ -89,11 +97,72 @@ class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderSt
               ),
             ),
             SizedBox(height: 15,),
-            ListView.builder(itemBuilder: (context,index){
-              return InkWell(child: ItemTonKho(),onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoTonKho()));
-              },);
-            },shrinkWrap: true,itemCount: 2,  physics: NeverScrollableScrollPhysics(),),
+            BlocBuilder(builder: (_,StateBloc state){
+              if(state is LoadSuccess){
+                ModelTonKho modeltonKho=state.data;
+                return
+                ListView.builder(itemBuilder: (context,index){
+                  return InkWell(child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '${modeltonKho.material! [index].name} -',
+                                  style: StyleApp.textStyle500(
+                                      color: ColorApp.blue8F, fontSize: 14),
+                                ),
+                                Text(
+                                  ' ${modeltonKho.material![index].code}',
+                                  style: StyleApp.textStyle500(
+                                      color: Color(0xffD10563), fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Số lượng - ',
+                                      style: StyleApp.textStyle500(
+                                          color: ColorApp.blue8F, fontSize: 14),
+                                    ),
+                                    Text(
+                                      '${modeltonKho.material![index].totalAmount}',
+                                      style: StyleApp.textStyle500(
+                                          color: Color(0xffD10563), fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  // '${modeltonKho.material![index].averagePrice}',
+                                    '${NumberFormat("###,###.###", 'vi_VN').format(double.parse(modeltonKho.material![index].averagePrice ?? '0'))} đ',
+                                  style: StyleApp.textStyle500(
+                                      color: Color(0xffD10563), fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider()
+                    ],
+                  ),onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoTonKho(materials: modeltonKho.material![index],)));
+                  },);
+                },shrinkWrap: true,itemCount: modeltonKho.material!.length,  physics: NeverScrollableScrollPhysics(),);
+              }
+              return SizedBox();
+            },bloc: blocListTonKho,),
+
             Padding(
               padding: EdgeInsets.only(left: 15,right: 15,top: 10,bottom: 15),
               child: Column(
@@ -102,8 +171,18 @@ class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderSt
                     children: [
                       Text('Tổng tiền', style:
                       StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16)),
-                      Text('9.000.000 đ', style:
-                      StyleApp.textStyle600(color: ColorApp.redText, fontSize: 16))
+                BlocBuilder(builder: (_,StateBloc state){
+                  if(state is LoadSuccess){
+                    ModelTonKho modeltonKho=state.data;
+                    double sum=0;
+                    for(var item in modeltonKho.material!){
+                      sum+=double.parse(item.averagePrice??'0');
+                    }
+                    return       Text('${NumberFormat("###,###.###", 'vi_VN').format(sum)} đ', style:
+                    StyleApp.textStyle600(color: ColorApp.redText, fontSize: 16));
+                  }
+                  return SizedBox();
+                },bloc: blocListTonKho,),
                     ],
                   )
                 ],

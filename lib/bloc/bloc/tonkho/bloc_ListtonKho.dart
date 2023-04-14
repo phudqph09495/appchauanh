@@ -6,13 +6,14 @@ import '../../../config/path/api_path.dart';
 import '../../../model/model_listKH.dart';
 import '../../../model/model_showKH.dart';
 import '../../../model/model_login.dart';
+import '../../../model/model_tonKho.dart';
 import '../../event_bloc.dart';
 import '../../state_bloc.dart';
 
 
 
-class BlocListKH extends Bloc<EventBloc, StateBloc> {
-  BlocListKH() : super(StateBloc());
+class BlocListTonKho extends Bloc<EventBloc, StateBloc> {
+  BlocListTonKho() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {
@@ -21,10 +22,10 @@ class BlocListKH extends Bloc<EventBloc, StateBloc> {
       try {
 
         var res = await Api.getAsync(
-            endPoint: ApiPath.listKH+event.param,  isToken: true);
+            endPoint: ApiPath.listTonKho,  isToken: true);
 
         if (res['status'] == true) {
-          ModelListKH model = ModelListKH.fromJson(res['data']);
+          ModelTonKho model = ModelTonKho.fromJson(res['data']);
 
 
           yield LoadSuccess(

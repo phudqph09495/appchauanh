@@ -1,4 +1,5 @@
 import 'package:ChauAnh/home.dart';
+import 'package:ChauAnh/model/model_listKH.dart';
 import 'package:flutter/material.dart';
 import 'package:ChauAnh/config/path/image_path.dart';
 import 'package:ChauAnh/screen/home/item/khachhang_item.dart';
@@ -8,7 +9,7 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../../bloc/bloc/KhachHang/bloc_listKH.dart';
 import '../../bloc/event_bloc.dart';
 import '../../bloc/state_bloc.dart';
-import '../../model/model_listKH.dart';
+import '../../model/model_showKH.dart';
 import '../../model/model_local.dart';
 import '../../style/init_style.dart';
 import '../../widget/item/input/text_filed.dart';
@@ -21,7 +22,10 @@ class KhachHang extends StatefulWidget {
 }
 
 class _KhachHangState extends State<KhachHang> {
-  BlocListKH blocListKH=BlocListKH()..add(GetData());
+  BlocListKH blocListKH1=BlocListKH();
+  BlocListKH blocListKH2=BlocListKH();
+  BlocListKH blocListKH3=BlocListKH();
+  BlocListKH blocListKH4=BlocListKH();
   final list = [
     ModelKH(
       id: 'KH0001',
@@ -46,26 +50,27 @@ class _KhachHangState extends State<KhachHang> {
 
 
   ];
+  refesh(){
+    blocListKH1.add(GetData(param: '1'));
+    blocListKH2.add(GetData(param: '2'));
+    blocListKH3.add(GetData(param: '3'));
+    blocListKH4.add(GetData(param: '4'));
 
-  final Map<String, List<ModelKH>> groupedLists = {};
+  }
+
 
   TextEditingController qrcode = TextEditingController();
 
-  void groupMyList() {
 
-    list.forEach((person) {
-
-      if (groupedLists['${person.name[0]}'] == null) {
-        groupedLists['${person.name[0]}'] = <ModelKH>[];
-      }
-      groupedLists['${person.name[0]}']?.add(person);
-
-    });
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    refesh();
   }
-
   @override
   Widget build(BuildContext context) {
-    groupMyList();
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.25,
@@ -190,14 +195,14 @@ class _KhachHangState extends State<KhachHang> {
                 child: TabBarView(
                   children: <Widget>[
 
-                    BlocBuilder(bloc: blocListKH,builder: (_,StateBloc state){
+                    BlocBuilder(bloc: blocListKH1,builder: (_,StateBloc state){
                       if(state is LoadSuccess){
                         ModelListKH model=state.data;
-                        final Map<String, List<Customers>> groupedLists = {};
+                        final Map<String, List<Customer>> groupedLists = {};
                         for (var person in model.customers!) {
 
                           if (groupedLists['${person.fullName![0]}'] == null) {
-                            groupedLists['${person.fullName![0]}'] = <Customers>[];
+                            groupedLists['${person.fullName![0]}'] = <Customer>[];
                           }
                           groupedLists['${person.fullName![0]}']?.add(person);
 
@@ -218,11 +223,11 @@ class _KhachHangState extends State<KhachHang> {
                                       ListView.builder(itemBuilder: (context,index){
                                         return InkWell(
                                           onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach()));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach(id: entry.value[index].id.toString(),))).then((value) => refesh());
                                           },
                                           child: ItemKhachHang(
                                               '${entry.value[index].fullName}', '${entry.value[
-    index].phone}', '${entry.value[index].id}'),
+    index].phone}', '${entry.value[index].code}'),
                                         );
                                       },
                                         itemCount: entry.value.length,shrinkWrap: true,
@@ -260,87 +265,216 @@ class _KhachHangState extends State<KhachHang> {
                       }
                       return Container();
                     }),
-                    ListView(
-                      children: [
-                        for (var entry in groupedLists.entries)
-                          SizedBox(
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
-                                ListView.builder(itemBuilder: (context,index){
-                                  return InkWell(
-                                    onTap: (){
-                                      print(entry.value.length);
+                    BlocBuilder(bloc: blocListKH2,builder: (_,StateBloc state){
+                      if(state is LoadSuccess){
+                        ModelListKH model=state.data;
+                        final Map<String, List<Customer>> groupedLists = {};
+                        for (var person in model.customers!) {
+
+                          if (groupedLists['${person.fullName![0]}'] == null) {
+                            groupedLists['${person.fullName![0]}'] = <Customer>[];
+                          }
+                          groupedLists['${person.fullName![0]}']?.add(person);
+
+                        }
+                        return  ListView(
+                          children: [
+                            for (var entry in groupedLists.entries)
+                              SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
+                                    ),
+                                    ListView.builder(itemBuilder: (context,index){
+                                      return InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach(id: entry.value[index].id.toString(),))).then((value) => refesh());
+                                        },
+                                        child: ItemKhachHang(
+                                            '${entry.value[index].fullName}', '${entry.value[
+                                        index].phone}', '${entry.value[index].code}'),
+                                      );
                                     },
-                                    child: ItemKhachHang(entry.value[index].name, entry.value[
-                                    index].phone, entry.value[index].id),
-                                  );
+                                      itemCount: entry.value.length,shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                    )
+                                  ],
+                                ),
+                              ),
+                          ],
+                        );
+                      }
+                      if(state is LoadFail){
+                        return Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 100,),
+                              Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                                  ''),
+                              SizedBox(height: 10,),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
                                 },
-                                  itemCount: entry.value.length,shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                )
-                              ],
-                            ),
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all()),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                      ],
-                    ),
-                    ListView(
-                      children: [
-                        for (var entry in groupedLists.entries)
-                          SizedBox(
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
-                                ListView.builder(itemBuilder: (context,index){
-                                  return InkWell(
-                                    onTap: (){
-                                      print(entry.value.length);
+                        );
+                      }
+                      return Container();
+                    }),
+                    BlocBuilder(bloc: blocListKH3,builder: (_,StateBloc state){
+                      if(state is LoadSuccess){
+                        ModelListKH model=state.data;
+                        final Map<String, List<Customer>> groupedLists = {};
+                        for (var person in model.customers!) {
+
+                          if (groupedLists['${person.fullName![0]}'] == null) {
+                            groupedLists['${person.fullName![0]}'] = <Customer>[];
+                          }
+                          groupedLists['${person.fullName![0]}']?.add(person);
+
+                        }
+                        return  ListView(
+                          children: [
+                            for (var entry in groupedLists.entries)
+                              SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
+                                    ),
+                                    ListView.builder(itemBuilder: (context,index){
+                                      return InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach(id: entry.value[index].id.toString(),))).then((value) => refesh());
+                                        },
+                                        child: ItemKhachHang(
+                                            '${entry.value[index].fullName}', '${entry.value[
+                                        index].phone}', '${entry.value[index].code}'),
+                                      );
                                     },
-                                    child: ItemKhachHang(entry.value[index].name, entry.value[
-                                    index].phone, entry.value[index].id),
-                                  );
+                                      itemCount: entry.value.length,shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                    )
+                                  ],
+                                ),
+                              ),
+                          ],
+                        );
+                      }
+                      if(state is LoadFail){
+                        return Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 100,),
+                              Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                                  ''),
+                              SizedBox(height: 10,),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
                                 },
-                                  itemCount: entry.value.length,shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                )
-                              ],
-                            ),
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all()),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                      ],
-                    ),
-                    ListView(
-                      children: [
-                        for (var entry in groupedLists.entries)
-                          SizedBox(
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
-                                ListView.builder(itemBuilder: (context,index){
-                                  return InkWell(
-                                    onTap: (){
-                                      print(entry.value.length);
+                        );
+                      }
+                      return Container();
+                    }),
+                    BlocBuilder(bloc: blocListKH4,builder: (_,StateBloc state){
+                      if(state is LoadSuccess){
+                        ModelListKH model=state.data;
+                        final Map<String, List<Customer>> groupedLists = {};
+                        for (var person in model.customers!) {
+
+                          if (groupedLists['${person.fullName![0]}'] == null) {
+                            groupedLists['${person.fullName![0]}'] = <Customer>[];
+                          }
+                          groupedLists['${person.fullName![0]}']?.add(person);
+
+                        }
+                        return  ListView(
+                          children: [
+                            for (var entry in groupedLists.entries)
+                              SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(entry.key,style: StyleApp.textStyle700(fontSize: 18),),
+                                    ),
+                                    ListView.builder(itemBuilder: (context,index){
+                                      return InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Info_Khach(id: entry.value[index].id.toString(),))).then((value) => refesh());
+                                        },
+                                        child: ItemKhachHang(
+                                            '${entry.value[index].fullName}', '${entry.value[
+                                        index].phone}', '${entry.value[index].code}'),
+                                      );
                                     },
-                                    child: ItemKhachHang(entry.value[index].name, entry.value[
-                                    index].phone, entry.value[index].id),
-                                  );
+                                      itemCount: entry.value.length,shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                    )
+                                  ],
+                                ),
+                              ),
+                          ],
+                        );
+                      }
+                      if(state is LoadFail){
+                        return Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 100,),
+                              Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                                  ''),
+                              SizedBox(height: 10,),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
                                 },
-                                  itemCount: entry.value.length,shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                )
-                              ],
-                            ),
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all()),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                      ],
-                    )
+                        );
+                      }
+                      return Container();
+                    }),
 
 
 

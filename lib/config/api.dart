@@ -96,6 +96,7 @@ class Api {
       if (isToken) {
         var token = await SharedPrefs.readString(SharePrefsKeys.user_token);
         headers['Authorization'] = 'Bearer ${token}';
+        print(token);
       }
       var res = await dio.get(
         Const.api_host + endPoint,

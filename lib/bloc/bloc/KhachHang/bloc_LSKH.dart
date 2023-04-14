@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/api.dart';
 import '../../../config/path/api_path.dart';
-import '../../../model/model_listKH.dart';
 import '../../../model/model_showKH.dart';
 import '../../../model/model_login.dart';
 import '../../event_bloc.dart';
@@ -11,20 +10,21 @@ import '../../state_bloc.dart';
 
 
 
-class BlocListKH extends Bloc<EventBloc, StateBloc> {
-  BlocListKH() : super(StateBloc());
+class BlocLSKH extends Bloc<EventBloc, StateBloc> {
+  BlocLSKH() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {
     if (event is GetData) {
       yield Loading();
       try {
-
-        var res = await Api.getAsync(
-            endPoint: ApiPath.listKH+event.param,  isToken: true);
+Map<String,dynamic>req=Map();
+req['search']=event.keySearch;
+        var res = await Api.postAsync(
+            endPoint: ApiPath.lskh+event.param, req: req, isToken: true,hasForm: false);
 
         if (res['status'] == true) {
-          ModelListKH model = ModelListKH.fromJson(res['data']);
+          Customers model = Customers.fromJson(res['data']['customer']);
 
 
           yield LoadSuccess(

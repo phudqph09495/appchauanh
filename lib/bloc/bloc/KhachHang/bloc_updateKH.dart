@@ -1,34 +1,39 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/api.dart';
 import '../../../config/path/api_path.dart';
-import '../../../model/model_listKH.dart';
-import '../../../model/model_showKH.dart';
 import '../../../model/model_login.dart';
 import '../../event_bloc.dart';
 import '../../state_bloc.dart';
 
-
-
-class BlocListKH extends Bloc<EventBloc, StateBloc> {
-  BlocListKH() : super(StateBloc());
+class BlocUpdateKH extends Bloc<EventBloc, StateBloc> {
+  BlocUpdateKH() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {
-    if (event is GetData) {
+    if (event is AddCustomer) {
       yield Loading();
       try {
-
-        var res = await Api.getAsync(
-            endPoint: ApiPath.listKH+event.param,  isToken: true);
+        Map<String, dynamic> req = Map();
+        req['full_name'] = event.fullName;
+        req['phone'] = event.phone;
+        req['address'] = event.address;
+        req['facebook_url'] = event.fbURL;
+        req['delivery_phone'] = event.deliPhone;
+        req['delivery_method'] = event.deliMethod;
+        req['note'] = event.note;
+        req['types'] = event.types;
+        print(req);
+        var res = await Api.postAsync(
+            endPoint: ApiPath.update+event.id.toString(), req: req, isToken: true,hasForm: false);
+        print(res);
 
         if (res['status'] == true) {
-          ModelListKH model = ModelListKH.fromJson(res['data']);
-
 
           yield LoadSuccess(
-            data: model,
           );
         } else if (res['status'] == false) {
           yield LoadFail(error: res['message'] ?? "Lỗi kết nối");
