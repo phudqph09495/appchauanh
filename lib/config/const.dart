@@ -205,7 +205,7 @@ class Const {
     if (timestamp == 0) {
       return "";
     }
-    DateTime _timeDate = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    DateTime _timeDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
 
     String timestr = "";
     final customDate = CustomTimeElapsed(
@@ -266,3 +266,4 @@ extension HexColor on Color {
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
+

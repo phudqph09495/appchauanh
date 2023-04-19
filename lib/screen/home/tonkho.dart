@@ -2,11 +2,13 @@ import 'package:ChauAnh/screen/home/info/info_tonkho.dart';
 import 'package:flutter/material.dart';
 import 'package:ChauAnh/widget/item/input/text_filed.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../bloc/bloc/tonkho/bloc_ListtonKho.dart';
 import '../../bloc/event_bloc.dart';
 import '../../bloc/state_bloc.dart';
+import '../../config/const.dart';
 import '../../model/model_tonKho.dart';
 import '../../style/init_style.dart';
 import 'item/tonkho_item.dart';
@@ -19,6 +21,9 @@ class TonKhoScreen extends StatefulWidget {
 class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderStateMixin{
   TabController? _tabController;
   BlocListTonKho blocListTonKho=BlocListTonKho();
+
+  String startTime='';
+  String endTime='';
 
   String a = '';
 
@@ -56,46 +61,62 @@ class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderSt
                 radius: 5,
               ),
             ),
+Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+    InkWell(
 
-            Container(
-              color: Color(0xffF3F3F3),
-              child: TabBar(
-                onTap: (value) {
-                  print(value);
-                  setState(() {
-                    a = value.toString();
-                  });
-                },
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                controller: _tabController,
-                indicatorColor: Colors.transparent,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                labelStyle: StyleApp.textStyle500(fontSize: 16),
-                unselectedLabelStyle: StyleApp.textStyle500(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
-                tabs: <Widget>[
-                  Tab(
-                    child: Text('Tất cả'),
-                  ),
-                  Tab(
-                    child: Text('Ngày'),
-                  ),
-                  Tab(
-                    child: Text('Tuần'),
-                  ),
-                  Tab(
-                    child: Text('Tháng'),
-                  ),
-                ],
-              ),
-            ),
+      onTap: (){
+        DatePicker.showDatePicker(context,
+            showTitleActions: true,
+            locale: LocaleType.vi,currentTime: DateTime.now(),
+            onConfirm: (date){
+              setState(() {
+                startTime=Const.formatTime(date.millisecondsSinceEpoch,format: 'dd/MM/yyyy');
+             setState(() {
+
+             });
+              });
+            });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all()
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+          child: Text(startTime!=''?'Ngày bắt đầu\n\n${startTime}':'Ngày bắt đầu',style: StyleApp.textStyle500(),),
+        ),
+      ),
+    ),
+    InkWell(
+      onTap: (){
+        DatePicker.showDatePicker(context,
+            showTitleActions: true,
+            locale: LocaleType.vi,currentTime: DateTime.now(),
+            onConfirm: (date){
+              setState(() {
+                endTime=Const.formatTime(date.millisecondsSinceEpoch,format: 'dd/MM/yyyy');
+                setState(() {
+
+                });
+              });
+            });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all()
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+          child: Text(endTime!=''?'Ngày kết thúc\n\n${endTime}':'Ngày kết thúc',style: StyleApp.textStyle500(),),
+        ),
+      ),
+    ),
+  ],
+),
+
             SizedBox(height: 15,),
             BlocBuilder(builder: (_,StateBloc state){
               if(state is LoadSuccess){
