@@ -8,32 +8,25 @@ import '../../../model/model_login.dart';
 import '../../event_bloc.dart';
 import '../../state_bloc.dart';
 
-class BlocADDKH extends Bloc<EventBloc, StateBloc> {
-  BlocADDKH() : super(StateBloc());
+class BlocNhanMay extends Bloc<EventBloc, StateBloc> {
+  BlocNhanMay() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {
-    if (event is AddCustomer) {
+    if (event is CreateRepairOrder) {
       yield Loading();
       try {
-        Map<String, dynamic> req = Map();
-        req['full_name'] = event.fullName;
-        req['phone'] = event.phone;
-        req['address'] = event.address;
-        req['facebook_url'] = event.fbURL;
-        req['delivery_phone'] = event.deliPhone;
-        req['delivery_method'] = event.deliMethod;
-        req['note'] = event.note;
-        req['types'] = event.types;
-print(req);
+        Map<String, dynamic> req = event.toJson();
+
+        print(req);
         var res = await Api.postAsync(
-            endPoint: ApiPath.addKH, req: req, isToken: true,hasForm: false);
+            endPoint: ApiPath.createRepairOrder, req: req, isToken: true,hasForm: false);
         print(res);
 
         if (res['status'] == true) {
           Customer customer=Customer.fromJson(res['data']);
-              yield LoadSuccess(
-                data: customer
+          yield LoadSuccess(
+              data: customer
           );
         } else if (res['status'] == false) {
           yield LoadFail(error: res['message'] ?? "Lỗi kết nối");

@@ -4,36 +4,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/api.dart';
 import '../../../config/path/api_path.dart';
 import '../../../model/model_listKH.dart';
+import '../../../model/model_listKho.dart';
+import '../../../model/model_listNV.dart';
+import '../../../model/model_showKH.dart';
 import '../../../model/model_login.dart';
 import '../../event_bloc.dart';
 import '../../state_bloc.dart';
 
-class BlocADDKH extends Bloc<EventBloc, StateBloc> {
-  BlocADDKH() : super(StateBloc());
+
+
+class BlocFullListNV extends Bloc<EventBloc, StateBloc> {
+  BlocFullListNV() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {
-    if (event is AddCustomer) {
+    if (event is GetData) {
       yield Loading();
       try {
-        Map<String, dynamic> req = Map();
-        req['full_name'] = event.fullName;
-        req['phone'] = event.phone;
-        req['address'] = event.address;
-        req['facebook_url'] = event.fbURL;
-        req['delivery_phone'] = event.deliPhone;
-        req['delivery_method'] = event.deliMethod;
-        req['note'] = event.note;
-        req['types'] = event.types;
-print(req);
-        var res = await Api.postAsync(
-            endPoint: ApiPath.addKH, req: req, isToken: true,hasForm: false);
-        print(res);
+
+        var res = await Api.getAsync(
+            endPoint: ApiPath.fullListNV,  isToken: true);
 
         if (res['status'] == true) {
-          Customer customer=Customer.fromJson(res['data']);
-              yield LoadSuccess(
-                data: customer
+          List<ModelListNV>list=[];
+          // ModelListKH model = ModelListKH.fromJson(res['data']);
+          for(var item in res['data']){
+            ModelListNV customer=ModelListNV.fromJson(item);
+            list.add(customer);
+          }
+
+
+          yield LoadSuccess(
+            data: list,
           );
         } else if (res['status'] == false) {
           yield LoadFail(error: res['message'] ?? "Lỗi kết nối");
