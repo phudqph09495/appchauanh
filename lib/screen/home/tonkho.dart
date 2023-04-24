@@ -196,10 +196,12 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                   if(state is LoadSuccess){
                     ModelTonKho modeltonKho=state.data;
                     double sum=0;
-                    for(var item in modeltonKho.material!){
-                      sum+=double.parse(item.averagePrice??'0');
-                    }
-                    return       Text('${NumberFormat("###,###.###", 'vi_VN').format(sum)} đ', style:
+
+                              for (var item in modeltonKho.material!) {
+                                sum += double.parse(item.averagePrice ?? '0');
+                              }
+
+                            return       Text('${NumberFormat("###,###.###", 'vi_VN').format(sum)} đ', style:
                     StyleApp.textStyle600(color: ColorApp.redText, fontSize: 16));
                   }
                   return SizedBox();

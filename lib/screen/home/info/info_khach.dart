@@ -262,7 +262,7 @@ class _Info_KhachState extends State<Info_Khach> {
                   Divider(),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>LichSuKhach()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>LichSuKhach(id: '${customers.id}',)));
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 5),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/api.dart';
 import '../../../config/path/api_path.dart';
+import '../../../model/model_historyKH.dart';
 import '../../../model/model_showKH.dart';
 import '../../../model/model_login.dart';
 import '../../event_bloc.dart';
@@ -18,13 +19,12 @@ class BlocLSKH extends Bloc<EventBloc, StateBloc> {
     if (event is GetData) {
       yield Loading();
       try {
-Map<String,dynamic>req=Map();
-req['search']=event.keySearch;
-        var res = await Api.postAsync(
-            endPoint: ApiPath.lskh+event.param, req: req, isToken: true,hasForm: false);
 
+        var res = await Api.getAsync(
+            endPoint: ApiPath.lskh+event.param+'?search='+event.keySearch, isToken: true,);
+print(res);
         if (res['status'] == true) {
-          Customers model = Customers.fromJson(res['data']['customer']);
+          ModelHistory model = ModelHistory.fromJson(res['data']);
 
 
           yield LoadSuccess(

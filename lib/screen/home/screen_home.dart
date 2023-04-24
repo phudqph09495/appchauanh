@@ -65,40 +65,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: StyleApp.textStyle600(
                                   fontSize: 20, color: Colors.white),
                             ),
-                           StatefulBuilder(builder: (BuildContext context,setState){return  PopupMenuButton(
-
-                               child: Container(
-                                   decoration: BoxDecoration(
-                                       borderRadius: BorderRadius.circular(15),
-                                       border:
-                                       Border.all(color: Colors.white)),
-                                   child: Padding(
-                                     padding: const EdgeInsets.all(8.0),
-                                     child: Text(
-                                       daily??'',
-                                       style: StyleApp.textStyle500(
-                                           color: Colors.white),
-                                     ),
-                                   )),
-                               itemBuilder: (context2) {
-                                 return List.generate(
-                                     listB.length,
-                                         (index) => PopupMenuItem(
-                                       padding: EdgeInsets.only(left: 20),
-                                       child: Text(
-                                         listB[index],
-                                         textAlign: TextAlign.end,
-                                       ),
-                                       value: index,
-                                       onTap: () {
-                                         setState(() {
-                                           daily = listB[index];
-                                         });
-                                         print(daily);
-
-                                       },
-                                     ));
-                               });})
+                           // StatefulBuilder(builder: (BuildContext context,setState){return  PopupMenuButton(
+                           //
+                           //     child: Container(
+                           //         decoration: BoxDecoration(
+                           //             borderRadius: BorderRadius.circular(15),
+                           //             border:
+                           //             Border.all(color: Colors.white)),
+                           //         child: Padding(
+                           //           padding: const EdgeInsets.all(8.0),
+                           //           child: Text(
+                           //             daily??'',
+                           //             style: StyleApp.textStyle500(
+                           //                 color: Colors.white),
+                           //           ),
+                           //         )),
+                           //     itemBuilder: (context2) {
+                           //       return List.generate(
+                           //           listB.length,
+                           //               (index) => PopupMenuItem(
+                           //             padding: EdgeInsets.only(left: 20),
+                           //             child: Text(
+                           //               listB[index],
+                           //               textAlign: TextAlign.end,
+                           //             ),
+                           //             value: index,
+                           //             onTap: () {
+                           //               setState(() {
+                           //                 daily = listB[index];
+                           //               });
+                           //               print(daily);
+                           //
+                           //             },
+                           //           ));
+                           //     });})
                           ],
                         )
                       ],

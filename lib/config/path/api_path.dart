@@ -9,7 +9,7 @@ static const listKH="/api/customer/type/";
 static const infoKH="/api/customer/show/";
 static const addKH="/api/customer/create";
  static const update="/api/customer/update/";
- static const lskh="api/customer/show/history/";
+ static const lskh="/api/customer/show/history/";
 
  /// ton kho
 static const listTonKho="/api/material/inventory";

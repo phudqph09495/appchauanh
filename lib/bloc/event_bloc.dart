@@ -23,7 +23,7 @@ class GetData extends EventBloc {
   int? class_id;
   int? subject_id;
   String? id;
-  String? keySearch;
+  String keySearch;
   String? keySearch1;
   String? keySearch2;
   String? keyword;
@@ -45,7 +45,7 @@ class GetData extends EventBloc {
       this.class_id,
       this.id,
       this.subject_id,
-      this.keySearch,
+      this.keySearch='',
       this.keySearch1,
       this.keySearch2,
       this.bankName,
