@@ -10,7 +10,8 @@ static const infoKH="/api/customer/show/";
 static const addKH="/api/customer/create";
  static const update="/api/customer/update/";
  static const lskh="/api/customer/show/history/";
-
+/// dich vu sua chua
+ static const dvsc="/api/user/list-job";
  /// ton kho
 static const listTonKho="/api/material/inventory";
 /// nhan may

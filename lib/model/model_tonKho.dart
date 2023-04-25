@@ -1,13 +1,13 @@
 class ModelTonKho {
-  List<Materials>? material;
+  List<Product>? product;
 
-  ModelTonKho({this.material});
+  ModelTonKho({this.product});
 
   ModelTonKho.fromJson(Map<String, dynamic> json) {
-    if (json['material'] != null) {
-      material = <Materials>[];
-      json['material'].forEach((v) {
-        material!.add(new Materials.fromJson(v));
+    if (json['product'] != null) {
+      product = <Product>[];
+      json['product'].forEach((v) {
+        product!.add(new Product.fromJson(v));
       });
     }
   }
@@ -15,7 +15,7 @@ class ModelTonKho {
 
 }
 
-class Materials {
+class Product {
   int? id;
   String? name;
   String? code;
@@ -23,7 +23,7 @@ class Materials {
   int? totalAmount;
   String? averagePrice;
 
-  Materials(
+  Product(
       {this.id,
         this.name,
         this.code,
@@ -31,7 +31,7 @@ class Materials {
         this.totalAmount,
         this.averagePrice});
 
-  Materials.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     code = json['code'];
@@ -41,8 +41,8 @@ class Materials {
         materialAttrs!.add(new MaterialAttrs.fromJson(v));
       });
     }
-    totalAmount = json['total_amount']!=null?json['total_amount']:0;
-    averagePrice = json['average_price'].toString()!='null'?json['average_price'].toString():'0';
+    totalAmount = json['total_amount'];
+    averagePrice = json['average_price'].toString();
   }
 
 
@@ -60,13 +60,13 @@ class MaterialAttrs {
   int? amount;
   String? importDate;
   String? note;
-  String? customerId;
+  int? customerId;
   String? customerCode;
   String? customerType;
   String? customerName;
   String? customerPhone;
   String? customerAddress;
-  String? projectId;
+  int? projectId;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
@@ -105,17 +105,18 @@ class MaterialAttrs {
     salePrice = json['sale_price'];
     amount = json['amount'];
     importDate = json['import_date'];
-    note = json['note'].toString();
-    customerId = json['customer_id'].toString();
-    customerCode = json['customer_code'].toString();
-    customerType = json['customer_type'].toString();
-    customerName = json['customer_name'].toString();
-    customerPhone = json['customer_phone'].toString();
-    customerAddress = json['customer_address'].toString();
-    projectId = json['project_id'].toString();
+    note = json['note'];
+    customerId = json['customer_id'];
+    customerCode = json['customer_code'];
+    customerType = json['customer_type'];
+    customerName = json['customer_name'];
+    customerPhone = json['customer_phone'];
+    customerAddress = json['customer_address'];
+    projectId = json['project_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'].toString();
+    deletedAt = json['deleted_at'];
   }
+
 
 }

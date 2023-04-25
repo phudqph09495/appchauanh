@@ -1,13 +1,20 @@
+import 'package:ChauAnh/bloc/event_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ChauAnh/config/path/image_path.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
+import '../../bloc/bloc/congviec/bloc_dvsc.dart';
+import '../../bloc/state_bloc.dart';
 import '../../config/const.dart';
+import '../../model/model_dvsc.dart';
 import '../../style/init_style.dart';
+import '../../widget/item/button.dart';
 import '../../widget/item/input/text_filed.dart';
 import '../../widget/item/load_image.dart';
 
+import 'item/chonLinhKien.dart';
 import 'item/work_item.dart';
 
 class WorkScreen extends StatefulWidget {
@@ -21,6 +28,7 @@ class _WorkScreenState extends State<WorkScreen>
   String a = '';
   TabController? _tabController2;
   TabController? _tabController3;
+  BlocDVSC blocDVSC=BlocDVSC();
   int b = 0;
   DateTime? TimeStart;
   TextEditingController qrcode=TextEditingController();
@@ -28,12 +36,14 @@ class _WorkScreenState extends State<WorkScreen>
   String endTime=Const.formatTime(DateTime.now().millisecondsSinceEpoch,format: 'dd/MM/yyyy');
   @override
   void initState() {
+    a = '0';
+    b=0;
+    blocDVSC.add(GetData());
     _tabController = TabController(length: 8, vsync: this);
     _tabController2 = TabController(length: 2, vsync: this);
     _tabController3 = TabController(length: 5, vsync: this);
     super.initState();
-    a = '0';
-    b=0;
+
   }
 
 
@@ -175,6 +185,7 @@ class _WorkScreenState extends State<WorkScreen>
                     print(value);
                     setState(() {
                       a = value.toString();
+                      print(a);
                     });
                   },
                   isScrollable: true,
@@ -323,12 +334,128 @@ onConfirm: (date){
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(itemBuilder: (context,index){
-                  return ItemWork();
-                },itemCount: 10,shrinkWrap: true,  physics: NeverScrollableScrollPhysics(),),
-              )
+             BlocBuilder(builder: (_,StateBloc state){
+               if(state is LoadSuccess){
+                 ModelDVSC model=state.data;
+                 return  Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: ListView.builder(itemBuilder: (context,index){
+                     return Card(
+                       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                       color: ColorApp.whiteF0,
+                       child: Row(
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                         children: [
+                           Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               SizedBox(
+                                 height: 5,
+                               ),
+                               Text(
+                                 model.productAttrs![index].customerName??'',
+                                 style:
+                                 StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),
+                               ),
+                               SizedBox(
+                                 height: 5,
+                               ),
+                               InkWell(onTap: (){
+
+                                 Navigator.push(
+                                     context,
+                                     MaterialPageRoute(
+                                         builder: (context) => ChonLinhKien()));
+                               },
+                                 child: Row(
+                                   children: [
+                                     Text(
+                                       model.productAttrs![index].imei??'',
+                                       style: StyleApp.textStyle600(
+                                           color: ColorApp.blue8F, fontSize: 12),
+                                     ),
+                                     Text(
+                                       ' - ',
+                                       style: StyleApp.textStyle600(
+                                           color: ColorApp.blue8F, fontSize: 12),
+                                     ),
+                                     SizedBox(
+                                       width: MediaQuery.of(context).size.width * 0.3,
+                                       child: Text(
+                                         model.productAttrs![index].serial??'',
+                                         maxLines: 1,
+                                         overflow: TextOverflow.ellipsis,
+                                         softWrap: false,
+                                         style: StyleApp.textStyle600(
+                                             color: ColorApp.redText, fontSize: 12),
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                               SizedBox(
+                                 height: 5,
+                               ),
+                               Text(
+                                 model.productAttrs![index].title??'',
+                                 style:
+                                 StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
+                               ),
+                               SizedBox(
+                                 height: 5,
+                               ),
+                               Text(
+                                 model.productAttrs![index].note??'',
+                                 style:
+                                 StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
+                               ),
+                               SizedBox(
+                                 height: 5,
+                               ),
+                               Text(model.productAttrs![index].userId.toString()),
+                               SizedBox(
+                                 height: 15,
+                               ),
+                               Text(model.productAttrs![index].status.toString()),
+                             ],
+                           ),
+                           InkWell(
+                             child: Icon(
+                               Icons.edit_note_outlined,
+                               size: 35,
+                               color: Colors.green,
+                             ),
+                             onTap: () {
+                               showDialog(context: context, builder:(_) => AlertDialog( shape: const RoundedRectangleBorder(
+                                   borderRadius: BorderRadius.all(
+                                       Radius.circular(10.0))),
+                                 content: Container(
+                                   height:
+                                   MediaQuery.of(context).size.height *
+                                       0.55,
+                                   width: MediaQuery.of(context).size.width *
+                                       0.8,
+                                   child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Text('Nhập mô tả',style: StyleApp.textStyle700(fontSize: 18,color: ColorApp.blue00),),
+
+                                       InputText1(label: 'Nhập mô tả',maxLine: 5,),
+
+                                       Center(child: Button1(colorButton: ColorApp.blue00, textColor: Colors.white, textButton: 'Lưu'),)
+                                     ],
+                                   ),
+                                 ),));
+                             },
+                           )
+                         ],
+                       ),
+                     );
+                   },itemCount: model.productAttrs!.length,shrinkWrap: true,  physics: NeverScrollableScrollPhysics(),),
+                 );
+               }
+               return SizedBox();
+             },bloc: blocDVSC,)
             ],
           ),
         ));

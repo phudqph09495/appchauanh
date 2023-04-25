@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../style/init_style.dart';
 import '../../../widget/item/input/text_filed.dart';
 class InfoTonKho extends StatefulWidget {
-  Materials materials;
+  Product materials;
   InfoTonKho({required this.materials});
 
 

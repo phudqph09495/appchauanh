@@ -51,71 +51,71 @@ class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderSt
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 15, right: 15, top: 15,bottom: 15),
-              child: InputText1(
-                label: 'Tìm kiếm tên, số điện thoại',
-                colorBg: Color(0xff7B7B7B).withOpacity(0.3),
-                hasLeading: true,
-                iconData: Icons.search,
-                radius: 5,
-              ),
-            ),
-Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-  children: [
-    InkWell(
-
-      onTap: (){
-        DatePicker.showDatePicker(context,
-            showTitleActions: true,
-            locale: LocaleType.vi,currentTime: DateTime.now(),
-            onConfirm: (date){
-              setState(() {
-                startTime=Const.formatTime(date.millisecondsSinceEpoch,format: 'dd/MM/yyyy');
-             setState(() {
-
-             });
-              });
-            });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all()
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
-          child: Text(startTime!=''?'Ngày bắt đầu\n\n${startTime}':'Ngày bắt đầu',style: StyleApp.textStyle500(),),
-        ),
-      ),
-    ),
-    InkWell(
-      onTap: (){
-        DatePicker.showDatePicker(context,
-            showTitleActions: true,
-            locale: LocaleType.vi,currentTime: DateTime.now(),
-            onConfirm: (date){
-              setState(() {
-                endTime=Const.formatTime(date.millisecondsSinceEpoch,format: 'dd/MM/yyyy');
-                setState(() {
-
-                });
-              });
-            });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all()
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
-          child: Text(endTime!=''?'Ngày kết thúc\n\n${endTime}':'Ngày kết thúc',style: StyleApp.textStyle500(),),
-        ),
-      ),
-    ),
-  ],
-),
+            // Padding(
+            //   padding: EdgeInsets.only(left: 15, right: 15, top: 15,bottom: 15),
+            //   child: InputText1(
+            //     label: 'Tìm kiếm tên, số điện thoại',
+            //     colorBg: Color(0xff7B7B7B).withOpacity(0.3),
+            //     hasLeading: true,
+            //     iconData: Icons.search,
+            //     radius: 5,
+            //   ),
+            // ),
+// Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+//   children: [
+//     InkWell(
+//
+//       onTap: (){
+//         DatePicker.showDatePicker(context,
+//             showTitleActions: true,
+//             locale: LocaleType.vi,currentTime: DateTime.now(),
+//             onConfirm: (date){
+//               setState(() {
+//                 startTime=Const.formatTime(date.millisecondsSinceEpoch,format: 'dd/MM/yyyy');
+//              setState(() {
+//
+//              });
+//               });
+//             });
+//       },
+//       child: Container(
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(20),
+//           border: Border.all()
+//         ),
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+//           child: Text(startTime!=''?'Ngày bắt đầu\n\n${startTime}':'Ngày bắt đầu',style: StyleApp.textStyle500(),),
+//         ),
+//       ),
+//     ),
+//     InkWell(
+//       onTap: (){
+//         DatePicker.showDatePicker(context,
+//             showTitleActions: true,
+//             locale: LocaleType.vi,currentTime: DateTime.now(),
+//             onConfirm: (date){
+//               setState(() {
+//                 endTime=Const.formatTime(date.millisecondsSinceEpoch,format: 'dd/MM/yyyy');
+//                 setState(() {
+//
+//                 });
+//               });
+//             });
+//       },
+//       child: Container(
+//         decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(20),
+//             border: Border.all()
+//         ),
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+//           child: Text(endTime!=''?'Ngày kết thúc\n\n${endTime}':'Ngày kết thúc',style: StyleApp.textStyle500(),),
+//         ),
+//       ),
+//     ),
+//   ],
+// ),
 
             SizedBox(height: 15,),
             BlocBuilder(builder: (_,StateBloc state){
@@ -133,12 +133,12 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                             Row(
                               children: [
                                 Text(
-                                  '${modeltonKho.material! [index].name} -',
+                                  '${modeltonKho.product![index].name} -',
                                   style: StyleApp.textStyle500(
                                       color: ColorApp.blue8F, fontSize: 14),
                                 ),
                                 Text(
-                                  ' ${modeltonKho.material![index].code}',
+                                  ' ${modeltonKho.product![index].code}',
                                   style: StyleApp.textStyle500(
                                       color: Color(0xffD10563), fontSize: 14),
                                 ),
@@ -157,7 +157,7 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           color: ColorApp.blue8F, fontSize: 14),
                                     ),
                                     Text(
-                                      '${modeltonKho.material![index].totalAmount}',
+                                      '${modeltonKho.product![index].totalAmount}',
                                       style: StyleApp.textStyle500(
                                           color: Color(0xffD10563), fontSize: 14),
                                     ),
@@ -165,7 +165,7 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 ),
                                 Text(
                                   // '${modeltonKho.material![index].averagePrice}',
-                                    '${NumberFormat("###,###.###", 'vi_VN').format(double.parse(modeltonKho.material![index].averagePrice ?? '0'))} đ',
+                                    '${NumberFormat("###,###.###", 'vi_VN').format(double.parse(modeltonKho.product![index].averagePrice??'') )} đ',
                                   style: StyleApp.textStyle500(
                                       color: Color(0xffD10563), fontSize: 14),
                                 ),
@@ -177,9 +177,9 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                       Divider()
                     ],
                   ),onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoTonKho(materials: modeltonKho.material![index],)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoTonKho(materials: modeltonKho.product![index],)));
                   },);
-                },shrinkWrap: true,itemCount: modeltonKho.material!.length,  physics: NeverScrollableScrollPhysics(),);
+                },shrinkWrap: true,itemCount: modeltonKho.product!.length,  physics: NeverScrollableScrollPhysics(),);
               }
               return SizedBox();
             },bloc: blocListTonKho,),
@@ -197,7 +197,7 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                     ModelTonKho modeltonKho=state.data;
                     double sum=0;
 
-                              for (var item in modeltonKho.material!) {
+                              for (var item in modeltonKho.product!) {
                                 sum += double.parse(item.averagePrice ?? '0');
                               }
 
