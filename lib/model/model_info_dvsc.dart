@@ -1,95 +1,26 @@
-class ModelDVSC {
-  User? user;
-  List<ProductAttrs>? productAttrs;
+class ModelInfoDVSC {
+  ProductAttr? productAttr;
 
-  ModelDVSC({this.user, this.productAttrs});
+  ModelInfoDVSC({this.productAttr});
 
-  ModelDVSC.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
-    if (json['productAttrs'] != null) {
-      productAttrs = <ProductAttrs>[];
-      json['productAttrs'].forEach((v) {
-        productAttrs!.add(new ProductAttrs.fromJson(v));
-      });
-    }
+  ModelInfoDVSC.fromJson(Map<String, dynamic> json) {
+    productAttr = json['productAttr'] != null
+        ? new ProductAttr.fromJson(json['productAttr'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
-    }
-    if (this.productAttrs != null) {
-      data['productAttrs'] = this.productAttrs!.map((v) => v.toJson()).toList();
+    if (this.productAttr != null) {
+      data['productAttr'] = this.productAttr!.toJson();
     }
     return data;
   }
 }
 
-class User {
+class ProductAttr {
   int? id;
-  String? name;
-  String? fullName;
-  String? email;
-  String? phone;
-  int? role;
-  int? projectId;
-  Null? emailVerifiedAt;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
-  Null? deletedAt;
-
-  User(
-      {this.id,
-        this.name,
-        this.fullName,
-        this.email,
-        this.phone,
-        this.role,
-        this.projectId,
-        this.emailVerifiedAt,
-        this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
-
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    fullName = json['full_name'];
-    email = json['email'];
-    phone = json['phone'];
-    role = json['role'];
-    projectId = json['project_id'];
-    emailVerifiedAt = json['email_verified_at'];
-    status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['full_name'] = this.fullName;
-    data['email'] = this.email;
-    data['phone'] = this.phone;
-    data['role'] = this.role;
-    data['project_id'] = this.projectId;
-    data['email_verified_at'] = this.emailVerifiedAt;
-    data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
-    return data;
-  }
-}
-
-class ProductAttrs {
-  int? id;
-  int? productId;
+  List<ProductId>? productId;
   String? imei;
   String? serial;
   String? title;
@@ -98,14 +29,14 @@ class ProductAttrs {
   int? amount;
   String? importDate;
   String? note;
-  String? status;
+  int? status;
   String? createdAt;
   String? updatedAt;
   Null? deletedAt;
-  int? warehouseId;
+  List<WarehouseId>? warehouseId;
   int? typeId;
-  List<UserId>? userId;
-  int? customerId;
+  int? userId;
+  List<CustomerId>? customerId;
   String? customerCode;
   Null? customerType;
   String? customerName;
@@ -115,7 +46,7 @@ class ProductAttrs {
   String? isExport;
   List<Null>? productAttrMaterialAttr;
 
-  ProductAttrs(
+  ProductAttr(
       {this.id,
         this.productId,
         this.imei,
@@ -143,9 +74,14 @@ class ProductAttrs {
         this.isExport,
         this.productAttrMaterialAttr});
 
-  ProductAttrs.fromJson(Map<String, dynamic> json) {
+  ProductAttr.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    productId = json['product_id'];
+    if (json['product_id'] != null) {
+      productId = <ProductId>[];
+      json['product_id'].forEach((v) {
+        productId!.add(new ProductId.fromJson(v));
+      });
+    }
     imei = json['imei'];
     serial = json['serial'];
     title = json['title'];
@@ -158,15 +94,20 @@ class ProductAttrs {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    warehouseId = json['warehouse_id'];
-    typeId = json['type_id'];
-    if (json['user_id'] != null) {
-      userId = <UserId>[];
-      json['user_id'].forEach((v) {
-        userId!.add(new UserId.fromJson(v));
+    if (json['warehouse_id'] != null) {
+      warehouseId = <WarehouseId>[];
+      json['warehouse_id'].forEach((v) {
+        warehouseId!.add(new WarehouseId.fromJson(v));
       });
     }
-    customerId = json['customer_id'];
+    typeId = json['type_id'];
+    userId = json['user_id'];
+    if (json['customer_id'] != null) {
+      customerId = <CustomerId>[];
+      json['customer_id'].forEach((v) {
+        customerId!.add(new CustomerId.fromJson(v));
+      });
+    }
     customerCode = json['customer_code'];
     customerType = json['customer_type'];
     customerName = json['customer_name'];
@@ -174,13 +115,15 @@ class ProductAttrs {
     customerAddress = json['customer_address'];
     projectId = json['project_id'];
     isExport = json['is_export'];
-
+ 
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['product_id'] = this.productId;
+    if (this.productId != null) {
+      data['product_id'] = this.productId!.map((v) => v.toJson()).toList();
+    }
     data['imei'] = this.imei;
     data['serial'] = this.serial;
     data['title'] = this.title;
@@ -193,12 +136,14 @@ class ProductAttrs {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    data['warehouse_id'] = this.warehouseId;
-    data['type_id'] = this.typeId;
-    if (this.userId != null) {
-      data['user_id'] = this.userId!.map((v) => v.toJson()).toList();
+    if (this.warehouseId != null) {
+      data['warehouse_id'] = this.warehouseId!.map((v) => v.toJson()).toList();
     }
-    data['customer_id'] = this.customerId;
+    data['type_id'] = this.typeId;
+    data['user_id'] = this.userId;
+    if (this.customerId != null) {
+      data['customer_id'] = this.customerId!.map((v) => v.toJson()).toList();
+    }
     data['customer_code'] = this.customerCode;
     data['customer_type'] = this.customerType;
     data['customer_name'] = this.customerName;
@@ -211,12 +156,47 @@ class ProductAttrs {
   }
 }
 
-class UserId {
+class ProductId {
+  String? code;
+  String? name;
+
+  ProductId({this.code, this.name});
+
+  ProductId.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['name'] = this.name;
+    return data;
+  }
+}
+
+class WarehouseId {
+  String? name;
+
+  WarehouseId({this.name});
+
+  WarehouseId.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    return data;
+  }
+}
+
+class CustomerId {
   String? fullName;
 
-  UserId({this.fullName});
+  CustomerId({this.fullName});
 
-  UserId.fromJson(Map<String, dynamic> json) {
+  CustomerId.fromJson(Map<String, dynamic> json) {
     fullName = json['full_name'];
   }
 

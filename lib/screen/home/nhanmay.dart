@@ -150,7 +150,7 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                         children: [
                           Text(model.productAttrs![index].customerName??'',style: StyleApp.textStyle500(color: ColorApp.blue3D,fontSize: 18),),
                           SizedBox(height: 15,),
-                          Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
+                          // Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
                           SizedBox(height: 10,),
                           Divider()
                         ],
@@ -159,7 +159,7 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay()));
                       },
                     );
-                  },itemCount: 2,shrinkWrap: true,);
+                  },itemCount: model.productAttrs!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),);
                 }
                 return SizedBox();
               },bloc: blocDVSC,)

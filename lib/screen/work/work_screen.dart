@@ -206,28 +206,31 @@ class _WorkScreenState extends State<WorkScreen>
                   ),
                   tabs: <Widget>[
                     Tab(
-                      child: Text('Tất cả(1600)'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        ModelDVSC model=state is LoadSuccess? state.data:ModelDVSC();
+                        return Text('Tất cả()');
+                        },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Đang xử lý(100)'),
+                      child: Text('Đang xử lý'),
                     ),
                     Tab(
-                      child: Text('Đã xử lý(100)'),
+                      child: Text('Đã xử lý'),
                     ),
                     Tab(
-                      child: Text('Chờ linh kiện(100)'),
+                      child: Text('Chờ linh kiện'),
                     ),
                     Tab(
-                      child: Text('Bảo hành(100)'),
+                      child: Text('Bảo hành'),
                     ),
                     Tab(
-                      child: Text('Không sửa được(100)'),
+                      child: Text('Không sửa được'),
                     ),
                     Tab(
-                      child: Text('Hoàn Thành(100)'),
+                      child: Text('Hoàn Thành'),
                     ),
                     Tab(
-                      child: Text('Máy nhà mua(100)'),
+                      child: Text('Máy nhà mua'),
                     ),
                   ],
                 ),
@@ -345,80 +348,83 @@ onConfirm: (date){
                        color: ColorApp.whiteF0,
                        child: Row(
                          crossAxisAlignment: CrossAxisAlignment.center,
-                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: [
-                           Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               SizedBox(
-                                 height: 5,
-                               ),
-                               Text(
-                                 model.productAttrs![index].customerName??'',
-                                 style:
-                                 StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),
-                               ),
-                               SizedBox(
-                                 height: 5,
-                               ),
-                               InkWell(onTap: (){
-
-                                 Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                         builder: (context) => ChonLinhKien()));
-                               },
-                                 child: Row(
-                                   children: [
-                                     Text(
-                                       model.productAttrs![index].imei??'',
-                                       style: StyleApp.textStyle600(
-                                           color: ColorApp.blue8F, fontSize: 12),
-                                     ),
-                                     Text(
-                                       ' - ',
-                                       style: StyleApp.textStyle600(
-                                           color: ColorApp.blue8F, fontSize: 12),
-                                     ),
-                                     SizedBox(
-                                       width: MediaQuery.of(context).size.width * 0.3,
-                                       child: Text(
-                                         model.productAttrs![index].serial??'',
-                                         maxLines: 1,
-                                         overflow: TextOverflow.ellipsis,
-                                         softWrap: false,
-                                         style: StyleApp.textStyle600(
-                                             color: ColorApp.redText, fontSize: 12),
-                                       ),
-                                     ),
-                                   ],
+                           Padding(
+                             padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                             child: Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+                                 SizedBox(
+                                   height: 5,
                                  ),
-                               ),
-                               SizedBox(
-                                 height: 5,
-                               ),
-                               Text(
-                                 model.productAttrs![index].title??'',
-                                 style:
-                                 StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
-                               ),
-                               SizedBox(
-                                 height: 5,
-                               ),
-                               Text(
-                                 model.productAttrs![index].note??'',
-                                 style:
-                                 StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
-                               ),
-                               SizedBox(
-                                 height: 5,
-                               ),
-                               Text(model.productAttrs![index].userId.toString()),
-                               SizedBox(
-                                 height: 15,
-                               ),
-                               Text(model.productAttrs![index].status.toString()),
-                             ],
+                                 Text(
+                                   model.productAttrs![index].customerName??'',
+                                   style:
+                                   StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),
+                                 ),
+                                 SizedBox(
+                                   height: 5,
+                                 ),
+                                 InkWell(onTap: (){
+
+                                   Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                           builder: (context) => ChonLinhKien()));
+                                 },
+                                   child: Row(
+                                     children: [
+                                       Text(
+                                         model.productAttrs![index].imei??'',
+                                         style: StyleApp.textStyle600(
+                                             color: ColorApp.blue8F, fontSize: 12),
+                                       ),
+                                       Text(
+                                         ' - ',
+                                         style: StyleApp.textStyle600(
+                                             color: ColorApp.blue8F, fontSize: 12),
+                                       ),
+                                       SizedBox(
+                                         width: MediaQuery.of(context).size.width * 0.3,
+                                         child: Text(
+                                           model.productAttrs![index].serial??'',
+                                           maxLines: 1,
+                                           overflow: TextOverflow.ellipsis,
+                                           softWrap: false,
+                                           style: StyleApp.textStyle600(
+                                               color: ColorApp.redText, fontSize: 12),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 SizedBox(
+                                   height: 5,
+                                 ),
+                                 Text(
+                                   model.productAttrs![index].title??'',
+                                   style:
+                                   StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
+                                 ),
+                                 SizedBox(
+                                   height: 5,
+                                 ),
+                                 Text(
+                                   model.productAttrs![index].note??'',
+                                   style:
+                                   StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
+                                 ),
+                                 SizedBox(
+                                   height: 5,
+                                 ),
+                                 Text(model.productAttrs![index].userId![0].fullName??''),
+                                 SizedBox(
+                                   height: 15,
+                                 ),
+                                 Text(model.productAttrs![index].status.toString()),
+                               ],
+                             ),
                            ),
                            InkWell(
                              child: Icon(
