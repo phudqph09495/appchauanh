@@ -14,8 +14,8 @@ import '../../state_bloc.dart';
 
 
 
-class BlocDVSC extends Bloc<EventBloc, StateBloc> {
-  BlocDVSC() : super(StateBloc());
+class BlocInfoDVSC extends Bloc<EventBloc, StateBloc> {
+  BlocInfoDVSC() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {

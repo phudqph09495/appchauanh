@@ -182,10 +182,10 @@ class _WorkScreenState extends State<WorkScreen>
                 color: Color(0xffF3F3F3),
                 child: TabBar(
                   onTap: (value) {
-                    print(value);
+                   blocDVSC.add(GetData(keySearch: value.toString()));
                     setState(() {
                       a = value.toString();
-                      print(a);
+
                     });
                   },
                   isScrollable: true,
@@ -207,30 +207,75 @@ class _WorkScreenState extends State<WorkScreen>
                   tabs: <Widget>[
                     Tab(
                       child: BlocBuilder(builder: (_,StateBloc state){
-                        ModelDVSC model=state is LoadSuccess? state.data:ModelDVSC();
-                        return Text('Tất cả()');
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Tất cả(${model.total![0].total})');
+                        }
+                        return Text('Tất cả');
                         },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Đang xử lý'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Đang xử lý(${model.total![0].dangXuLy})');
+                        }
+                        return Text('Đang xử lý');
+                      },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Đã xử lý'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Đã xử lý(${model.total![0].daXuLy})');
+                        }
+                        return Text('Đã xử lý');
+                      },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Chờ linh kiện'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Chờ linh kiện(${model.total![0].choLinhKien})');
+                        }
+                        return Text('Chờ linh kiện');
+                      },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Bảo hành'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Không sửa được(${model.total![0].khongSuaDuoc})');
+                        }
+                        return Text('Không sửa được');
+                      },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Không sửa được'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Máy nhà mua(${model.total![0].nhaMua})');
+                        }
+                        return Text('Máy nhà mua');
+                      },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Hoàn Thành'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Bảo hành(${model.total![0].baoHanh})');
+                        }
+                        return Text('Bảo hành');
+                      },bloc: blocDVSC,),
                     ),
                     Tab(
-                      child: Text('Máy nhà mua'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model= state.data;
+                          return Text('Hoàn thành(${model.total![0].hoanThanh})');
+                        }
+                        return Text('Hoàn thành');
+                      },bloc: blocDVSC,),
                     ),
                   ],
                 ),
@@ -239,7 +284,7 @@ class _WorkScreenState extends State<WorkScreen>
              color: Color(0xffF3F3F3),
              child: TabBar(
                onTap: (value) {
-                 print(value);
+
                  setState(() {
                    a = value.toString();
                  });
@@ -459,6 +504,9 @@ onConfirm: (date){
                      );
                    },itemCount: model.productAttrs!.length,shrinkWrap: true,  physics: NeverScrollableScrollPhysics(),),
                  );
+               }
+               if(state is Loading){
+                 return Text('Đang load, đợi xíu..');
                }
                return SizedBox();
              },bloc: blocDVSC,)

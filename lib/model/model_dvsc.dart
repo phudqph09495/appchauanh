@@ -1,8 +1,8 @@
 class ModelDVSC {
   User? user;
   List<ProductAttrs>? productAttrs;
-
-  ModelDVSC({this.user, this.productAttrs});
+  List<Total>? total;
+  ModelDVSC({this.user, this.productAttrs,this.total});
 
   ModelDVSC.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
@@ -10,6 +10,12 @@ class ModelDVSC {
       productAttrs = <ProductAttrs>[];
       json['productAttrs'].forEach((v) {
         productAttrs!.add(new ProductAttrs.fromJson(v));
+      });
+    }
+    if (json['total'] != null) {
+      total = <Total>[];
+      json['total'].forEach((v) {
+        total!.add(new Total.fromJson(v));
       });
     }
   }
@@ -223,6 +229,50 @@ class UserId {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['full_name'] = this.fullName;
+    return data;
+  }
+}
+class Total {
+  int? total;
+  int? dangXuLy;
+  int? daXuLy;
+  int? choLinhKien;
+  int? khongSuaDuoc;
+  int? nhaMua;
+  int? baoHanh;
+  int? hoanThanh;
+
+  Total(
+      {this.total,
+        this.dangXuLy,
+        this.daXuLy,
+        this.choLinhKien,
+        this.khongSuaDuoc,
+        this.nhaMua,
+        this.baoHanh,
+        this.hoanThanh});
+
+  Total.fromJson(Map<String, dynamic> json) {
+    total = json['total'];
+    dangXuLy = json['dang_xu_ly'];
+    daXuLy = json['da_xu_ly'];
+    choLinhKien = json['cho_linh_kien'];
+    khongSuaDuoc = json['khong_sua_duoc'];
+    nhaMua = json['nha_mua'];
+    baoHanh = json['bao_hanh'];
+    hoanThanh = json['hoan_thanh'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total'] = this.total;
+    data['dang_xu_ly'] = this.dangXuLy;
+    data['da_xu_ly'] = this.daXuLy;
+    data['cho_linh_kien'] = this.choLinhKien;
+    data['khong_sua_duoc'] = this.khongSuaDuoc;
+    data['nha_mua'] = this.nhaMua;
+    data['bao_hanh'] = this.baoHanh;
+    data['hoan_thanh'] = this.hoanThanh;
     return data;
   }
 }

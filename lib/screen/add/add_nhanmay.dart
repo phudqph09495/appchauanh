@@ -739,7 +739,9 @@ proID=list[index].id;
               ),
               BlocListener(bloc: blocNhanMay,
                 listener: (_,StateBloc state) {
-                CheckLogState.check(context, state: state,msg: 'Thành công');
+                CheckLogState.check(context, state: state,msg: 'Thành công',success: (){
+                  Navigator.pop(context);
+                });
                 },
                 child: Button1(
                   ontap: (){
