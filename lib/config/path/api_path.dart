@@ -22,4 +22,12 @@ static const fullListPrd="/api/product-attribute/list-product";
  static const fullListNV="/api/product-attribute/list-user";
  static const createRepairOrder="/api/product-attribute/createOrder";
 
+ ///doanh thu
+ static const doanhThu='/api/revenue';
+ ///cong no
+ static const congNo="/api/debt?search=";
+ static const detailCongNo="/api/debt/detail/";
+
+ static const dsLinhKien="/api/material-attr/list";
+
 }

@@ -54,6 +54,20 @@ class Const {
     return DateFormat(format ?? 'dd/MM/yyyy  HH:mm:ss', 'en_US')
         .format(DateTime.parse(time));
   }
+ static String convertDateFormat(String inputDate) {
+    // Define the input and output date formats
+    final inputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss.SSSSSSZ");
+    final outputFormat = DateFormat("dd/MM/yyyy");
+
+    // Parse the input date string
+    final date = inputFormat.parse(inputDate);
+
+    // Format the date to the desired output format
+    final outputDate = outputFormat.format(date);
+
+    // Return the converted date string
+    return outputDate;
+  }
 
 
 

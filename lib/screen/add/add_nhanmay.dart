@@ -1,6 +1,9 @@
 import 'dart:io';
-
+import 'package:ChauAnh/bloc/bloc/add/bloc_addLinkKien.dart';
+import 'package:ChauAnh/bloc/bloc/add/event_bloc2.dart';
+import 'package:number_inc_dec/number_inc_dec.dart';
 import 'package:ChauAnh/bloc/check_log_state.dart';
+import 'package:ChauAnh/model/model_linhKien.dart';
 import 'package:ChauAnh/model/model_listKH.dart';
 import 'package:ChauAnh/model/model_listKho.dart';
 import 'package:ChauAnh/model/model_listPrd.dart';
@@ -9,9 +12,11 @@ import 'package:ChauAnh/config/const.dart';
 import 'package:ChauAnh/config/path/image_path.dart';
 import 'package:ChauAnh/config/share_pref.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../../bloc/bloc/KhachHang/bloc_addKH.dart';
 import '../../bloc/bloc/KhachHang/bloc_listKH.dart';
+import '../../bloc/bloc/add/bloc_dsLinhKien.dart';
 import '../../bloc/bloc/nhanMay/bloc__nhanMay.dart';
 import '../../bloc/bloc/nhanMay/bloc_fullListKH.dart';
 import '../../bloc/bloc/nhanMay/bloc_fullListKho.dart';
@@ -26,6 +31,8 @@ import '../../widget/item/Dropdown1.dart';
 import '../../widget/item/button.dart';
 import '../../widget/item/input/text_filed.dart';
 import 'add_baogia.dart';
+
+
 
 class AddNhanMay extends StatefulWidget {
   @override
@@ -59,12 +66,17 @@ class _AddNhanMayState extends State<AddNhanMay> {
 TextEditingController date=TextEditingController();
 TextEditingController note=TextEditingController();
 TextEditingController title=TextEditingController();
-
+  BlocDsLinhKien blocDsLinhKien=BlocDsLinhKien();
   int? proID;
   int? warehouseID;
   int? customerID;
   int? userID;
   BlocNhanMay blocNhanMay=BlocNhanMay();
+
+  List<DanhSachLK> danhsachLK=[];
+
+
+  BlocCartLocal blocCartLocal = BlocCartLocal();
 @override
   void initState() {
     // TODO: implement initState
@@ -73,10 +85,12 @@ TextEditingController title=TextEditingController();
    blocFullListPrd.add(GetData2());
     blocFullListKho.add(GetData());
     blocFullListNV.add(GetData());
+    blocDsLinhKien.add(GetData());
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Tạo đơn'),
         centerTitle: true,
@@ -703,40 +717,121 @@ proID=list[index].id;
                 height: 20,
               ),
               Divider(),
+
               // SizedBox(
-              //   height: 10,
+              //   height: 20,
               // ),
               // Text(
-              //   'Trạng thái',
+              //   'Danh sách linh kiện',
               //   style:
-              //       StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              //   StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               // ),
-              // SizedBox(
-              //   height: 10,
-              // ),
-              // DropDown2(
-              //   listItem: [
-              //     ModelLocal(id: "0", name: "Đang xử lý"),
-              //     ModelLocal(id: "1", name: "Đã xử lý"),
-              //     ModelLocal(id: "2", name: "Chờ linh kiện"),
-              //     ModelLocal(id: "3", name: "Bảo hành"),
-              //     ModelLocal(id: "4", name: "Không sửa được"),
-              //     ModelLocal(id: "5", name: "Hoàn thành"),
-              //   ],
-              //   hint: 'Trạng thái',
-              //   onChanged: (value) {
-              //     trangthai = value.name;
-              //   },
-              //   value: trangthai,
-              // ),
+              // SizedBox(height: 10,),
+
+//             ListView.builder(itemBuilder: (context,index){
+//               TextEditingController con=TextEditingController();
+//               con.text=danhsachLK[index].soLuong.toString();
+//               return Card(
+//                 child: Row(
+//
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text('${danhsachLK[index].modelLinkKien!.code} - ${danhsachLK[index].modelLinkKien!.name}\nGía nhập : ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(danhsachLK[index].modelLinkKien!.importPrice ?? '0'))} đ'),
+//                     SizedBox(width: 10,),
+//                     Expanded(
+//                       child: NumberInputWithIncrementDecrement(
+//                         initialValue: danhsachLK[index].soLuong!,
+//                         onChanged: (val){
+//
+// danhsachLK[index].soLuong=val.toInt();
+//
+//                         },
+//                         onDecrement: (val){
+//
+//                           danhsachLK[index].soLuong=val.toInt();
+//                         },
+//                         onIncrement: (val){
+//
+//                           danhsachLK[index].soLuong=val.toInt();
+//                         },
+//                         onSubmitted: (val){
+//                           FocusScope.of(context).unfocus();
+//                         },
+//                         scaleHeight: 0.5,
+//                         scaleWidth: 0.7,
+//                         controller: con,
+//                         min: 0,
+//
+//                       ),
+//                     )
+//                   ],
+//                 ),
+//               );
+//             },itemCount: danhsachLK.length,shrinkWrap: true,),
+//               InkWell(
+//                 onTap: (){
+//                   showDialog(context: context, builder: (_)=>AlertDialog(
+//                     content: Container(
+//                       height:
+//                       MediaQuery.of(context).size.height *
+//                           0.55,
+//                       width: MediaQuery.of(context).size.width *
+//                           0.8,
+//                       child: SingleChildScrollView(
+//                         child: BlocBuilder(builder: (_,StateBloc state){
+//                           if(state is LoadSuccess){
+//                             List<ModelLinkKien> list=state.data;
+//                             return SingleChildScrollView(
+//                               child: ListView.builder(itemBuilder: (context,index){
+//                                 return InkWell(
+//                                   onTap: (){
+//                                 danhsachLK.add(DanhSachLK(modelLinkKien: list[index],soLuong: 1));
+//                                 setState(() {
+//
+//                                 });
+//                                 Navigator.pop(context);
+//                                   },
+//                                   child: Card(
+//
+//                                     child: Padding(
+//                                       padding: const EdgeInsets.all(5.0),
+//                                       child: Column(
+//                                         crossAxisAlignment: CrossAxisAlignment.start,
+//                                         children: [
+//                                           Text('${list[index].materialId!.code} - ${list[index].materialId!.name}',style: StyleApp.textStyle500(),),
+//                                           SizedBox(height: 5,),
+//                                           Text('Đối tượng: ${list[index].customerName}',style: StyleApp.textStyle600(),),
+//                                           SizedBox(height: 5,),
+//                                           Text('Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',style: StyleApp.textStyle500()),
+//                                           SizedBox(height: 5,), Text('Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',style: StyleApp.textStyle500()),
+//                                           SizedBox(height: 5,), Text('Số lượng : ${list[index].amount}',style: StyleApp.textStyle500()),
+//                                           SizedBox(height: 5,), Text('Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',style: StyleApp.textStyle500()),
+//                                           SizedBox(height: 5,),  Text('Ghi chú: ${list[index].note}',style: StyleApp.textStyle500())
+//                                         ],
+//                                       ),
+//                                     )
+//                                   ),
+//                                 );
+//                               },shrinkWrap: true,itemCount: list.length,physics: NeverScrollableScrollPhysics(),),
+//                             );
+//                           }
+//                           return SizedBox();
+//                         },bloc: blocDsLinhKien,),
+//                       ),
+//                     ),
+//                   ));
+//                 },
+//                 child: Image.asset(
+//                   ImagePath.bottomBarAdd,
+//                   width: 50,
+//                   height: 50,
+//                 ),
+//               ),
+
               SizedBox(
                 height: 20,
               ),
-
-
-              SizedBox(
-                height: 10,
-              ),
+              Divider(),
               BlocListener(bloc: blocNhanMay,
                 listener: (_,StateBloc state) {
                 CheckLogState.check(context, state: state,msg: 'Thành công',success: (){
@@ -744,6 +839,16 @@ proID=list[index].id;
                 });
                 },
                 child: Button1(
+                  // ontap: (){
+                  //   List<materrial> listM=[];
+                  //   for(var item in danhsachLK){
+                  //     listM.add(materrial(id: item.modelLinkKien!.id,solUong: item.soLuong));
+                  //   }
+                  //   for (var item in listM){
+                  //     print(item.id);
+                  //     print(item.solUong);
+                  //   }
+                  // },
                   ontap: (){
                     blocNhanMay.add(CreateRepairOrder(
                       productId: proID,

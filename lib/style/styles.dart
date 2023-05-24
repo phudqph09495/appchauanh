@@ -7,7 +7,7 @@ class StyleApp {
     Color color = Colors.black,
     double fontSize = 14,
   }) {
-    return GoogleFonts.roboto(
+    return GoogleFonts.nunito(
       color: color,
       fontSize: fontSize,
       fontWeight: FontWeight.w400,
@@ -19,7 +19,7 @@ class StyleApp {
     Color color = Colors.black,
     double fontSize = 14,
   }) {
-    return GoogleFonts.roboto(
+    return GoogleFonts.nunito(
       color: color,
       fontSize: fontSize,
       fontWeight: FontWeight.w500,
@@ -31,7 +31,7 @@ class StyleApp {
     Color color = Colors.black,
     double fontSize = 14,
   }) {
-    return GoogleFonts.roboto(
+    return GoogleFonts.nunito(
       color: color,
       fontSize: fontSize,
       fontWeight: FontWeight.w600,
@@ -43,7 +43,7 @@ class StyleApp {
     Color color = Colors.black,
     double fontSize = 14,
   }) {
-    return GoogleFonts.roboto(
+    return GoogleFonts.nunito(
       color: color,
       fontSize: fontSize,
       fontWeight: FontWeight.w700,
@@ -55,7 +55,7 @@ class StyleApp {
     Color color = Colors.black,
     double fontSize = 14,
   }) {
-    return GoogleFonts.roboto(
+    return GoogleFonts.nunito(
       color: color,
       fontSize: fontSize,
       fontWeight: FontWeight.w900,

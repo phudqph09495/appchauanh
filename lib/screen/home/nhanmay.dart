@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/bloc/congviec/bloc_dvsc.dart';
+import '../../home.dart';
 import '../../style/init_style.dart';
 import 'info/info_baogia.dart';
 import 'info/info_nhanmay.dart';
@@ -160,6 +161,33 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                       },
                     );
                   },itemCount: model.productAttrs!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),);
+                }
+                if(state is LoadFail){
+                  return Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 100,),
+                        Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                            ''),
+                        SizedBox(height: 10,),
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(border: Border.all()),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                if(state is Loading){
+                  return Text('Đang Load, đợi xíu...');
                 }
                 return SizedBox();
               },bloc: blocDVSC,)

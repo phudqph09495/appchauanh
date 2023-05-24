@@ -1,5 +1,7 @@
 
 
+import '../model/model_linhKien.dart';
+
 abstract class EventBloc {}
 
 class LoadMoreEvent extends EventBloc {
@@ -169,6 +171,17 @@ class CreateRepairOrder extends EventBloc{
   }
 }
 
+
+class DanhSachLK{
+  ModelLinkKien? modelLinkKien;
+  int? soLuong;
+  DanhSachLK({this.modelLinkKien,this.soLuong});
+}
+class materrial{
+  int? id;
+  int? solUong;
+  materrial({this.id,this.solUong});
+}
 
 
 

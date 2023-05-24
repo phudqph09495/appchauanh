@@ -46,7 +46,7 @@ class _AddKhachState extends State<AddKhach> {
     ),
     ModelLocal(
       name: 'Nhà cung cấp',
-      id: '3',
+      id: '4',
     ),
   ];
   @override

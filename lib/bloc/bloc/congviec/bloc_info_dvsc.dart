@@ -34,9 +34,10 @@ class BlocInfoDVSC extends Bloc<EventBloc, StateBloc> {
             data: model,
           );
         } else if (res['status'] == false) {
-          yield LoadFail(error: res['message'] ?? "Lỗi kết nối");
+          yield LoadFail2(error: res['message'] ?? "Lỗi kết nối");
         }
       } on DioError catch (e) {
+        print(e);
         yield LoadFail(error: e.error.error);
       } catch (e) {
         print(e);

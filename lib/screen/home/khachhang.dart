@@ -26,30 +26,7 @@ class _KhachHangState extends State<KhachHang> {
   BlocListKH blocListKH2=BlocListKH();
   BlocListKH blocListKH3=BlocListKH();
   BlocListKH blocListKH4=BlocListKH();
-  final list = [
-    ModelKH(
-      id: 'KH0001',
-      name: 'A Thang',
-      phone: '0974859631',
-    ),
-    ModelKH(
-      id: 'KH0002',
-      name: 'A Vinh',
-      phone: '0974859631',
-    ),
-    ModelKH(
-      id: 'KH0003',
-      name: 'B Thu',
-      phone: '0974859631',
-    ),
-    ModelKH(
-      id: 'KH0003',
-      name: 'B Linh',
-      phone: '0974859631',
-    ),
 
-
-  ];
   refesh(){
     blocListKH1.add(GetData(param: '1'));
     blocListKH2.add(GetData(param: '2'));
@@ -137,7 +114,10 @@ class _KhachHangState extends State<KhachHang> {
                     Expanded(flex: 9,
                       child: InputText1(controller: qrcode,
                         suffix: InkWell(child: Icon(Icons.search_outlined),onTap: (){
-                          print(qrcode.text);
+                          blocListKH1.add(GetData(param: '1',keySearch: qrcode.text));
+                          blocListKH2.add(GetData(param: '2',keySearch: qrcode.text));
+                          blocListKH3.add(GetData(param: '3',keySearch: qrcode.text));
+                          blocListKH4.add(GetData(param: '4',keySearch: qrcode.text));
                         },),
                         colorLabel: Color(0xffF3F3F3),
                         colorBg: Colors.white.withOpacity(0.4),
@@ -262,6 +242,9 @@ class _KhachHangState extends State<KhachHang> {
                             ],
                           ),
                         );
+                      }
+                      if(state is Loading){
+                        return Text('Đang Load, đợi xíu...');
                       }
                       return Container();
                     }),

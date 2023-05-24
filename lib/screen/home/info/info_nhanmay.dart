@@ -366,6 +366,7 @@ import '../../../bloc/bloc/nhanMay/bloc_fullListNV.dart';
 import '../../../bloc/bloc/nhanMay/bloc_fullListPrd.dart';
 import '../../../bloc/event_bloc.dart';
 import '../../../bloc/state_bloc.dart';
+import '../../../home.dart';
 import '../../../model/model_info_dvsc.dart';
 import '../../../model/model_listNV.dart';
 import '../../../model/model_local.dart';
@@ -417,6 +418,33 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child:BlocBuilder(builder: (_,StateBloc state){
+            if(state is LoadFail){
+              return Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 100,),
+                    Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                        ''),
+                    SizedBox(height: 10,),
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            if(state is Loading){
+              return Text('Đang Load, đợi xíu...');
+            }
             if( state is LoadSuccess){
               ModelInfoDVSC modelInfoDVSC=state.data;
               String? kho;
@@ -1141,6 +1169,10 @@ proName.text=modelInfoDVSC.productAttr!.productId![0].name??'';
                   )
                 ],
               );
+            }
+            if(state is LoadFail2){
+              return Text('${state.error}');
+
             }
             return SizedBox();},bloc: blocInfoDVSC,),
         ),

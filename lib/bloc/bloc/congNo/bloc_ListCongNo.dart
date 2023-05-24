@@ -3,31 +3,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/api.dart';
 import '../../../config/path/api_path.dart';
+import '../../../model/model_DoanhThu.dart';
+import '../../../model/model_ListcongNo.dart';
+import '../../../model/model_dvsc.dart';
 import '../../../model/model_listKH.dart';
+import '../../../model/model_showKH.dart';
 import '../../../model/model_login.dart';
+import '../../../model/model_tonKho.dart';
 import '../../event_bloc.dart';
 import '../../state_bloc.dart';
 
-class BlocNhanMay extends Bloc<EventBloc, StateBloc> {
-  BlocNhanMay() : super(StateBloc());
+
+
+class Bloc_ListCongNo extends Bloc<EventBloc, StateBloc> {
+  Bloc_ListCongNo() : super(StateBloc());
 
   @override
   Stream<StateBloc> mapEventToState(EventBloc event) async* {
-    if (event is CreateRepairOrder) {
+    if (event is GetData) {
       yield Loading();
       try {
-        Map<String, dynamic> req = event.toJson();
 
-        print(req);
-        var res = await Api.postAsync(
-            endPoint: ApiPath.createRepairOrder, req: req, isToken: true,hasForm: false);
-        print(res);
+        var res = await Api.getAsync(
+            endPoint: ApiPath.congNo+event.param,  isToken: true);
 
         if (res['status'] == true) {
+          ModelListCongNo model = ModelListCongNo.fromJson(res['data']);
 
-          Customer customer=Customer.fromJson(res['data']);
+
           yield LoadSuccess(
-              data: customer
+            data: model,
           );
         } else if (res['status'] == false) {
           yield LoadFail(error: res['message'] ?? "Lỗi kết nối");

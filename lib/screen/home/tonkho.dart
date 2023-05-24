@@ -196,9 +196,8 @@ class _TonKhoScreenState extends State<TonKhoScreen> with SingleTickerProviderSt
                   if(state is LoadSuccess){
                     ModelTonKho modeltonKho=state.data;
                     double sum=0;
-
                               for (var item in modeltonKho.product!) {
-                                sum += double.parse(item.averagePrice ?? '0');
+                                sum += double.parse('${(double.parse('${item.averagePrice}')*item.totalAmount!).toString()}');
                               }
 
                             return       Text('${NumberFormat("###,###.###", 'vi_VN').format(sum)} đ', style:

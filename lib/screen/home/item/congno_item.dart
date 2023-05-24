@@ -25,7 +25,7 @@ class _CongNoItemState extends State<CongNoItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-Navigator.push(context, MaterialPageRoute(builder: (context)=>InFoCongNo()));
+
       },
       child: Column(
         children: [

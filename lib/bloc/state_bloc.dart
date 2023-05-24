@@ -44,6 +44,13 @@ class LoadFail extends StateBloc {
     required this.error,
   });
 }
+class LoadFail2 extends StateBloc {
+  final String error;
+
+  LoadFail2({
+    required this.error,
+  });
+}
 
 class LoadMore extends StateBloc {}
 

@@ -8,6 +8,7 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../../bloc/bloc/congviec/bloc_dvsc.dart';
 import '../../bloc/state_bloc.dart';
 import '../../config/const.dart';
+import '../../home.dart';
 import '../../model/model_dvsc.dart';
 import '../../style/init_style.dart';
 import '../../widget/item/button.dart';
@@ -396,7 +397,7 @@ onConfirm: (date){
                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: [
                            Padding(
-                             padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                             padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
                              child: Column(
                                crossAxisAlignment: CrossAxisAlignment.start,
                                children: [
@@ -411,38 +412,30 @@ onConfirm: (date){
                                  SizedBox(
                                    height: 5,
                                  ),
-                                 InkWell(onTap: (){
-
-                                   Navigator.push(
-                                       context,
-                                       MaterialPageRoute(
-                                           builder: (context) => ChonLinhKien()));
-                                 },
-                                   child: Row(
-                                     children: [
-                                       Text(
-                                         model.productAttrs![index].imei??'',
+                                 Row(
+                                   children: [
+                                     Text(
+                                       model.productAttrs![index].imei??'',
+                                       style: StyleApp.textStyle600(
+                                           color: ColorApp.blue8F, fontSize: 12),
+                                     ),
+                                     Text(
+                                       ' - ',
+                                       style: StyleApp.textStyle600(
+                                           color: ColorApp.blue8F, fontSize: 12),
+                                     ),
+                                     SizedBox(
+                                       width: MediaQuery.of(context).size.width * 0.3,
+                                       child: Text(
+                                         model.productAttrs![index].serial??'',
+                                         maxLines: 1,
+                                         overflow: TextOverflow.ellipsis,
+                                         softWrap: false,
                                          style: StyleApp.textStyle600(
-                                             color: ColorApp.blue8F, fontSize: 12),
+                                             color: ColorApp.redText, fontSize: 12),
                                        ),
-                                       Text(
-                                         ' - ',
-                                         style: StyleApp.textStyle600(
-                                             color: ColorApp.blue8F, fontSize: 12),
-                                       ),
-                                       SizedBox(
-                                         width: MediaQuery.of(context).size.width * 0.3,
-                                         child: Text(
-                                           model.productAttrs![index].serial??'',
-                                           maxLines: 1,
-                                           overflow: TextOverflow.ellipsis,
-                                           softWrap: false,
-                                           style: StyleApp.textStyle600(
-                                               color: ColorApp.redText, fontSize: 12),
-                                         ),
-                                       ),
-                                     ],
-                                   ),
+                                     ),
+                                   ],
                                  ),
                                  SizedBox(
                                    height: 5,
@@ -463,7 +456,8 @@ onConfirm: (date){
                                  SizedBox(
                                    height: 5,
                                  ),
-                                 Text(model.productAttrs![index].userId![0].fullName??''),
+                                 // Text(model.productAttrs![index].userId![0].fullName??''),
+                                 ...List.generate(model.productAttrs![index].userId!.length, (index1) => Text(model.productAttrs![index].userId![index1].fullName??'')),
                                  SizedBox(
                                    height: 15,
                                  ),
@@ -507,6 +501,30 @@ onConfirm: (date){
                }
                if(state is Loading){
                  return Text('Đang load, đợi xíu..');
+               }
+               if(state is LoadFail){
+                 return Center(
+                   child: Column(
+                     children: [
+                       SizedBox(height: 100,),
+                       Text('Phiên đăng nhập đã hết, vui lòng đăng nhập lại'
+                           ''),
+                       SizedBox(height: 10,),
+                       InkWell(
+                         onTap: (){
+                           Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 3,)));
+                         },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all()),
+                           child: Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: Text('Đăng Nhập',style: StyleApp.textStyle500(color: ColorApp.blue00),textAlign: TextAlign.center,),
+                           ),
+                         ),
+                       ),
+                     ],
+                   ),
+                 );
                }
                return SizedBox();
              },bloc: blocDVSC,)

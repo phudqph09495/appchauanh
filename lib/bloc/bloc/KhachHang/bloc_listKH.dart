@@ -21,7 +21,7 @@ class BlocListKH extends Bloc<EventBloc, StateBloc> {
       try {
 
         var res = await Api.getAsync(
-            endPoint: ApiPath.listKH+event.param,  isToken: true);
+            endPoint: ApiPath.listKH+event.param+'?search='+event.keySearch,  isToken: true);
 
         if (res['status'] == true) {
           ModelListKH model = ModelListKH.fromJson(res['data']);

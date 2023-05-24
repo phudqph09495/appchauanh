@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'bloc/bloc/add/bloc_addLinkKien.dart';
+import 'bloc/bloc/add/event_bloc2.dart';
 import 'bloc/bloc/auth/bloc_check_login.dart';
 import 'bloc/bloc/counter_observer.dart';
 import 'bloc/event_bloc.dart';
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => BlocCheckLogin()..add(GetData())),
+          BlocProvider(create: (_) => BlocCartLocal()..add(GetCart())),
 
         ],
         child: MultiProvider(
