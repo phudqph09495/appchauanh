@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ChauAnh/bloc/bloc/add/bloc_addLinkKien.dart';
 import 'package:ChauAnh/bloc/bloc/add/event_bloc2.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:number_inc_dec/number_inc_dec.dart';
 import 'package:ChauAnh/bloc/check_log_state.dart';
 import 'package:ChauAnh/model/model_linhKien.dart';
@@ -52,7 +53,10 @@ class _AddNhanMayState extends State<AddNhanMay> {
   BlocFullListKH blocListKH=BlocFullListKH();
   List<ModelSp> list = [];
   BlocADDKH blocADDKH=BlocADDKH();
-
+TextEditingController moneyBuy=TextEditingController();
+  TextEditingController type=TextEditingController();
+  int? typeInt;
+  String? customCode;
   TextEditingController cusName=TextEditingController();
   TextEditingController cusPhone=TextEditingController();
   TextEditingController cusAdd=TextEditingController();
@@ -64,6 +68,8 @@ class _AddNhanMayState extends State<AddNhanMay> {
   TextEditingController NV=TextEditingController();
   TextEditingController soLuong=TextEditingController();
 TextEditingController date=TextEditingController();
+
+
 TextEditingController note=TextEditingController();
 TextEditingController title=TextEditingController();
   BlocDsLinhKien blocDsLinhKien=BlocDsLinhKien();
@@ -72,15 +78,16 @@ TextEditingController title=TextEditingController();
   int? customerID;
   int? userID;
   BlocNhanMay blocNhanMay=BlocNhanMay();
-
+int sum=0;
   List<DanhSachLK> danhsachLK=[];
 
 
-  BlocCartLocal blocCartLocal = BlocCartLocal();
+
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    date.text=Const.formatTime(DateTime.now().millisecondsSinceEpoch,format: 'yyyy-MM-dd  HH:mm:ss');
     blocListKH.add(GetData());
    blocFullListPrd.add(GetData2());
     blocFullListKho.add(GetData());
@@ -136,6 +143,18 @@ TextEditingController title=TextEditingController();
                 height: 10,
               ),
               InputText1(
+                controller: date,
+                onTap: (){
+                  DatePicker.showDateTimePicker(context,
+                      showTitleActions: true,
+                      locale: LocaleType.vi,currentTime: DateTime.now(),
+                      onConfirm: (dateTime){
+                        setState(() {
+                          date.text=Const.formatTime(dateTime.millisecondsSinceEpoch,format: 'yyyy-MM-dd  HH:mm:ss');
+
+                        });
+                      });
+                },
                 borderColor: Colors.white,
                 label: Const.formatTime(DateTime.now().millisecondsSinceEpoch),
                 radius: 0,
@@ -192,6 +211,7 @@ TextEditingController title=TextEditingController();
                                       customerID=list[index].id;
                                       cusPhone.text=list[index].phone??'';
                                       cusAdd.text=list[index].address??'';
+                                      customCode=list[index].code;
                                       Navigator.pop(context);
                                     },
                                   );
@@ -308,9 +328,11 @@ TextEditingController title=TextEditingController();
                                               cusName.text=cus.fullName??'';
                                               cusPhone.text=cus.phone??'';
                                               cusAdd.text=cus.address??'';
+                                              customCode=cus.code;
                                               newNane.clear();
                                               newPhone.clear();
                                               newAddress.clear();
+
                                               Navigator.pop(context);
                                             });
                                             },
@@ -717,117 +739,219 @@ proID=list[index].id;
                 height: 20,
               ),
               Divider(),
+              Text(
+                'Giá TV nhà mua',
+                style:
+                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                inputformater: [
+                  ThousandsSeparatorInputFormatter()
+                ],
+                keyboardType: TextInputType.number,
+                controller: moneyBuy,
+                borderColor: Colors.white,
+                label: 'Nhập giá TV',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              Text(
+                'Loại Nhập Kho',
+                style:
+                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+readOnly: true,
+                onTap: (){
+  showModalBottomSheet(context: context, builder: (context){
+    return StatefulBuilder(builder: (BuildContext context, StateSetter setState){
+      
+      return Container(height: MediaQuery.of(context).size.height*0.16,
+        child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(onTap: (){
+              type.text='Hàng sửa chữa';
+              typeInt=1;
+              Navigator.pop(context);
+            },child: Container(color: ColorApp.whiteF0,width: double.infinity,child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text('Hàng sửa chữa',style: StyleApp.textStyle500(),),
+            ))),
+            InkWell(onTap: (){
+              type.text='Hàng nhập mới';
+              typeInt=2;
+              Navigator.pop(context);
+            },child: Container(color: ColorApp.whiteF0,width: double.infinity,child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text('Hàng nhập mới',style: StyleApp.textStyle500()),
+            ))),
 
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // Text(
-              //   'Danh sách linh kiện',
-              //   style:
-              //   StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
-              // ),
-              // SizedBox(height: 10,),
+          ],
+        ),
+      );
+    });
+  });
+                },
+                controller: type,
+                borderColor: Colors.white,
+                label: 'Chọn loại nhập kho',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              Text(
+                'Danh sách linh kiện',
+                style:
+                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(height: 10,),
 
-//             ListView.builder(itemBuilder: (context,index){
-//               TextEditingController con=TextEditingController();
-//               con.text=danhsachLK[index].soLuong.toString();
-//               return Card(
-//                 child: Row(
-//
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text('${danhsachLK[index].modelLinkKien!.code} - ${danhsachLK[index].modelLinkKien!.name}\nGía nhập : ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(danhsachLK[index].modelLinkKien!.importPrice ?? '0'))} đ'),
-//                     SizedBox(width: 10,),
-//                     Expanded(
-//                       child: NumberInputWithIncrementDecrement(
-//                         initialValue: danhsachLK[index].soLuong!,
-//                         onChanged: (val){
-//
-// danhsachLK[index].soLuong=val.toInt();
-//
-//                         },
-//                         onDecrement: (val){
-//
-//                           danhsachLK[index].soLuong=val.toInt();
-//                         },
-//                         onIncrement: (val){
-//
-//                           danhsachLK[index].soLuong=val.toInt();
-//                         },
-//                         onSubmitted: (val){
-//                           FocusScope.of(context).unfocus();
-//                         },
-//                         scaleHeight: 0.5,
-//                         scaleWidth: 0.7,
-//                         controller: con,
-//                         min: 0,
-//
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               );
-//             },itemCount: danhsachLK.length,shrinkWrap: true,),
-//               InkWell(
-//                 onTap: (){
-//                   showDialog(context: context, builder: (_)=>AlertDialog(
-//                     content: Container(
-//                       height:
-//                       MediaQuery.of(context).size.height *
-//                           0.55,
-//                       width: MediaQuery.of(context).size.width *
-//                           0.8,
-//                       child: SingleChildScrollView(
-//                         child: BlocBuilder(builder: (_,StateBloc state){
-//                           if(state is LoadSuccess){
-//                             List<ModelLinkKien> list=state.data;
-//                             return SingleChildScrollView(
-//                               child: ListView.builder(itemBuilder: (context,index){
-//                                 return InkWell(
-//                                   onTap: (){
-//                                 danhsachLK.add(DanhSachLK(modelLinkKien: list[index],soLuong: 1));
-//                                 setState(() {
-//
-//                                 });
-//                                 Navigator.pop(context);
-//                                   },
-//                                   child: Card(
-//
-//                                     child: Padding(
-//                                       padding: const EdgeInsets.all(5.0),
-//                                       child: Column(
-//                                         crossAxisAlignment: CrossAxisAlignment.start,
-//                                         children: [
-//                                           Text('${list[index].materialId!.code} - ${list[index].materialId!.name}',style: StyleApp.textStyle500(),),
-//                                           SizedBox(height: 5,),
-//                                           Text('Đối tượng: ${list[index].customerName}',style: StyleApp.textStyle600(),),
-//                                           SizedBox(height: 5,),
-//                                           Text('Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',style: StyleApp.textStyle500()),
-//                                           SizedBox(height: 5,), Text('Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',style: StyleApp.textStyle500()),
-//                                           SizedBox(height: 5,), Text('Số lượng : ${list[index].amount}',style: StyleApp.textStyle500()),
-//                                           SizedBox(height: 5,), Text('Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',style: StyleApp.textStyle500()),
-//                                           SizedBox(height: 5,),  Text('Ghi chú: ${list[index].note}',style: StyleApp.textStyle500())
-//                                         ],
-//                                       ),
-//                                     )
-//                                   ),
-//                                 );
-//                               },shrinkWrap: true,itemCount: list.length,physics: NeverScrollableScrollPhysics(),),
-//                             );
-//                           }
-//                           return SizedBox();
-//                         },bloc: blocDsLinhKien,),
-//                       ),
-//                     ),
-//                   ));
-//                 },
-//                 child: Image.asset(
-//                   ImagePath.bottomBarAdd,
-//                   width: 50,
-//                   height: 50,
-//                 ),
-//               ),
+            ListView.builder(itemBuilder: (context,index){
+              TextEditingController con=TextEditingController();
+              con.text=danhsachLK[index].soLuong.toString();
+              return Card(
+                child: Row(
 
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${danhsachLK[index].modelLinkKien!.code} - ${danhsachLK[index].modelLinkKien!.name}\nGía nhập : ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(danhsachLK[index].modelLinkKien!.importPrice ?? '0'))} đ'),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: NumberInputPrefabbed.roundedButtons(
+                        initialValue: danhsachLK[index].soLuong!,
+                        incDecBgColor: ColorApp.blue00,
+                        onChanged: (val){
+
+danhsachLK[index].soLuong=val.toInt();
+setState(() {
+  sum=0;
+
+  for(var item in danhsachLK){
+
+    sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
+  }
+});
+
+                        },
+                        onDecrement: (val){
+
+                          danhsachLK[index].soLuong=val.toInt();
+                          setState(() {
+                            sum=0;
+
+                            for(var item in danhsachLK){
+
+                              sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
+                            }
+                          });
+                        },
+                        onIncrement: (val){
+
+                          danhsachLK[index].soLuong=val.toInt();
+                          setState(() {
+                            sum=0;
+
+                            for(var item in danhsachLK){
+
+                              sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
+                            }
+                          });
+                        },
+                        onSubmitted: (val){
+                          FocusScope.of(context).unfocus();
+                        },
+                        scaleHeight: 0.7,
+                        scaleWidth: 0.9,
+                        controller: con,
+                        min: 0,
+                        max: danhsachLK[index].modelLinkKien!.amount!.toInt(),
+
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },itemCount: danhsachLK.length,shrinkWrap: true,),
+              InkWell(
+                onTap: (){
+                  showDialog(context: context, builder: (_)=>AlertDialog(
+                    content: Container(
+                      height:
+                      MediaQuery.of(context).size.height *
+                          0.55,
+                      width: MediaQuery.of(context).size.width *
+                          0.8,
+                      child: SingleChildScrollView(
+                        child: BlocBuilder(builder: (_,StateBloc state){
+                          if(state is LoadSuccess){
+                            List<ModelLinkKien> list=state.data;
+                            return SingleChildScrollView(
+                              child: ListView.builder(itemBuilder: (context,index){
+                                return InkWell(
+                                  onTap: (){
+                                    if(list[index].amount!>0){
+                                      danhsachLK.add(DanhSachLK(modelLinkKien: list[index],soLuong: 0));
+                                    }else{
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Linh kiện đã hết')));
+                                    }
+
+
+
+                                    setState(() {
+
+                                });
+                                Navigator.pop(context);
+                                  },
+                                  child: Card(
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${list[index].materialId!.code} - ${list[index].materialId!.name}',style: StyleApp.textStyle500(),),
+                                          SizedBox(height: 5,),
+                                          Text('Đối tượng: ${list[index].customerName}',style: StyleApp.textStyle600(),),
+                                          SizedBox(height: 5,),
+                                          Text('Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',style: StyleApp.textStyle500()),
+                                          SizedBox(height: 5,), Text('Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',style: StyleApp.textStyle500()),
+                                          SizedBox(height: 5,), Text('Số lượng : ${list[index].amount}',style: StyleApp.textStyle500()),
+                                          SizedBox(height: 5,), Text('Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',style: StyleApp.textStyle500()),
+                                          SizedBox(height: 5,),  Text('Ghi chú: ${list[index].note}',style: StyleApp.textStyle500())
+                                        ],
+                                      ),
+                                    )
+                                  ),
+                                );
+                              },shrinkWrap: true,itemCount: list.length,physics: NeverScrollableScrollPhysics(),),
+                            );
+                          }
+                          return SizedBox();
+                        },bloc: blocDsLinhKien,),
+                      ),
+                    ),
+                  ));
+                },
+                child: Image.asset(
+                  ImagePath.bottomBarAdd,
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+Text('Giá nhập linh kiện'),
+Text('${Const.ConvertPrice.format(sum)} đ'),
               SizedBox(
                 height: 20,
               ),
@@ -839,19 +963,22 @@ proID=list[index].id;
                 });
                 },
                 child: Button1(
-                  // ontap: (){
-                  //   List<materrial> listM=[];
-                  //   for(var item in danhsachLK){
-                  //     listM.add(materrial(id: item.modelLinkKien!.id,solUong: item.soLuong));
-                  //   }
-                  //   for (var item in listM){
-                  //     print(item.id);
-                  //     print(item.solUong);
-                  //   }
-                  // },
+
                   ontap: (){
+                 sum=0;
+                    List<MaterialAttribute> listM=[];
+                    for(var item in danhsachLK){
+                      listM.add(MaterialAttribute(id: item.modelLinkKien!.id,amount: item.soLuong));
+                      sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
+                    }
+
+
                     blocNhanMay.add(CreateRepairOrder(
                       productId: proID,
+                      importPrice: sum.toString(),
+                      moneyBuy: moneyBuy.text.replaceAll(".", ""),
+                      customerCode: customCode,
+                      type: typeInt,
                       warehouseId: warehouseID,
                       customerId: customerID,
                       customerName: cusName.text,
@@ -860,10 +987,11 @@ proID=list[index].id;
                       userId: userID,
                       model: model.text,
                       serial: qrcode.text,
-                      title: 'tittle',
+                      title: title.text,
+                      materialAttribute: listM,
                       exportPrice: gia.text.replaceAll(".", ""),
                       amount: soLuong.text,
-                      importDate: DateTime.now().toString(),
+                      importDate: date.text,
                       note: note.text
                     ));
                   },

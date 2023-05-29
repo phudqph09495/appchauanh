@@ -21,6 +21,7 @@ static const fullListKH="/api/product-attribute/list-customer";
 static const fullListPrd="/api/product-attribute/list-product";
  static const fullListNV="/api/product-attribute/list-user";
  static const createRepairOrder="/api/product-attribute/createOrder";
+ static const updateJob="/api/user/job-update";
 
  ///doanh thu
  static const doanhThu='/api/revenue';

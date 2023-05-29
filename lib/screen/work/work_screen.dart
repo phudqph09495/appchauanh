@@ -15,6 +15,7 @@ import '../../widget/item/button.dart';
 import '../../widget/item/input/text_filed.dart';
 import '../../widget/item/load_image.dart';
 
+import '../home/info/info_nhanmay.dart';
 import 'item/chonLinhKien.dart';
 import 'item/work_item.dart';
 
@@ -389,111 +390,116 @@ onConfirm: (date){
                  return  Padding(
                    padding: const EdgeInsets.all(8.0),
                    child: ListView.builder(itemBuilder: (context,index){
-                     return Card(
-                       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                       color: ColorApp.whiteF0,
-                       child: Row(
-                         crossAxisAlignment: CrossAxisAlignment.center,
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Padding(
-                             padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                             child: Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 SizedBox(
-                                   height: 5,
-                                 ),
-                                 Text(
-                                   model.productAttrs![index].customerName??'',
-                                   style:
-                                   StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),
-                                 ),
-                                 SizedBox(
-                                   height: 5,
-                                 ),
-                                 Row(
-                                   children: [
-                                     Text(
-                                       model.productAttrs![index].imei??'',
-                                       style: StyleApp.textStyle600(
-                                           color: ColorApp.blue8F, fontSize: 12),
-                                     ),
-                                     Text(
-                                       ' - ',
-                                       style: StyleApp.textStyle600(
-                                           color: ColorApp.blue8F, fontSize: 12),
-                                     ),
-                                     SizedBox(
-                                       width: MediaQuery.of(context).size.width * 0.3,
-                                       child: Text(
-                                         model.productAttrs![index].serial??'',
-                                         maxLines: 1,
-                                         overflow: TextOverflow.ellipsis,
-                                         softWrap: false,
-                                         style: StyleApp.textStyle600(
-                                             color: ColorApp.redText, fontSize: 12),
-                                       ),
-                                     ),
-                                   ],
-                                 ),
-                                 SizedBox(
-                                   height: 5,
-                                 ),
-                                 Text(
-                                   model.productAttrs![index].title??'',
-                                   style:
-                                   StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
-                                 ),
-                                 SizedBox(
-                                   height: 5,
-                                 ),
-                                 Text(
-                                   model.productAttrs![index].note??'',
-                                   style:
-                                   StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
-                                 ),
-                                 SizedBox(
-                                   height: 5,
-                                 ),
-                                 // Text(model.productAttrs![index].userId![0].fullName??''),
-                                 ...List.generate(model.productAttrs![index].userId!.length, (index1) => Text(model.productAttrs![index].userId![index1].fullName??'')),
-                                 SizedBox(
-                                   height: 15,
-                                 ),
-                                 Text(model.productAttrs![index].status.toString()),
-                               ],
-                             ),
-                           ),
-                           InkWell(
-                             child: Icon(
-                               Icons.edit_note_outlined,
-                               size: 35,
-                               color: Colors.green,
-                             ),
-                             onTap: () {
-                               showDialog(context: context, builder:(_) => AlertDialog( shape: const RoundedRectangleBorder(
-                                   borderRadius: BorderRadius.all(
-                                       Radius.circular(10.0))),
-                                 content: Container(
-                                   height:
-                                   MediaQuery.of(context).size.height *
-                                       0.55,
-                                   width: MediaQuery.of(context).size.width *
-                                       0.8,
-                                   child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                     return InkWell(
+                       onTap: (){
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs![index].id}',)));
+                       },
+                       child: Card(
+                         margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                         color: ColorApp.whiteF0,
+                         child: Row(
+                           crossAxisAlignment: CrossAxisAlignment.center,
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   Text(
+                                     model.productAttrs![index].customerName??'',
+                                     style:
+                                     StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),
+                                   ),
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   Row(
                                      children: [
-                                       Text('Nhập mô tả',style: StyleApp.textStyle700(fontSize: 18,color: ColorApp.blue00),),
-
-                                       InputText1(label: 'Nhập mô tả',maxLine: 5,),
-
-                                       Center(child: Button1(colorButton: ColorApp.blue00, textColor: Colors.white, textButton: 'Lưu'),)
+                                       Text(
+                                         model.productAttrs![index].imei??'',
+                                         style: StyleApp.textStyle600(
+                                             color: ColorApp.blue8F, fontSize: 12),
+                                       ),
+                                       Text(
+                                         ' - ',
+                                         style: StyleApp.textStyle600(
+                                             color: ColorApp.blue8F, fontSize: 12),
+                                       ),
+                                       SizedBox(
+                                         width: MediaQuery.of(context).size.width * 0.3,
+                                         child: Text(
+                                           model.productAttrs![index].serial??'',
+                                           maxLines: 1,
+                                           overflow: TextOverflow.ellipsis,
+                                           softWrap: false,
+                                           style: StyleApp.textStyle600(
+                                               color: ColorApp.redText, fontSize: 12),
+                                         ),
+                                       ),
                                      ],
                                    ),
-                                 ),));
-                             },
-                           )
-                         ],
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   Text(
+                                     model.productAttrs![index].title??'',
+                                     style:
+                                     StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
+                                   ),
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   Text(
+                                     model.productAttrs![index].note??'',
+                                     style:
+                                     StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 12),
+                                   ),
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   // Text(model.productAttrs![index].userId![0].fullName??''),
+                                   ...List.generate(model.productAttrs![index].userId!.length, (index1) => Text(model.productAttrs![index].userId![index1].fullName??'')),
+                                   SizedBox(
+                                     height: 15,
+                                   ),
+                                   Text(model.productAttrs![index].status.toString()),
+                                 ],
+                               ),
+                             ),
+                             InkWell(
+                               child: Icon(
+                                 Icons.edit_note_outlined,
+                                 size: 35,
+                                 color: Colors.green,
+                               ),
+                               onTap: () {
+                                 showDialog(context: context, builder:(_) => AlertDialog( shape: const RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.all(
+                                         Radius.circular(10.0))),
+                                   content: Container(
+                                     height:
+                                     MediaQuery.of(context).size.height *
+                                         0.55,
+                                     width: MediaQuery.of(context).size.width *
+                                         0.8,
+                                     child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                       children: [
+                                         Text('Nhập mô tả',style: StyleApp.textStyle700(fontSize: 18,color: ColorApp.blue00),),
+
+                                         InputText1(label: 'Nhập mô tả',maxLine: 5,),
+
+                                         Center(child: Button1(colorButton: ColorApp.blue00, textColor: Colors.white, textButton: 'Lưu'),)
+                                       ],
+                                     ),
+                                   ),));
+                               },
+                             )
+                           ],
+                         ),
                        ),
                      );
                    },itemCount: model.productAttrs!.length,shrinkWrap: true,  physics: NeverScrollableScrollPhysics(),),

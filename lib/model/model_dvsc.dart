@@ -2,7 +2,8 @@ class ModelDVSC {
   User? user;
   List<ProductAttrs>? productAttrs;
   List<Total>? total;
-  ModelDVSC({this.user, this.productAttrs,this.total});
+
+  ModelDVSC({this.user, this.productAttrs, this.total});
 
   ModelDVSC.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
@@ -28,6 +29,9 @@ class ModelDVSC {
     if (this.productAttrs != null) {
       data['productAttrs'] = this.productAttrs!.map((v) => v.toJson()).toList();
     }
+    if (this.total != null) {
+      data['total'] = this.total!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -36,7 +40,7 @@ class User {
   int? id;
   String? name;
   String? fullName;
-  String? email;
+  Null? email;
   String? phone;
   int? role;
   int? projectId;
@@ -100,6 +104,7 @@ class ProductAttrs {
   String? serial;
   String? title;
   String? importPrice;
+  String? moneyBuy;
   String? exportPrice;
   int? amount;
   String? importDate;
@@ -119,7 +124,7 @@ class ProductAttrs {
   String? customerAddress;
   int? projectId;
   String? isExport;
-  List<Null>? productAttrMaterialAttr;
+  List<ProductAttrMaterialAttr>? productAttrMaterialAttr;
 
   ProductAttrs(
       {this.id,
@@ -128,6 +133,7 @@ class ProductAttrs {
         this.serial,
         this.title,
         this.importPrice,
+        this.moneyBuy,
         this.exportPrice,
         this.amount,
         this.importDate,
@@ -156,6 +162,7 @@ class ProductAttrs {
     serial = json['serial'];
     title = json['title'];
     importPrice = json['import_price'];
+    moneyBuy = json['money_buy'];
     exportPrice = json['export_price'];
     amount = json['amount'];
     importDate = json['import_date'];
@@ -180,7 +187,12 @@ class ProductAttrs {
     customerAddress = json['customer_address'];
     projectId = json['project_id'];
     isExport = json['is_export'];
-
+    if (json['product_attr_material_attr'] != null) {
+      productAttrMaterialAttr = <ProductAttrMaterialAttr>[];
+      json['product_attr_material_attr'].forEach((v) {
+        productAttrMaterialAttr!.add(new ProductAttrMaterialAttr.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -191,6 +203,7 @@ class ProductAttrs {
     data['serial'] = this.serial;
     data['title'] = this.title;
     data['import_price'] = this.importPrice;
+    data['money_buy'] = this.moneyBuy;
     data['export_price'] = this.exportPrice;
     data['amount'] = this.amount;
     data['import_date'] = this.importDate;
@@ -212,7 +225,10 @@ class ProductAttrs {
     data['customer_address'] = this.customerAddress;
     data['project_id'] = this.projectId;
     data['is_export'] = this.isExport;
-
+    if (this.productAttrMaterialAttr != null) {
+      data['product_attr_material_attr'] =
+          this.productAttrMaterialAttr!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -232,6 +248,23 @@ class UserId {
     return data;
   }
 }
+
+class ProductAttrMaterialAttr {
+  String? code;
+
+  ProductAttrMaterialAttr({this.code});
+
+  ProductAttrMaterialAttr.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    return data;
+  }
+}
+
 class Total {
   int? total;
   int? dangXuLy;

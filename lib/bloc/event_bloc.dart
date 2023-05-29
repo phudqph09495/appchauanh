@@ -124,6 +124,10 @@ class CreateRepairOrder extends EventBloc{
   String? customerName;
   String? customerPhone;
   String? customerAddress;
+  String? customerCode;
+  String? moneyBuy;
+  String? importPrice;
+  int? type;
   int? userId;
   String? model;
   String? serial;
@@ -132,11 +136,16 @@ class CreateRepairOrder extends EventBloc{
   String? amount;
   String? importDate;
   String? note;
+  List<MaterialAttribute>? materialAttribute;
 
   CreateRepairOrder(
       {this.productId,
         this.warehouseId,
         this.customerId,
+        this.type,
+        this.importPrice,
+        this.customerCode,
+        this.moneyBuy,
         this.customerName,
         this.customerPhone,
         this.customerAddress,
@@ -147,6 +156,7 @@ class CreateRepairOrder extends EventBloc{
         this.exportPrice,
         this.amount,
         this.importDate,
+        this.materialAttribute,
         this.note});
 
 
@@ -167,11 +177,46 @@ class CreateRepairOrder extends EventBloc{
     data['amount'] = amount;
     data['import_date'] = importDate;
     data['note'] = note;
+
+
+    data['customer_code'] = customerCode;
+    data['money_buy'] = moneyBuy;
+    data['import_price'] = importPrice;
+    data['type'] = type;
+    if (this.materialAttribute != null) {
+      data['materialAttribute'] =
+          this.materialAttribute!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
+class UpdateOrder extends EventBloc{
+  int? id;
+  int? status;
+  String? note;
+  List<MaterialAttribute>? materialAttribute;
+  UpdateOrder({this.id,this.status,this.note,this.materialAttribute});
 
+}
+class MaterialAttribute {
+  int? id;
+  int? amount;
+
+  MaterialAttribute({this.id, this.amount});
+
+  MaterialAttribute.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    amount = json['amount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['amount'] = this.amount;
+    return data;
+  }
+}
 class DanhSachLK{
   ModelLinkKien? modelLinkKien;
   int? soLuong;

@@ -59,7 +59,7 @@ class ModelLinkKien {
         : null;
     importPrice = json['import_price'];
     salePrice = json['sale_price'];
-    amount = json['amount'];
+    amount = json['amount']??0;
     importDate = json['import_date'];
     note = json['note'];
     customerId = json['customer_id'];

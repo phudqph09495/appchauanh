@@ -25,9 +25,9 @@ class BlocNhanMay extends Bloc<EventBloc, StateBloc> {
 
         if (res['status'] == true) {
 
-          Customer customer=Customer.fromJson(res['data']);
+
           yield LoadSuccess(
-              data: customer
+
           );
         } else if (res['status'] == false) {
           yield LoadFail(error: res['message'] ?? "Lỗi kết nối");

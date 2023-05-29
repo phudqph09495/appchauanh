@@ -58,6 +58,7 @@ class _DoanhThuScreenState extends State<DoanhThuScreen>
                   controller: search,
                  onChanged: (val){
                    bloc_doanhThu.add(GetData(param: time,keySearch: search.text));
+
                  },
                   iconData: Icons.search,
                   radius: 5,
@@ -143,7 +144,7 @@ class _DoanhThuScreenState extends State<DoanhThuScreen>
                              Text('Tổng thu : ', style:
                              StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),),SizedBox(height: 5,),
                              Text(
-                               'Tổng chi :', style:
+                               'Tổng chi : ', style:
                              StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16),
                              ),SizedBox(height: 5,),
                              Text('Lợi nhuận : ',  style:
@@ -153,13 +154,13 @@ class _DoanhThuScreenState extends State<DoanhThuScreen>
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.end,
                            children: [
-                             Text('100.000.00 đ', style:
+                             Text('${Const.ConvertPrice.format(model.orderTotalPrice)} đ', style:
                              StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16)),SizedBox(height: 5,),
                              Text(
-                                 '50.000.00 đ', style:
+                                 '${Const.ConvertPrice.format(model.orderTotalImportPrice)} đ', style:
                              StyleApp.textStyle600(color: ColorApp.blue8F, fontSize: 16)
                              ),SizedBox(height: 5,),
-                             Text('50.000.000 đ ',style:
+                             Text('${Const.ConvertPrice.format(model.orders)} đ ',style:
                              StyleApp.textStyle600(color: ColorApp.redText, fontSize: 16))
                            ],
                          ),

@@ -157,7 +157,7 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                         ],
                       ),
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs![index].id}',)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs![index].id}',))).then((value) => blocDVSC.add(GetData()));
                       },
                     );
                   },itemCount: model.productAttrs!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),);

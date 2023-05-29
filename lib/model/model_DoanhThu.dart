@@ -1,7 +1,12 @@
 class ModelDoanhThu {
   List<Orders>? orders;
-
-  ModelDoanhThu({this.orders});
+  int? total;
+  int? orderTotalImportPrice;
+  int? orderTotalPrice;
+  ModelDoanhThu({this.orders,
+    this.total,
+    this.orderTotalImportPrice,
+    this.orderTotalPrice});
 
   ModelDoanhThu.fromJson(Map<String, dynamic> json) {
     if (json['orders'] != null) {
@@ -10,6 +15,9 @@ class ModelDoanhThu {
         orders!.add(new Orders.fromJson(v));
       });
     }
+    total = json['total'];
+    orderTotalImportPrice = json['order_total_import_price'];
+    orderTotalPrice = json['order_total_price'];
   }
 
   Map<String, dynamic> toJson() {
