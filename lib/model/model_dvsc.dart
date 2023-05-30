@@ -113,7 +113,7 @@ class ProductAttrs {
   String? createdAt;
   String? updatedAt;
   Null? deletedAt;
-  int? warehouseId;
+  List<WarehouseId>? warehouseId;
   int? typeId;
   List<UserId>? userId;
   int? customerId;
@@ -171,7 +171,7 @@ class ProductAttrs {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    warehouseId = json['warehouse_id'];
+
     typeId = json['type_id'];
     if (json['user_id'] != null) {
       userId = <UserId>[];
@@ -184,6 +184,13 @@ class ProductAttrs {
     customerType = json['customer_type'];
     customerName = json['customer_name'];
     customerPhone = json['customer_phone'];
+    if (json['warehouse_id'] != null) {
+      warehouseId = <WarehouseId>[];
+      json['warehouse_id'].forEach((v) {
+        warehouseId!.add(new WarehouseId.fromJson(v));
+      });
+    }
+
     customerAddress = json['customer_address'];
     projectId = json['project_id'];
     isExport = json['is_export'];
@@ -233,12 +240,32 @@ class ProductAttrs {
   }
 }
 
+class WarehouseId {
+  int? id;
+  String? name;
+
+  WarehouseId({this.id, this.name});
+
+  WarehouseId.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    return data;
+  }
+}
+
 class UserId {
   String? fullName;
-
-  UserId({this.fullName});
+  int? id;
+  UserId({this.fullName,this.id});
 
   UserId.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     fullName = json['full_name'];
   }
 

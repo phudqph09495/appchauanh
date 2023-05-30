@@ -680,7 +680,7 @@ proID=list[index].id;
                     readOnly: true,
                     onTap: (){
                       showDialog(context: context, builder: (_)=>AlertDialog(
-                        title: Center(child: Text('Chọn sản phẩm',style: StyleApp.textStyle500(fontSize: 16),)),
+                        title: Center(child: Text('Chọn nhân viên',style: StyleApp.textStyle500(fontSize: 16),)),
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(10.0))),

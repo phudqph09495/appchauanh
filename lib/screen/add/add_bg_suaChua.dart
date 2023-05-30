@@ -1,0 +1,772 @@
+import 'dart:io';
+import 'package:ChauAnh/bloc/bloc/add/bloc_addLinkKien.dart';
+import 'package:ChauAnh/bloc/bloc/add/event_bloc2.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:number_inc_dec/number_inc_dec.dart';
+import 'package:ChauAnh/bloc/check_log_state.dart';
+import 'package:ChauAnh/model/model_linhKien.dart';
+import 'package:ChauAnh/model/model_listKH.dart';
+import 'package:ChauAnh/model/model_listKho.dart';
+import 'package:ChauAnh/model/model_listPrd.dart';
+import 'package:flutter/material.dart';
+import 'package:ChauAnh/config/const.dart';
+import 'package:ChauAnh/config/path/image_path.dart';
+import 'package:ChauAnh/config/share_pref.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import '../../bloc/bloc/KhachHang/bloc_addKH.dart';
+import '../../bloc/bloc/KhachHang/bloc_listKH.dart';
+import '../../bloc/bloc/add/bloc_dsLinhKien.dart';
+import '../../bloc/bloc/baoGia/bloc_bgSuaChua.dart';
+import '../../bloc/bloc/congviec/bloc_dvsc.dart';
+import '../../bloc/bloc/nhanMay/bloc__nhanMay.dart';
+import '../../bloc/bloc/nhanMay/bloc_fullListKH.dart';
+import '../../bloc/bloc/nhanMay/bloc_fullListKho.dart';
+import '../../bloc/bloc/nhanMay/bloc_fullListNV.dart';
+import '../../bloc/bloc/nhanMay/bloc_fullListPrd.dart';
+import '../../bloc/event_bloc.dart';
+import '../../bloc/state_bloc.dart';
+import '../../model/model_dvsc.dart';
+import '../../model/model_listNV.dart';
+import '../../model/model_local.dart';
+import '../../style/init_style.dart';
+import '../../widget/item/Dropdown1.dart';
+import '../../widget/item/button.dart';
+import '../../widget/item/input/text_filed.dart';
+import 'add_baogia.dart';
+
+class ADD_BGSuaChua extends StatefulWidget {
+  @override
+  State<ADD_BGSuaChua> createState() => _ADD_BGSuaChuaState();
+}
+
+class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
+  String? kho;
+  TextEditingController qrcode = TextEditingController();
+  TextEditingController serial = TextEditingController();
+  TextEditingController gia = TextEditingController();
+  TextEditingController giaNhap = TextEditingController();
+  TextEditingController newNane = TextEditingController();
+  TextEditingController newPhone = TextEditingController();
+  TextEditingController newAddress = TextEditingController();
+  String? trangthai;
+  BlocFullListKH blocListKH = BlocFullListKH();
+
+  BlocADDKH blocADDKH = BlocADDKH();
+  TextEditingController moneyBuy = TextEditingController();
+  TextEditingController type = TextEditingController();
+  int? typeInt;
+  String? customCode;
+  TextEditingController cusName = TextEditingController();
+  TextEditingController cusPhone = TextEditingController();
+  TextEditingController cusAdd = TextEditingController();
+  BlocFullListPrd blocFullListPrd = BlocFullListPrd();
+  TextEditingController proName = TextEditingController();
+  BlocFullListKho blocFullListKho = BlocFullListKho();
+  TextEditingController khoName = TextEditingController();
+  BlocFullListNV blocFullListNV = BlocFullListNV();
+  TextEditingController NV = TextEditingController();
+  TextEditingController NVXuatKho = TextEditingController();
+  TextEditingController soLuong = TextEditingController();
+  TextEditingController date = TextEditingController();
+
+  TextEditingController note = TextEditingController();
+  TextEditingController title = TextEditingController();
+  BlocDsLinhKien blocDsLinhKien = BlocDsLinhKien();
+  int? proID;
+  int? warehouseID;
+  int? customerID;
+  int? userID;
+  int? userID_export;
+  BlocbgSuaChua blocNhanMay = BlocbgSuaChua();
+
+
+  List<ProductAttrMaterialAttr> productAttrMaterialAttr=[];
+  BlocDVSC blocDVSC = BlocDVSC();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    blocListKH.add(GetData());
+    blocFullListKho.add(GetData());
+    blocFullListNV.add(GetData());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: Text('Tạo báo giá sửa chữa'),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: ColorApp.linearGradientBanner,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocListener(
+                bloc: blocDVSC,
+                listener: (_, StateBloc state) {
+                  CheckLogState.check(context, state: state, isShowMsg: false,
+                      success: () {
+                    ModelDVSC model =
+                        state is LoadSuccess ? state.data : ModelDVSC();
+                    showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                              title: Center(
+                                  child: Text(
+                                'Chọn kho định ngầm',
+                                style: StyleApp.textStyle500(fontSize: 16),
+                              )),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                              content: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.55,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      child: Card(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text(
+                                            '${model.productAttrs![index].importDate} - ${model.productAttrs![index].customerName} - ${model.productAttrs![index].customerPhone} - Serial: ${model.productAttrs![index].serial} - Imei: ${model.productAttrs![index].imei}',
+                                            style: StyleApp.textStyle500(),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        date.text=model.productAttrs![index].importDate??'';
+                                        cusName.text=model.productAttrs![index].customerName??'';
+                                        cusAdd.text=model.productAttrs![index].customerAddress??'';
+                                        cusPhone.text=model.productAttrs![index].customerPhone??'';
+                                        qrcode.text=model.productAttrs![index].imei??'';
+                                        serial.text=model.productAttrs![index].serial??'';
+                                        gia.text=Const.ConvertPrice.format(int.parse(model.productAttrs![index].exportPrice??'0'))??'';
+                                        giaNhap.text=Const.ConvertPrice.format(int.parse(model.productAttrs![index].importPrice??'0'))??'';
+
+                                        soLuong.text=model.productAttrs![index].amount.toString();
+                                        note.text=model.productAttrs![index].note??'';
+                                        title.text=model.productAttrs![index].title??'';
+                                        userID=model.productAttrs![index].userId![0].id;
+NV.text=model.productAttrs![index].userId![0].fullName??'';
+khoName.text=model.productAttrs![index].warehouseId![0].name??'';
+warehouseID=model.productAttrs![index].warehouseId![0].id;
+typeInt=model.productAttrs![index].typeId;
+if(typeInt==1){
+  type.text='Hàng sửa chữa';
+}else if(typeInt==2){
+  type.text='Hàng Nhập mới';
+}
+                                        productAttrMaterialAttr=model.productAttrs![index].productAttrMaterialAttr??[];
+
+
+
+                                      },
+                                    );
+                                  },
+                                  shrinkWrap: true,
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  itemCount: model.productAttrs!.length,
+                                ),
+                              ),
+                            ));
+                  });
+                },
+                child: InkWell(
+                  onTap: () {
+                    blocDVSC.add(GetData());
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(color: ColorApp.blue00),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Text(
+                        'Chọn mã hàng',
+                        style: StyleApp.textStyle500(
+                            color: ColorApp.whiteF0, fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                'Ngày',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: date,
+                borderColor: Colors.white,
+                label: '',
+                radius: 0,
+                readOnly: true,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Khách hàng',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: cusName,
+                readOnly: true,
+                width: 250,
+                borderColor: Colors.white,
+                label: 'Chọn khách hàng',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Địa Chỉ',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: cusAdd,
+                borderColor: Colors.white,
+                label: 'Nhập địa chỉ',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Số điện thoại',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: cusPhone,
+                keyboardType: TextInputType.phone,
+                borderColor: Colors.white,
+                label: 'Nhập số điện thoại',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Số seri',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: qrcode,
+                width: MediaQuery.of(context).size.width * 0.5,
+                borderColor: Colors.white,
+                label: 'Nhập số seri',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Model máy',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: serial,
+                borderColor: Colors.white,
+                label: 'Nhập model máy',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Giá bán',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: gia,
+                inputformater: [ThousandsSeparatorInputFormatter()],
+                keyboardType: TextInputType.number,
+                borderColor: Colors.white,
+                label: 'Nhập giá',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Giá nhập',
+                style:
+                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: giaNhap,
+                inputformater: [ThousandsSeparatorInputFormatter()],
+                keyboardType: TextInputType.number,
+                borderColor: Colors.white,
+                label: '',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Số lượng',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                keyboardType: TextInputType.number,
+                controller: soLuong,
+                borderColor: Colors.white,
+                label: 'Số lượng',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Tình trạng',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: title,
+                borderColor: Colors.white,
+                label: 'Nhập tình trạng',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Xuất tại kho ',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              BlocBuilder(
+                builder: (_, StateBloc state) {
+                  if (state is LoadSuccess) {
+                    List<ModelListKho> list = state.data;
+                    return InputText1(
+                      controller: khoName,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn kho định ngầm',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                '${list[index].type} - ${list[index].name} - ${list[index].address}',
+                                                style: StyleApp.textStyle500(),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            khoName.text =
+                                                list[index].name ?? '';
+                                            warehouseID = list[index].id;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: list.length,
+                                    ),
+                                  ),
+                                ));
+                      },
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn kho định ngầm',
+                      radius: 0,
+                    );
+                  }
+                  return SizedBox();
+                },
+                bloc: blocFullListKho,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              Text(
+                'Nhân viên Sửa chữa',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              BlocBuilder(
+                builder: (_, StateBloc state) {
+                  if (state is LoadSuccess) {
+                    List<ModelListNV> list = state.data;
+                    return InputText1(
+                      controller: NV,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn nhân viên',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                '${list[index].fullName} - ${list[index].phone}',
+                                                style: StyleApp.textStyle500(),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            NV.text =
+                                                list[index].fullName ?? '';
+                                            userID = list[index].id;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: list.length,
+                                    ),
+                                  ),
+                                ));
+                      },
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn nhân viên',
+                      radius: 0,
+                    );
+                  }
+                  return SizedBox();
+                },
+                bloc: blocFullListNV,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              Divider(),
+              Text(
+                'Nhân viên xuất kho',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              BlocBuilder(
+                builder: (_, StateBloc state) {
+                  if (state is LoadSuccess) {
+                    List<ModelListNV> list = state.data;
+                    return InputText1(
+                      controller: NVXuatKho,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn nhân viên',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                '${list[index].fullName} - ${list[index].phone}',
+                                                style: StyleApp.textStyle500(),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            NVXuatKho.text =
+                                                list[index].fullName ?? '';
+                                            userID_export = list[index].id;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: list.length,
+                                    ),
+                                  ),
+                                ));
+                      },
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn nhân viên',
+                      radius: 0,
+                    );
+                  }
+                  return SizedBox();
+                },
+                bloc: blocFullListNV,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Diễn giải',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: note,
+                borderColor: Colors.white,
+                label: 'Nhập diễn giải',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+
+
+              Divider(),
+              Text(
+                'Loại Nhập Kho',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                readOnly: true,
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.16,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      type.text = 'Hàng sửa chữa';
+                                      typeInt = 1;
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                        color: ColorApp.whiteF0,
+                                        width: double.infinity,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'Hàng sửa chữa',
+                                            style: StyleApp.textStyle500(),
+                                          ),
+                                        ))),
+                                InkWell(
+                                    onTap: () {
+                                      type.text = 'Hàng nhập mới';
+                                      typeInt = 2;
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                        color: ColorApp.whiteF0,
+                                        width: double.infinity,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text('Hàng nhập mới',
+                                              style: StyleApp.textStyle500()),
+                                        ))),
+                              ],
+                            ),
+                          );
+                        });
+                      });
+                },
+                controller: type,
+                borderColor: Colors.white,
+                label: 'Chọn loại nhập kho',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              Text(
+                'Danh sách linh kiện',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ListView.builder(
+                itemBuilder: (context, index) {
+
+                  return Card(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            '${productAttrMaterialAttr[index].code} - ${productAttrMaterialAttr[index]!.code}\nGía nhập :  đ'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('Số lượng :')
+                      ],
+                    ),
+                  );
+                },
+                itemCount: productAttrMaterialAttr.length,
+                shrinkWrap: true,
+              ),
+
+
+              SizedBox(
+                height: 20,
+              ),
+              Divider(),
+              BlocListener(
+                bloc: blocNhanMay,
+                listener: (_, StateBloc state) {
+                  CheckLogState.check(context, state: state, msg: 'Thành công',
+                      success: () {
+                    Navigator.pop(context);
+                  });
+                },
+                child: Button1(
+                  ontap: () {},
+                  colorButton: ColorApp.blue8F,
+                  textColor: ColorApp.whiteF7,
+                  textButton: 'Lưu',
+                  fontSize: 16,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

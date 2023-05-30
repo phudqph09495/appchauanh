@@ -1,4 +1,5 @@
 
+import 'package:ChauAnh/screen/add/add_bg_suaChua.dart';
 import 'package:ChauAnh/screen/add/add_khach.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +69,7 @@ class BottomSheetAccount extends StatelessWidget {
                       ),
                       child: const Text('Sửa chữa'),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ADD_BGSuaChua()));
                       },
                     ),
                     TextButton(

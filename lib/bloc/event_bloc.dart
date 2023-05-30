@@ -282,5 +282,74 @@ class Mattrs {
 
 
 
+class BaoGiaSuaChua extends EventBloc{
+  int? productId;
+  int? productAttrId;
+  String? imei;
+  String? serial;
+  String? title;
+  String? importPrice;
+  String? exportPrice;
+  String? amount;
+  String? importDate;
+  String? note;
+  String? userId;
+  int? customerId;
+  String? customerCode;
+  String? customerName;
+  String? customerPhone;
+  String? customerAddress;
+  int? userExportId;
+  int? warehouseId;
+
+  BaoGiaSuaChua(
+      {this.productId,
+        this.productAttrId,
+        this.imei,
+        this.serial,
+        this.title,
+        this.importPrice,
+        this.exportPrice,
+        this.amount,
+        this.importDate,
+        this.note,
+        this.userId,
+        this.customerId,
+        this.customerCode,
+        this.customerName,
+        this.customerPhone,
+        this.customerAddress,
+        this.userExportId,
+        this.warehouseId});
+
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['product_id'] = this.productId;
+    data['product_attr_id'] = this.productAttrId;
+    data['imei'] = this.imei;
+    data['serial'] = this.serial;
+    data['title'] = this.title;
+    data['import_price'] = this.importPrice;
+    data['export_price'] = this.exportPrice;
+    data['amount'] = this.amount;
+    data['import_date'] = this.importDate;
+    data['note'] = this.note;
+    data['user_id'] = this.userId;
+    data['customer_id'] = this.customerId;
+    data['customer_code'] = this.customerCode;
+    data['customer_name'] = this.customerName;
+    data['customer_phone'] = this.customerPhone;
+    data['customer_address'] = this.customerAddress;
+    data['user_export_id'] = this.userExportId;
+    data['warehouse_id'] = this.warehouseId;
+    return data;
+  }
+}
+
+
+
+
 
 

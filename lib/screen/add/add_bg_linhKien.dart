@@ -54,7 +54,7 @@ class _AddBGLinhKienState extends State<AddBGLinhKien> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('Tạo báo giá'),
+        title: Text('Tạo báo giá linh kiện'),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -362,7 +362,7 @@ class _AddBGLinhKienState extends State<AddBGLinhKien> {
               itemBuilder: (context, index) {
                 TextEditingController con = TextEditingController();
                 TextEditingController gia = TextEditingController();
-                gia.text =Const.ConvertPrice.format(int.parse(danhsachLK[index].price??'0'));
+                gia.text =Const.ConvertPrice.format(int.parse(danhsachLK[index].price!.replaceAll('.', '')??'0'));
                 con.text = danhsachLK[index].soLuong.toString();
                 return Card(
                   child: Row(
@@ -552,8 +552,9 @@ class _AddBGLinhKienState extends State<AddBGLinhKien> {
             BlocListener(
               bloc: blocbgLK,
               listener: (_, StateBloc state) {
-                CheckLogState.check(context, state: state, msg: 'Thành công',
+                CheckLogState.check(context, state: state, msg:state is LoadSuccess? state.data:'Thành công',
                     success: () {
+                  Navigator.pop(context);
                   Navigator.pop(context);
                 });
               },

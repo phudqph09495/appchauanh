@@ -23,6 +23,7 @@ static const fullListPrd="/api/product-attribute/list-product";
  static const createRepairOrder="/api/product-attribute/createOrder";
  static const updateJob="/api/user/job-update";
  static const bgLinhKien="/api/price-quote/material-attr/create";
+ static const bgSuaChua="/api/price-quote/product-attr/create";
 
  ///doanh thu
  static const doanhThu='/api/revenue';
