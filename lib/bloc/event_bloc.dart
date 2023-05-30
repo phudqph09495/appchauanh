@@ -220,13 +220,66 @@ class MaterialAttribute {
 class DanhSachLK{
   ModelLinkKien? modelLinkKien;
   int? soLuong;
-  DanhSachLK({this.modelLinkKien,this.soLuong});
+  String? price;
+  DanhSachLK({this.modelLinkKien,this.soLuong,this.price});
 }
 class materrial{
   int? id;
   int? solUong;
-  materrial({this.id,this.solUong});
+  String? price;
+  materrial({this.id,this.solUong,this.price});
 }
+
+class BaoGiaLK extends EventBloc {
+  int? customerId;
+  String? customerCode;
+  String? customerName;
+  String? customerPhone;
+  String? customerAddress;
+  List<Mattrs>? mattrs;
+
+  BaoGiaLK(
+      {this.customerId,
+        this.customerCode,
+        this.customerName,
+        this.customerPhone,
+        this.customerAddress,
+        this.mattrs});
+
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['customer_id'] = this.customerId;
+    data['customer_code'] = this.customerCode;
+    data['customer_name'] = this.customerName;
+    data['customer_phone'] = this.customerPhone;
+    data['customer_address'] = this.customerAddress;
+    if (this.mattrs != null) {
+      data['mattrs'] = this.mattrs!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Mattrs {
+  int? id;
+  int? amount;
+  String? salePrice;
+
+  Mattrs({this.id, this.amount, this.salePrice});
+
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['amount'] = this.amount;
+    data['sale_price'] = this.salePrice;
+    return data;
+  }
+}
+
 
 
 
