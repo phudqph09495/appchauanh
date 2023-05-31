@@ -75,14 +75,14 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
   TextEditingController title = TextEditingController();
   BlocDsLinhKien blocDsLinhKien = BlocDsLinhKien();
   int? proID;
+  int? proATRID;
   int? warehouseID;
   int? customerID;
   int? userID;
   int? userID_export;
-  BlocbgSuaChua blocNhanMay = BlocbgSuaChua();
+  BlocbgSuaChua BlocBgSuaChua = BlocbgSuaChua();
 
-
-  List<ProductAttrMaterialAttr> productAttrMaterialAttr=[];
+  List<ProductAttrMaterialAttr> productAttrMaterialAttr = [];
   BlocDVSC blocDVSC = BlocDVSC();
 
   @override
@@ -150,32 +150,79 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                       ),
                                       onTap: () {
                                         Navigator.pop(context);
-                                        date.text=model.productAttrs![index].importDate??'';
-                                        cusName.text=model.productAttrs![index].customerName??'';
-                                        cusAdd.text=model.productAttrs![index].customerAddress??'';
-                                        cusPhone.text=model.productAttrs![index].customerPhone??'';
-                                        qrcode.text=model.productAttrs![index].imei??'';
-                                        serial.text=model.productAttrs![index].serial??'';
-                                        gia.text=Const.ConvertPrice.format(int.parse(model.productAttrs![index].exportPrice??'0'))??'';
-                                        giaNhap.text=Const.ConvertPrice.format(int.parse(model.productAttrs![index].importPrice??'0'))??'';
+                                        proID=model.productAttrs![index].productId;
+                                        proATRID=model.productAttrs![index].id;
+                                        date.text = model.productAttrs![index]
+                                                .importDate ??
+                                            '';
+                                        customerID=model
+                                            .productAttrs![index].customerId;
+                                        customCode=model
+                                            .productAttrs![index].customerCode;
+                                        cusName.text = model
+                                                .productAttrs![index]
+                                                .customerName ??
+                                            '';
+                                        cusAdd.text = model.productAttrs![index]
+                                                .customerAddress ??
+                                            '';
+                                        cusPhone.text = model
+                                                .productAttrs![index]
+                                                .customerPhone ??
+                                            '';
+                                        qrcode.text =
+                                            model.productAttrs![index].imei ??
+                                                '';
+                                        serial.text =
+                                            model.productAttrs![index].serial ??
+                                                '';
+                                        gia.text = Const.ConvertPrice.format(
+                                                int.parse(model
+                                                        .productAttrs![index]
+                                                        .exportPrice ??
+                                                    '0')) ??
+                                            '';
+                                        giaNhap.text =
+                                            Const.ConvertPrice.format(int.parse(
+                                                    model.productAttrs![index]
+                                                            .importPrice ??
+                                                        '0')) ??
+                                                '';
 
-                                        soLuong.text=model.productAttrs![index].amount.toString();
-                                        note.text=model.productAttrs![index].note??'';
-                                        title.text=model.productAttrs![index].title??'';
-                                        userID=model.productAttrs![index].userId![0].id;
-NV.text=model.productAttrs![index].userId![0].fullName??'';
-khoName.text=model.productAttrs![index].warehouseId![0].name??'';
-warehouseID=model.productAttrs![index].warehouseId![0].id;
-typeInt=model.productAttrs![index].typeId;
-if(typeInt==1){
-  type.text='Hàng sửa chữa';
-}else if(typeInt==2){
-  type.text='Hàng Nhập mới';
-}
-                                        productAttrMaterialAttr=model.productAttrs![index].productAttrMaterialAttr??[];
-
-
-
+                                        soLuong.text = model
+                                            .productAttrs![index].amount
+                                            .toString();
+                                        note.text =
+                                            model.productAttrs![index].note ??
+                                                '';
+                                        title.text =
+                                            model.productAttrs![index].title ??
+                                                '';
+                                        userID = model
+                                            .productAttrs![index].userId![0].id;
+                                        NV.text = model.productAttrs![index]
+                                                .userId![0].fullName ??
+                                            '';
+                                        khoName.text = model
+                                                .productAttrs![index]
+                                                .warehouseId![0]
+                                                .name ??
+                                            '';
+                                        warehouseID = model.productAttrs![index]
+                                            .warehouseId![0].id;
+                                        typeInt =
+                                            model.productAttrs![index].typeId;
+                                        if (typeInt == 1) {
+                                          type.text = 'Hàng sửa chữa';
+                                        } else if (typeInt == 2) {
+                                          type.text = 'Hàng Nhập mới';
+                                        }
+                                      setState(() {
+                                        productAttrMaterialAttr = model
+                                            .productAttrs![index]
+                                            .productAttrMaterialAttr ??
+                                            [];
+                                      });
                                       },
                                     );
                                   },
@@ -215,7 +262,7 @@ if(typeInt==1){
               ),
               InputText1(
                 controller: date,
-                borderColor: Colors.white,
+                colorBg: ColorApp.whiteF0,
                 label: '',
                 radius: 0,
                 readOnly: true,
@@ -238,9 +285,10 @@ if(typeInt==1){
               InputText1(
                 controller: cusName,
                 readOnly: true,
+                colorBg: ColorApp.whiteF0,
                 width: 250,
                 borderColor: Colors.white,
-                label: 'Chọn khách hàng',
+                label: '',
                 radius: 0,
               ),
               SizedBox(
@@ -259,6 +307,8 @@ if(typeInt==1){
                 height: 10,
               ),
               InputText1(
+                readOnly: true,
+                colorBg: ColorApp.whiteF0,
                 controller: cusAdd,
                 borderColor: Colors.white,
                 label: 'Nhập địa chỉ',
@@ -280,10 +330,12 @@ if(typeInt==1){
                 height: 10,
               ),
               InputText1(
+                readOnly: true,
+                colorBg: ColorApp.whiteF0,
                 controller: cusPhone,
                 keyboardType: TextInputType.phone,
                 borderColor: Colors.white,
-                label: 'Nhập số điện thoại',
+                label: '',
                 radius: 0,
               ),
               SizedBox(
@@ -302,10 +354,12 @@ if(typeInt==1){
                 height: 10,
               ),
               InputText1(
+                readOnly: true,
+                colorBg: ColorApp.whiteF0,
                 controller: qrcode,
                 width: MediaQuery.of(context).size.width * 0.5,
                 borderColor: Colors.white,
-                label: 'Nhập số seri',
+                label: '',
                 radius: 0,
               ),
               SizedBox(
@@ -320,9 +374,11 @@ if(typeInt==1){
                 height: 10,
               ),
               InputText1(
+                readOnly: true,
+                colorBg: ColorApp.whiteF0,
                 controller: serial,
                 borderColor: Colors.white,
-                label: 'Nhập model máy',
+                label: '',
                 radius: 0,
               ),
               SizedBox(
@@ -341,7 +397,7 @@ if(typeInt==1){
                 inputformater: [ThousandsSeparatorInputFormatter()],
                 keyboardType: TextInputType.number,
                 borderColor: Colors.white,
-                label: 'Nhập giá',
+                label: '',
                 radius: 0,
               ),
               SizedBox(
@@ -350,7 +406,7 @@ if(typeInt==1){
               Text(
                 'Giá nhập',
                 style:
-                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
               SizedBox(
                 height: 10,
@@ -393,6 +449,8 @@ if(typeInt==1){
                 height: 10,
               ),
               InputText1(
+                readOnly: true,
+                colorBg: ColorApp.whiteF0,
                 controller: title,
                 borderColor: Colors.white,
                 label: 'Nhập tình trạng',
@@ -644,8 +702,6 @@ if(typeInt==1){
               SizedBox(
                 height: 20,
               ),
-
-
               Divider(),
               Text(
                 'Loại Nhập Kho',
@@ -723,17 +779,16 @@ if(typeInt==1){
               ),
               ListView.builder(
                 itemBuilder: (context, index) {
-
                   return Card(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            '${productAttrMaterialAttr[index].code} - ${productAttrMaterialAttr[index]!.code}\nGía nhập :  đ'),
+                            '${productAttrMaterialAttr[index].code} - ${productAttrMaterialAttr[index]!.name}\nGía nhập : ${Const.ConvertPrice.format(int.parse('${productAttrMaterialAttr[index]!.importPrice}'))}  đ'),
                         SizedBox(
                           width: 10,
                         ),
-                        Text('Số lượng :')
+                        Text('Số lượng : ${productAttrMaterialAttr[index].amount}')
                       ],
                     ),
                   );
@@ -741,14 +796,12 @@ if(typeInt==1){
                 itemCount: productAttrMaterialAttr.length,
                 shrinkWrap: true,
               ),
-
-
               SizedBox(
                 height: 20,
               ),
               Divider(),
               BlocListener(
-                bloc: blocNhanMay,
+                bloc: BlocBgSuaChua,
                 listener: (_, StateBloc state) {
                   CheckLogState.check(context, state: state, msg: 'Thành công',
                       success: () {
@@ -756,7 +809,29 @@ if(typeInt==1){
                   });
                 },
                 child: Button1(
-                  ontap: () {},
+                  ontap: () {
+                    BlocBgSuaChua.add(BaoGiaSuaChua(
+productId: proID,
+                      productAttrId: proATRID,
+                      imei: qrcode.text,
+                      serial: serial.text,
+                      title: title.text,
+                      exportPrice: gia.text.replaceAll('.', ''),
+                      importPrice: giaNhap.text.replaceAll('.', ''),
+                      amount: soLuong.text,
+                        importDate: date.text,
+                      note: note.text,
+                      userId: userID.toString(),
+                      userExportId: userID_export,
+                      customerId: customerID,
+                      customerCode: customCode,
+                      customerName: cusName.text,
+                      customerPhone: cusPhone.text,
+                      customerAddress: cusAdd.text,
+                      warehouseId: warehouseID
+
+                    ));
+                  },
                   colorButton: ColorApp.blue8F,
                   textColor: ColorApp.whiteF7,
                   textButton: 'Lưu',

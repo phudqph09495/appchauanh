@@ -37,7 +37,12 @@ class Const {
       //     ));
     }
   }
-
+static convertTime(String time){
+  var dateTime = DateFormat("yyyy-MM-ddTHH:mm:ss.SSSSSSZ").parse(time, true);
+  var dateLocal = dateTime.toLocal();
+  String date=formatTime(dateLocal.millisecondsSinceEpoch,format: 'dd-MM-yyyy HH:mm');
+  return date;
+}
   static formatTime(int time, {String? format}) {
     if (time == 0) {
       return "";

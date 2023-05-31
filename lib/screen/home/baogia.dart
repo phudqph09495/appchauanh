@@ -1,6 +1,15 @@
+import 'package:ChauAnh/bloc/bloc/baoGia/bloc_listBG.dart';
+import 'package:ChauAnh/bloc/event_bloc.dart';
+import 'package:ChauAnh/model/model_listBG.dart';
 import 'package:ChauAnh/widget/item/input/text_filed.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/bloc/baoGia/bloc_detaiBG.dart';
+import '../../bloc/check_log_state.dart';
+import '../../bloc/state_bloc.dart';
+import '../../config/const.dart';
+import '../../model/model_detailBG.dart';
 import '../../style/init_style.dart';
 import 'info/info_baogia.dart';
 
@@ -9,18 +18,18 @@ class DanhSachBaoGia extends StatefulWidget {
   State<DanhSachBaoGia> createState() => _DanhSachBaoGiaState();
 }
 
-class _DanhSachBaoGiaState extends State<DanhSachBaoGia>with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-  String a = '';
+class _DanhSachBaoGiaState extends State<DanhSachBaoGia>
+    with SingleTickerProviderStateMixin {
+  BlocListBG blocListBG = BlocListBG()..add(GetData());
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
     super.initState();
-    a = '0';
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorApp.whiteF0,
       appBar: AppBar(
         backgroundColor: ColorApp.whiteF7,
         centerTitle: true,
@@ -38,81 +47,991 @@ class _DanhSachBaoGiaState extends State<DanhSachBaoGia>with SingleTickerProvide
           },
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              InputText1(
-                label: 'Tìm kiếm tên, số điện thoại',
-                radius: 10,
-                colorBg: Colors.grey.withOpacity(0.2),
-                colorLabel: ColorApp.blue00,
-                hasLeading: true,
-                iconData: Icons.search_outlined,
-                verti: 7,
-              ),
-              SizedBox(height: 15,),
-              Container(
-                color: Color(0xffF3F3F3),
-                child: TabBar(
-                  onTap: (value) {
-                    print(value);
-                    setState(() {
-                      a = value.toString();
-                    });
-                  },
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  controller: _tabController,
-                  indicatorColor: Colors.transparent,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.grey,
-                  labelStyle: StyleApp.textStyle500(fontSize: 16),
-                  unselectedLabelStyle: StyleApp.textStyle500(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  tabs: <Widget>[
-                    Tab(
-                      child: Text('Tất cả'),
-                    ),
-                    Tab(
-                      child: Text('Ngày'),
-                    ),
-                    Tab(
-                      child: Text('Tuần'),
-                    ),
-                    Tab(
-                      child: Text('Tháng'),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10,),
-              ListView.builder(itemBuilder: (context,index){
-                return InkWell(
+      body: BlocBuilder(
+        builder: (_, StateBloc state) {
+          if (state is LoadSuccess) {
+            ModelListBaoGia modelListBaoGia = state.data;
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: DefaultTabController(
+                  length: 2,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Vũ Đức Huy',style: StyleApp.textStyle500(color: ColorApp.blue3D,fontSize: 18),),
-                      SizedBox(height: 15,),
-                      Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
-                      SizedBox(height: 10,),
-                      Divider()
+                      const TabBar(
+                        isScrollable: true,
+                        labelStyle: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w700),
+                        indicatorColor: ColorApp.red,
+                        unselectedLabelStyle: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400),
+                        labelColor: ColorApp.red,
+                        unselectedLabelColor: ColorApp.black49,
+                        tabs: [
+                          Tab(text: 'Báo giá sửa chữa'),
+                          Tab(text: 'Báo giá  linh kiện'),
+                        ],
+                      ),
+                      Expanded(
+                          child: TabBarView(children: <Widget>[
+                        ListView.builder(
+                          itemBuilder: (context, index) {
+                            BlocDetailBG blocDetailBg = BlocDetailBG();
+                            return BlocListener(
+                              listener: (_, StateBloc state) {
+                                CheckLogState.check(context,
+                                    state: state,
+                                    isShowMsg: false, success: () {
+                                  ModelDetailBG modelDetail =
+                                      state is LoadSuccess
+                                          ? state.data
+                                          : ModelDetailBG();
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          insetPadding: EdgeInsets.all(10),
+                                          content: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.8,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            child: SingleChildScrollView(
+                                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Table(
+                                                    columnWidths: {
+                                                      0: FlexColumnWidth(1),
+                                                      1: FlexColumnWidth(1),
+                                                    },
+                                                    children: [
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Mã Khách hàng')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.customerCode}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Tên Khách hàng: ')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.customerName}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Số điện thoại :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.customerPhone}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Địa chỉ :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.customerAddress}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Loại nhập kho :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  modelDetail.type==1?  'Hàng sửa chữa':'Hàng nhập mới')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'NV sửa chữa :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.userId![0].name}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Ngày nhập kho :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.importDate}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Model :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.imei}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Serial :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.serial}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Tình trạng :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.title}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Giá nhập TV nhà mua :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${Const.ConvertPrice.format(int.parse('${modelDetail.moneyBuy}'))} đ')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Giá nhập linh kiện :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${Const.ConvertPrice.format(int.parse('${modelDetail.importPrice}'))} đ')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Giá bán :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${Const.ConvertPrice.format(int.parse('${modelDetail.exportPrice}'))} đ')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Số lượng :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.amount}')
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              )
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Ghi chú :')
+                                                            ]),
+                                                        Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  '${modelDetail.note}')
+                                                            ]),
+                                                      ]),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Text(
+                                                    'Thông tin linh kiện',
+                                                    style:
+                                                        StyleApp.textStyle500(),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  ListView.builder(
+                                                    itemBuilder:
+                                                        (context, index1) {
+                                                      return Card(
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                '${modelDetail.orderDetails![index1].code} - ${modelDetail.orderDetails![index1]!.name}\nGía nhập : ${Const.ConvertPrice.format(int.parse('${modelDetail.orderDetails![index1]!.importPrice}'))}  đ'),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Text(
+                                                                'Số lượng : ${modelDetail.orderDetails![index1].amount}')
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    shrinkWrap: true,
+                                                    itemCount: modelDetail
+                                                        .orderDetails!.length,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                });
+                              },
+                              bloc: blocDetailBg,
+                              child: InkWell(
+                                onTap: () {
+                                  blocDetailBg.add(GetData(
+                                      param: modelListBaoGia
+                                          .productAttrQuoteOrders![index].id
+                                          .toString()));
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Table(
+                                      columnWidths: {
+                                        0: FlexColumnWidth(1),
+                                        1: FlexColumnWidth(2),
+                                      },
+                                      children: [
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [Text('Ngày báo giá')]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${modelListBaoGia.productAttrQuoteOrders![index].importDate}')
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [Text('Đối tượng : ')]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${modelListBaoGia.productAttrQuoteOrders![index].customerName}')
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [Text('Model :')]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${modelListBaoGia.productAttrQuoteOrders![index].imei}')
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [Text('Serial :')]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${modelListBaoGia.productAttrQuoteOrders![index].serial}')
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5,
+                                                )
+                                              ]),
+                                        ]),
+                                        TableRow(children: [
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [Text('Diễn giải :')]),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${modelListBaoGia.productAttrQuoteOrders![index].title}')
+                                              ]),
+                                        ]),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          shrinkWrap: true,
+                          itemCount:
+                              modelListBaoGia.productAttrQuoteOrders!.length,
+                          physics: NeverScrollableScrollPhysics(),
+                        ),
+                        ListView.builder(
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {},
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Table(
+                                    columnWidths: {
+                                      0: FlexColumnWidth(1),
+                                      1: FlexColumnWidth(2),
+                                    },
+                                    children: [
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [Text('Ngày báo giá')]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  '${Const.convertTime('${modelListBaoGia.materialAttrQuoteOrders![index].createdAt}')}')
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [Text('Đối tượng : ')]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  '${modelListBaoGia.materialAttrQuoteOrders![index].customerName}')
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [Text('Model :')]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  '${modelListBaoGia.materialAttrQuoteOrders![index].imei}')
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [Text('Serial :')]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  '${modelListBaoGia.materialAttrQuoteOrders![index].serial}')
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                      ]),
+                                      TableRow(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [Text('Diễn giải :')]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  '${modelListBaoGia.materialAttrQuoteOrders![index].title}')
+                                            ]),
+                                      ]),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          shrinkWrap: true,
+                          itemCount:
+                              modelListBaoGia.materialAttrQuoteOrders!.length,
+                          physics: NeverScrollableScrollPhysics(),
+                        ),
+                      ]))
                     ],
-                  ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>BaoGiaInFoScreen()));
-                  },
-                );
-              },itemCount: 2,shrinkWrap: true,),
-            ],
-          ),
-        ),
+                  )),
+            );
+          }
+          return SizedBox();
+        },
+        bloc: blocListBG,
       ),
     );
   }
