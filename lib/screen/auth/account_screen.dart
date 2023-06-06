@@ -22,6 +22,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   BlocProfile blocProfile=BlocProfile()..add(GetData());
   BlocLogout blocLogout=BlocLogout();
+
   @override
   Widget build(BuildContext context) {
 

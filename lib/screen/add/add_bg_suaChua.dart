@@ -143,75 +143,75 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Text(
-                                            '${model.productAttrs![index].importDate} - ${model.productAttrs![index].customerName} - ${model.productAttrs![index].customerPhone} - Serial: ${model.productAttrs![index].serial} - Imei: ${model.productAttrs![index].imei}',
+                                            '${model.productAttrs!.data![index].importDate} - ${model.productAttrs!.data![index].customerName} - ${model.productAttrs!.data![index].customerPhone} - Serial: ${model.productAttrs!.data![index].serial} - Imei: ${model.productAttrs!.data![index].imei}',
                                             style: StyleApp.textStyle500(),
                                           ),
                                         ),
                                       ),
                                       onTap: () {
                                         Navigator.pop(context);
-                                        proID=model.productAttrs![index].productId;
-                                        proATRID=model.productAttrs![index].id;
-                                        date.text = model.productAttrs![index]
+                                        proID=model.productAttrs!.data![index].productId;
+                                        proATRID=model.productAttrs!.data![index].id;
+                                        date.text = model.productAttrs!.data![index]
                                                 .importDate ??
                                             '';
                                         customerID=model
-                                            .productAttrs![index].customerId;
+                                            .productAttrs!.data![index].customerId;
                                         customCode=model
-                                            .productAttrs![index].customerCode;
+                                            .productAttrs!.data![index].customerCode;
                                         cusName.text = model
-                                                .productAttrs![index]
+                                                .productAttrs!.data![index]
                                                 .customerName ??
                                             '';
-                                        cusAdd.text = model.productAttrs![index]
+                                        cusAdd.text = model.productAttrs!.data![index]
                                                 .customerAddress ??
                                             '';
                                         cusPhone.text = model
-                                                .productAttrs![index]
+                                                .productAttrs!.data![index]
                                                 .customerPhone ??
                                             '';
                                         qrcode.text =
-                                            model.productAttrs![index].imei ??
+                                            model.productAttrs!.data![index].imei ??
                                                 '';
                                         serial.text =
-                                            model.productAttrs![index].serial ??
+                                            model.productAttrs!.data![index].serial ??
                                                 '';
                                         gia.text = Const.ConvertPrice.format(
                                                 int.parse(model
-                                                        .productAttrs![index]
+                                                        .productAttrs!.data![index]
                                                         .exportPrice ??
                                                     '0')) ??
                                             '';
                                         giaNhap.text =
                                             Const.ConvertPrice.format(int.parse(
-                                                    model.productAttrs![index]
+                                                    model.productAttrs!.data![index]
                                                             .importPrice ??
                                                         '0')) ??
                                                 '';
 
                                         soLuong.text = model
-                                            .productAttrs![index].amount
+                                            .productAttrs!.data![index].amount
                                             .toString();
                                         note.text =
-                                            model.productAttrs![index].note ??
+                                            model.productAttrs!.data![index].note ??
                                                 '';
                                         title.text =
-                                            model.productAttrs![index].title ??
+                                            model.productAttrs!.data![index].title ??
                                                 '';
                                         userID = model
-                                            .productAttrs![index].userId![0].id;
-                                        NV.text = model.productAttrs![index]
+                                            .productAttrs!.data![index].userId![0].id;
+                                        NV.text = model.productAttrs!.data![index]
                                                 .userId![0].fullName ??
                                             '';
                                         khoName.text = model
-                                                .productAttrs![index]
+                                                .productAttrs!.data![index]
                                                 .warehouseId![0]
                                                 .name ??
                                             '';
-                                        warehouseID = model.productAttrs![index]
+                                        warehouseID = model.productAttrs!.data![index]
                                             .warehouseId![0].id;
                                         typeInt =
-                                            model.productAttrs![index].typeId;
+                                            model.productAttrs!.data![index].typeId;
                                         if (typeInt == 1) {
                                           type.text = 'Hàng sửa chữa';
                                         } else if (typeInt == 2) {
@@ -219,7 +219,7 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                         }
                                       setState(() {
                                         productAttrMaterialAttr = model
-                                            .productAttrs![index]
+                                            .productAttrs!.data![index]
                                             .productAttrMaterialAttr ??
                                             [];
                                       });
@@ -228,7 +228,7 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                   },
                                   shrinkWrap: true,
                                   physics: AlwaysScrollableScrollPhysics(),
-                                  itemCount: model.productAttrs!.length,
+                                  itemCount: model.productAttrs!.data!.length,
                                 ),
                               ),
                             ));

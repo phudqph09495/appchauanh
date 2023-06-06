@@ -229,6 +229,7 @@ class ProductAttrMaterialAttr {
   String? name;
   String? importPrice;
   String? salePrice;
+  int? isApproved;
   int? amount;
   Null? note;
   Null? customerId;
@@ -251,6 +252,7 @@ class ProductAttrMaterialAttr {
         this.salePrice,
         this.amount,
         this.note,
+        this.isApproved,
         this.customerId,
         this.customerCode,
         this.customerType,
@@ -271,6 +273,7 @@ class ProductAttrMaterialAttr {
     salePrice = json['sale_price'];
     amount = json['amount'];
     note = json['note'];
+
     customerId = json['customer_id'];
     customerCode = json['customer_code'];
     customerType = json['customer_type'];
@@ -280,6 +283,7 @@ class ProductAttrMaterialAttr {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    isApproved=json['is_approved'];
   }
 
   Map<String, dynamic> toJson() {

@@ -1,18 +1,15 @@
 class ModelDVSC {
   User? user;
-  List<ProductAttrs>? productAttrs;
+  ProductAttrs? productAttrs;
   List<Total>? total;
 
   ModelDVSC({this.user, this.productAttrs, this.total});
 
   ModelDVSC.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
-    if (json['productAttrs'] != null) {
-      productAttrs = <ProductAttrs>[];
-      json['productAttrs'].forEach((v) {
-        productAttrs!.add(new ProductAttrs.fromJson(v));
-      });
-    }
+    productAttrs = json['productAttrs'] != null
+        ? new ProductAttrs.fromJson(json['productAttrs'])
+        : null;
     if (json['total'] != null) {
       total = <Total>[];
       json['total'].forEach((v) {
@@ -27,7 +24,7 @@ class ModelDVSC {
       data['user'] = this.user!.toJson();
     }
     if (this.productAttrs != null) {
-      data['productAttrs'] = this.productAttrs!.map((v) => v.toJson()).toList();
+      data['productAttrs'] = this.productAttrs!.toJson();
     }
     if (this.total != null) {
       data['total'] = this.total!.map((v) => v.toJson()).toList();
@@ -98,6 +95,85 @@ class User {
 }
 
 class ProductAttrs {
+  int? currentPage;
+  List<Data>? data;
+  String? firstPageUrl;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
+  List<Links>? links;
+  String? nextPageUrl;
+  String? path;
+  int? perPage;
+  Null? prevPageUrl;
+  int? to;
+  int? total;
+
+  ProductAttrs(
+      {this.currentPage,
+        this.data,
+        this.firstPageUrl,
+        this.from,
+        this.lastPage,
+        this.lastPageUrl,
+        this.links,
+        this.nextPageUrl,
+        this.path,
+        this.perPage,
+        this.prevPageUrl,
+        this.to,
+        this.total});
+
+  ProductAttrs.fromJson(Map<String, dynamic> json) {
+    currentPage = json['current_page'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+    firstPageUrl = json['first_page_url'];
+    from = json['from'];
+    lastPage = json['last_page'];
+    lastPageUrl = json['last_page_url'];
+    if (json['links'] != null) {
+      links = <Links>[];
+      json['links'].forEach((v) {
+        links!.add(new Links.fromJson(v));
+      });
+    }
+    nextPageUrl = json['next_page_url'];
+    path = json['path'];
+    perPage = json['per_page'];
+    prevPageUrl = json['prev_page_url'];
+    to = json['to'];
+    total = json['total'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['current_page'] = this.currentPage;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    data['first_page_url'] = this.firstPageUrl;
+    data['from'] = this.from;
+    data['last_page'] = this.lastPage;
+    data['last_page_url'] = this.lastPageUrl;
+    if (this.links != null) {
+      data['links'] = this.links!.map((v) => v.toJson()).toList();
+    }
+    data['next_page_url'] = this.nextPageUrl;
+    data['path'] = this.path;
+    data['per_page'] = this.perPage;
+    data['prev_page_url'] = this.prevPageUrl;
+    data['to'] = this.to;
+    data['total'] = this.total;
+    return data;
+  }
+}
+
+class Data {
   int? id;
   int? productId;
   String? imei;
@@ -124,9 +200,10 @@ class ProductAttrs {
   String? customerAddress;
   int? projectId;
   String? isExport;
+  int? isReadMessage;
   List<ProductAttrMaterialAttr>? productAttrMaterialAttr;
 
-  ProductAttrs(
+  Data(
       {this.id,
         this.productId,
         this.imei,
@@ -153,9 +230,10 @@ class ProductAttrs {
         this.customerAddress,
         this.projectId,
         this.isExport,
+        this.isReadMessage,
         this.productAttrMaterialAttr});
 
-  ProductAttrs.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productId = json['product_id'];
     imei = json['imei'];
@@ -171,7 +249,12 @@ class ProductAttrs {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-
+    if (json['warehouse_id'] != null) {
+      warehouseId = <WarehouseId>[];
+      json['warehouse_id'].forEach((v) {
+        warehouseId!.add(new WarehouseId.fromJson(v));
+      });
+    }
     typeId = json['type_id'];
     if (json['user_id'] != null) {
       userId = <UserId>[];
@@ -184,16 +267,10 @@ class ProductAttrs {
     customerType = json['customer_type'];
     customerName = json['customer_name'];
     customerPhone = json['customer_phone'];
-    if (json['warehouse_id'] != null) {
-      warehouseId = <WarehouseId>[];
-      json['warehouse_id'].forEach((v) {
-        warehouseId!.add(new WarehouseId.fromJson(v));
-      });
-    }
-
     customerAddress = json['customer_address'];
     projectId = json['project_id'];
     isExport = json['is_export'];
+    isReadMessage = json['is_read_message'];
     if (json['product_attr_material_attr'] != null) {
       productAttrMaterialAttr = <ProductAttrMaterialAttr>[];
       json['product_attr_material_attr'].forEach((v) {
@@ -219,7 +296,9 @@ class ProductAttrs {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    data['warehouse_id'] = this.warehouseId;
+    if (this.warehouseId != null) {
+      data['warehouse_id'] = this.warehouseId!.map((v) => v.toJson()).toList();
+    }
     data['type_id'] = this.typeId;
     if (this.userId != null) {
       data['user_id'] = this.userId!.map((v) => v.toJson()).toList();
@@ -232,6 +311,7 @@ class ProductAttrs {
     data['customer_address'] = this.customerAddress;
     data['project_id'] = this.projectId;
     data['is_export'] = this.isExport;
+    data['is_read_message'] = this.isReadMessage;
     if (this.productAttrMaterialAttr != null) {
       data['product_attr_material_attr'] =
           this.productAttrMaterialAttr!.map((v) => v.toJson()).toList();
@@ -260,9 +340,10 @@ class WarehouseId {
 }
 
 class UserId {
-  String? fullName;
   int? id;
-  UserId({this.fullName,this.id});
+  String? fullName;
+
+  UserId({this.id, this.fullName});
 
   UserId.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -271,6 +352,7 @@ class UserId {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['full_name'] = this.fullName;
     return data;
   }
@@ -286,12 +368,13 @@ class ProductAttrMaterialAttr {
   String? salePrice;
   int? amount;
   String? note;
-  String? customerId;
-  String? customerCode;
-  String? customerType;
-  String? customerName;
-  String? customerPhone;
-  String? customerAddress;
+  Null? customerId;
+  Null? customerCode;
+  Null? customerType;
+  Null? customerName;
+  Null? customerPhone;
+  Null? customerAddress;
+  int? isApproved;
   String? createdAt;
   String? updatedAt;
   Null? deletedAt;
@@ -312,6 +395,7 @@ class ProductAttrMaterialAttr {
         this.customerName,
         this.customerPhone,
         this.customerAddress,
+        this.isApproved,
         this.createdAt,
         this.updatedAt,
         this.deletedAt});
@@ -332,6 +416,7 @@ class ProductAttrMaterialAttr {
     customerName = json['customer_name'];
     customerPhone = json['customer_phone'];
     customerAddress = json['customer_address'];
+    isApproved = json['is_approved'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -354,9 +439,32 @@ class ProductAttrMaterialAttr {
     data['customer_name'] = this.customerName;
     data['customer_phone'] = this.customerPhone;
     data['customer_address'] = this.customerAddress;
+    data['is_approved'] = this.isApproved;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    return data;
+  }
+}
+
+class Links {
+  String? url;
+  String? label;
+  bool? active;
+
+  Links({this.url, this.label, this.active});
+
+  Links.fromJson(Map<String, dynamic> json) {
+    url = json['url'];
+    label = json['label'];
+    active = json['active'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['url'] = this.url;
+    data['label'] = this.label;
+    data['active'] = this.active;
     return data;
   }
 }

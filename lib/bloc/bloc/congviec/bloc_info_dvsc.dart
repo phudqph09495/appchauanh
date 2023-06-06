@@ -28,8 +28,6 @@ class BlocInfoDVSC extends Bloc<EventBloc, StateBloc> {
 
         if (res['status'] == true) {
           ModelInfoDVSC model = ModelInfoDVSC.fromJson(res['data']);
-
-
           yield LoadSuccess(
             data: model,
           );

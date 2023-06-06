@@ -79,9 +79,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     BlocListener(bloc: blocLogin,
                       listener: (_,StateBloc state) {
                         ModelLogin model = ModelLogin();
+
                         if (state is LoadSuccess) {
                           model = state.data;
                         }
+
                       CheckLogState.check(context, state: state,msg: 'Đăng nhập thành công',
                       success: ()async{
                         await SharePrefsKeys.saveUserKey(model);

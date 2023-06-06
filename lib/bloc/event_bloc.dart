@@ -21,8 +21,8 @@ class LoadMoreEvent extends EventBloc {
 
 
 class GetData extends EventBloc {
-  int? cat_id;
-  int? class_id;
+  String search_cus;
+  String search_time;
   int? subject_id;
   String? id;
   String keySearch;
@@ -43,8 +43,8 @@ class GetData extends EventBloc {
 
   GetData(
       {this.keyword,
-      this.cat_id,
-      this.class_id,
+      this.search_cus='',
+      this.search_time='',
       this.id,
       this.subject_id,
       this.keySearch='',

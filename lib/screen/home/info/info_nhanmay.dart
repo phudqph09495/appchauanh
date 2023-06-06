@@ -868,7 +868,24 @@ listM=[];
                     ),
                     ListView.builder(
                       itemBuilder: (context, index) {
+                        String trangthai='';
+                        Color color=ColorApp.black;
                         TextEditingController con = TextEditingController();
+                        switch( modelInfoDVSC
+                            .productAttr!.productAttrMaterialAttr![index].isApproved){
+                          case 0: {
+                            trangthai='Chờ duyệt';
+                            color=ColorApp.orangeF0;
+                          }break;
+                          case 1: {
+                            trangthai='Đã duyệt';
+                            color=ColorApp.blue1F;
+                          }break;
+                          case 2: {
+                            trangthai='Huỷ bỏ';
+                            color=ColorApp.red;
+                          }break;
+                        }
                         con.text = modelInfoDVSC
                             .productAttr!.productAttrMaterialAttr![index].amount
                             .toString();
@@ -876,8 +893,24 @@ listM=[];
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                  '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name}\nGía nhập : ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(modelInfoDVSC.productAttr!.productAttrMaterialAttr![index]!.importPrice ?? '0'))} đ'),
+                              Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name} '),
+                                  Row(
+                                    children: [
+                                      Text('Trạng thái : '),
+                                      Container(color: color,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('${trangthai} ',style: StyleApp.textStyle500(color: Colors.white),),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                               SizedBox(
                                 width: 10,
                               ),
@@ -988,32 +1021,13 @@ listM=[];
                                                           SizedBox(
                                                             height: 5,
                                                           ),
-                                                          Text(
-                                                            'Đối tượng: ${list[index].customerName}',
-                                                            style: StyleApp
-                                                                .textStyle600(),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              'Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',
-                                                              style: StyleApp
-                                                                  .textStyle500()),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              'Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',
-                                                              style: StyleApp
-                                                                  .textStyle500()),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              'Số lượng : ${list[index].amount}',
-                                                              style: StyleApp
-                                                                  .textStyle500()),
+
+
+                                                          list[index].amount!>0?Text('Còn hàng',style: StyleApp.textStyle500(color: Colors.green),):Text('Hết hàng',style: StyleApp.textStyle500(color: Colors.red),),
+                                                          // Text(
+                                                          //     'Số lượng : ${list[index].amount}',
+                                                          //     style: StyleApp
+                                                          //         .textStyle500()),
                                                           SizedBox(
                                                             height: 5,
                                                           ),

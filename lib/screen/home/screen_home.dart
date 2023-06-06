@@ -233,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 10,
                         ),
                         Text(
-                          'Nhận máy',
+                          'DS Nhận máy',
                           style: StyleApp.textStyle400(fontSize: 14),
                         )
                       ],

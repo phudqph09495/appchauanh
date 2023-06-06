@@ -149,7 +149,7 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(model.productAttrs![index].customerName??'',style: StyleApp.textStyle500(color: ColorApp.blue3D,fontSize: 18),),
+                          Text(model.productAttrs!.data![index].customerName??'',style: StyleApp.textStyle500(color: ColorApp.blue3D,fontSize: 18),),
                           SizedBox(height: 15,),
                           // Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
                           SizedBox(height: 10,),
@@ -157,10 +157,10 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                         ],
                       ),
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs![index].id}',))).then((value) => blocDVSC.add(GetData()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs!.data![index].id}',))).then((value) => blocDVSC.add(GetData()));
                       },
                     );
-                  },itemCount: model.productAttrs!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),);
+                  },itemCount: model.productAttrs!.data!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),);
                 }
                 if(state is LoadFail){
                   return Center(

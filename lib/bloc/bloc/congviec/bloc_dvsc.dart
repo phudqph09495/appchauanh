@@ -11,8 +11,6 @@ import '../../../model/model_tonKho.dart';
 import '../../event_bloc.dart';
 import '../../state_bloc.dart';
 
-
-
 class BlocDVSC extends Bloc<EventBloc, StateBloc> {
   BlocDVSC() : super(StateBloc());
 
@@ -21,13 +19,13 @@ class BlocDVSC extends Bloc<EventBloc, StateBloc> {
     if (event is GetData) {
       yield Loading();
       try {
-
         var res = await Api.getAsync(
-            endPoint: ApiPath.dvsc+'?search='+event.keySearch,  isToken: true);
+            endPoint:
+                '${ApiPath.dvsc}?search=${event.keySearch}&search_customer=${event.search_cus}&search_time=${event.search_time}&page=${event.page}',
+            isToken: true);
 
         if (res['status'] == true) {
           ModelDVSC model = ModelDVSC.fromJson(res['data']);
-
 
           yield LoadSuccess(
             data: model,
