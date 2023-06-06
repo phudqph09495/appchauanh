@@ -20,6 +20,10 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
   TabController? _tabController;
   TabController? _tabController2;
   BlocDVSC blocDVSC=BlocDVSC();
+  BlocDVSC blocDVSC1=BlocDVSC();
+  BlocDVSC blocDVSC2=BlocDVSC();
+  BlocDVSC blocDVSC3=BlocDVSC();
+  BlocDVSC blocDVSC4=BlocDVSC();
   String b = '';
   String a = '';
   @override
@@ -30,6 +34,12 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
     a = '0';
     b='0';
     blocDVSC.add(GetData());
+
+    blocDVSC1.add(GetData(search_time: ''));
+    blocDVSC2.add(GetData(search_time: 'day'));
+    blocDVSC3.add(GetData(search_time: 'week'));
+    blocDVSC4.add(GetData(search_time: 'month'));
+
   }
   @override
   Widget build(BuildContext context) {
@@ -126,16 +136,40 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                   ),
                   tabs: <Widget>[
                     Tab(
-                      child: Text('Tất cả'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model=state.data;
+                          return Text('Tất cả(${model.productAttrs!.total})');
+                        }
+                        return Text('Tất cả');
+                      },bloc: blocDVSC1,),
                     ),
                     Tab(
-                      child: Text('Ngày'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model=state.data;
+                          return Text('Ngày(${model.productAttrs!.total})');
+                        }
+                        return Text('Ngày');
+                      },bloc: blocDVSC2,),
                     ),
                     Tab(
-                      child: Text('Tuần'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model=state.data;
+                          return Text('Tuần(${model.productAttrs!.total})');
+                        }
+                        return Text('Tuần');
+                      },bloc: blocDVSC3,),
                     ),
                     Tab(
-                      child: Text('Tháng'),
+                      child: BlocBuilder(builder: (_,StateBloc state){
+                        if(state is LoadSuccess){
+                          ModelDVSC model=state.data;
+                          return Text('Tháng(${model.productAttrs!.total})');
+                        }
+                        return Text('Tháng');
+                      },bloc: blocDVSC4,),
                     ),
                   ],
                 ),

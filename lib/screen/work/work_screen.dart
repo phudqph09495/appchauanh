@@ -32,7 +32,10 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
   BlocDVSC blocDVSC = BlocDVSC();
 
   int page = 1;
-
+  BlocDVSC blocDVSC1 = BlocDVSC();
+  BlocDVSC blocDVSC2 = BlocDVSC();
+  BlocDVSC blocDVSC3 = BlocDVSC();
+  BlocDVSC blocDVSC4 = BlocDVSC();
   int b = 0;
   DateTime? TimeStart;
   TextEditingController search_cus = TextEditingController();
@@ -46,7 +49,10 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
     b = 0;
     blocDVSC.add(GetData());
 
-
+    blocDVSC1.add(GetData(search_time: ''));
+    blocDVSC2.add(GetData(search_time: 'day'));
+    blocDVSC3.add(GetData(search_time: 'week'));
+    blocDVSC4.add(GetData(search_time: 'month'));
 
     _tabController = TabController(length: 8, vsync: this);
     _tabController2 = TabController(length: 4, vsync: this);
@@ -113,7 +119,24 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                             search_cus: search_cus.text,
                             search_time: time,
                             page: page));
+                        blocDVSC1.add(GetData(
+                            search_time: '',
+                            keySearch: trangThai,
+                            search_cus: search_cus.text));
+                        blocDVSC2.add(GetData(
+                            search_time: 'day',
+                            keySearch: trangThai,
+                            search_cus: search_cus.text));
 
+                        blocDVSC3.add(GetData(
+                            search_time: 'week',
+                            keySearch: trangThai,
+                            search_cus: search_cus.text));
+
+                        blocDVSC4.add(GetData(
+                            search_time: 'month',
+                            keySearch: trangThai,
+                            search_cus: search_cus.text));
                       },
                     ),
                     colorLabel: Color(0xffF3F3F3),
@@ -142,7 +165,24 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         keySearch: trangThai,
                         search_cus: search_cus.text,
                         search_time: time,page: page));
+                    blocDVSC1.add(GetData(
+                        search_time: '',
+                        keySearch: trangThai,
+                        search_cus: search_cus.text));
+                    blocDVSC2.add(GetData(
+                        search_time: 'day',
+                        keySearch: trangThai,
+                        search_cus: search_cus.text));
 
+                    blocDVSC3.add(GetData(
+                        search_time: 'week',
+                        keySearch: trangThai,
+                        search_cus: search_cus.text));
+
+                    blocDVSC4.add(GetData(
+                        search_time: 'month',
+                        keySearch: trangThai,
+                        search_cus: search_cus.text));
                   },
                   isScrollable: true,
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -157,7 +197,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                   ),
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: ColorApp.blue00,
+                    color: Colors.white,
                   ),
                   tabs: <Widget>[
                     Tab(
@@ -328,96 +368,65 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                   ),
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.green,
+                    color: Colors.white,
                   ),
-                  tabs: const <Widget>[
+                  tabs: <Widget>[
                     Tab(
-                      child:  Text('Tất cả'),
+                      child: BlocBuilder(
+                        builder: (_, StateBloc state) {
+                          if (state is LoadSuccess) {
+                            ModelDVSC model = state.data;
+                            return Text(
+                                'Tất cả(${model.productAttrs!.total})');
+                          }
+                          return Text('Tất cả');
+                        },
+                        bloc: blocDVSC1,
+                      ),
                     ),
                     Tab(
-                      child:Text('Ngày'),
+                      child: BlocBuilder(
+                        builder: (_, StateBloc state) {
+                          if (state is LoadSuccess) {
+                            ModelDVSC model = state.data;
+                            return Text(
+                                'Ngày(${model.productAttrs!.total})');
+                          }
+                          return Text('Ngày');
+                        },
+                        bloc: blocDVSC2,
+                      ),
                     ),
                     Tab(
-                      child: Text('Tuần'),
+                      child: BlocBuilder(
+                        builder: (_, StateBloc state) {
+                          if (state is LoadSuccess) {
+                            ModelDVSC model = state.data;
+                            return Text(
+                                'Tuần(${model.productAttrs!.total})');
+                          }
+                          return Text('Tuần');
+                        },
+                        bloc: blocDVSC3,
+                      ),
                     ),
                     Tab(
-                      child: Text('Tháng'),
+                      child: BlocBuilder(
+                        builder: (_, StateBloc state) {
+                          if (state is LoadSuccess) {
+                            ModelDVSC model = state.data;
+                            return Text(
+                                'Tháng(${model.productAttrs!.total})');
+                          }
+                          return Text('Tháng');
+                        },
+                        bloc: blocDVSC4,
+                      ),
                     ),
                   ],
                 ),
               ),
-              // Container(
-              //   color: Color(0xffF3F3F3),
-              //   child: TabBar(
-              //     onTap: (value) {},
-              //     isScrollable: true,
-              //     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              //     controller: _tabController2,
-              //     indicatorColor: Colors.transparent,
-              //     labelColor: Colors.black,
-              //     unselectedLabelColor: Colors.grey,
-              //     labelStyle: StyleApp.textStyle500(fontSize: 16),
-              //     unselectedLabelStyle: StyleApp.textStyle500(
-              //       fontSize: 16,
-              //       color: Colors.black,
-              //     ),
-              //     indicator: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(20),
-              //       color: Colors.white,
-              //     ),
-              //     tabs: <Widget>[
-              //       Tab(
-              //         child: BlocBuilder(
-              //           builder: (_, StateBloc state) {
-              //             if (state is LoadSuccess) {
-              //               ModelDVSC model = state.data;
-              //               return Text('Tất cả(${model.total![0].total})');
-              //             }
-              //             return Text('Tất cả');
-              //           },
-              //           bloc: blocDVSC,
-              //         ),
-              //       ),
-              //       Tab(
-              //         child: BlocBuilder(
-              //           builder: (_, StateBloc state) {
-              //             if (state is LoadSuccess) {
-              //               ModelDVSC model = state.data;
-              //               return Text('Ngày(${model.total![0].dangXuLy})');
-              //             }
-              //             return Text('Ngày');
-              //           },
-              //           bloc: blocDVSC,
-              //         ),
-              //       ),
-              //       Tab(
-              //         child: BlocBuilder(
-              //           builder: (_, StateBloc state) {
-              //             if (state is LoadSuccess) {
-              //               ModelDVSC model = state.data;
-              //               return Text('Tuần(${model.total![0].daXuLy})');
-              //             }
-              //             return Text('Tuần');
-              //           },
-              //           bloc: blocDVSC,
-              //         ),
-              //       ),
-              //       Tab(
-              //         child: BlocBuilder(
-              //           builder: (_, StateBloc state) {
-              //             if (state is LoadSuccess) {
-              //               ModelDVSC model = state.data;
-              //               return Text(
-              //                   'Tháng(${model.total![0].choLinhKien})');
-              //             }
-              //             return Text('Tháng');
-              //           },
-              //           bloc: blocDVSC,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+
               BlocBuilder(
                 builder: (_, StateBloc state) {
                   if (state is LoadSuccess) {
