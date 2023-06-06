@@ -308,6 +308,9 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                 color: Color(0xffF3F3F3),
                 child: TabBar(
                   onTap: (value) {
+                    setState(() {
+                      page=1;
+                    });
                     switch (value) {
                       case 0:
                         // do something
@@ -478,6 +481,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                                   color: Colors.red.withOpacity(0.5))
                             ],
                           ),
+                          SizedBox(height: 10,),
                           ListView.builder(
                             itemBuilder: (context, index) {
                               return InkWell(

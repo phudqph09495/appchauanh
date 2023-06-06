@@ -17,7 +17,7 @@ static const addKH="/api/customer/create";
 static const listTonKho="/api/material/inventory";
 /// nhan may
 static const fullListKH="/api/product-attribute/list-customer";
- static const fullListKho="/api/product-attribute/list-warehouse";
+ static const fullListKho="/api/list-warehouse";
 static const fullListPrd="/api/product-attribute/list-product";
  static const fullListNV="/api/product-attribute/list-user";
  static const createRepairOrder="/api/product-attribute/createOrder";

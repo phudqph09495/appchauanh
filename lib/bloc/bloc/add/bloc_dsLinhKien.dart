@@ -22,7 +22,7 @@ class BlocDsLinhKien extends Bloc<EventBloc, StateBloc> {
       try {
 
         var res = await Api.getAsync(
-            endPoint: ApiPath.dsLinhKien,  isToken: true);
+            endPoint: ApiPath.dsLinhKien+'?search='+event.keySearch+'&wareHouse_id='+event.id,  isToken: true);
 
         if (res['status'] == true) {
           List<ModelLinkKien> list=[];

@@ -397,6 +397,9 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
     ModelLocal(id: '6', name: 'Bảo hành'),
     ModelLocal(id: '7', name: 'Hoàn Thành'),
   ];
+  String khoName='Chọn kho';
+  int? khoID;
+  TextEditingController search = TextEditingController();
   List<MaterialAttribute> listM = [];
   String? status;
   int? idStt;
@@ -484,11 +487,10 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                 TextEditingController note = TextEditingController();
                 note.text = modelInfoDVSC.productAttr!.note ?? '';
                 status = modelInfoDVSC.productAttr!.status ?? '';
-listM=[];
+                listM = [];
 
                 for (var item
                     in modelInfoDVSC.productAttr!.productAttrMaterialAttr!) {
-
                   listM.add(MaterialAttribute(
                       id: item.materialAttrId, amount: item.amount));
                 }
@@ -844,7 +846,7 @@ listM=[];
                                     setState(() {
                                       modelInfoDVSC.productAttr!.status =
                                           listt[index].name;
-                                     idStt=int.parse('${listt[index].id}');
+                                      idStt = int.parse('${listt[index].id}');
                                     });
                                   },
                                   value: index,
@@ -868,23 +870,33 @@ listM=[];
                     ),
                     ListView.builder(
                       itemBuilder: (context, index) {
-                        String trangthai='';
-                        Color color=ColorApp.black;
+                        String trangthai = '';
+                        Color color = ColorApp.black;
+                        bool fix = true;
                         TextEditingController con = TextEditingController();
-                        switch( modelInfoDVSC
-                            .productAttr!.productAttrMaterialAttr![index].isApproved){
-                          case 0: {
-                            trangthai='Chờ duyệt';
-                            color=ColorApp.orangeF0;
-                          }break;
-                          case 1: {
-                            trangthai='Đã duyệt';
-                            color=ColorApp.blue1F;
-                          }break;
-                          case 2: {
-                            trangthai='Huỷ bỏ';
-                            color=ColorApp.red;
-                          }break;
+                        switch (modelInfoDVSC.productAttr!
+                            .productAttrMaterialAttr![index].isApproved) {
+                          case 0:
+                            {
+                              trangthai = 'Chờ duyệt';
+                              fix = true;
+                              color = ColorApp.orangeF0;
+                            }
+                            break;
+                          case 1:
+                            {
+                              fix = false;
+                              trangthai = 'Đã duyệt';
+                              color = ColorApp.blue1F;
+                            }
+                            break;
+                          case 2:
+                            {
+                              fix = true;
+                              trangthai = 'Huỷ bỏ';
+                              color = ColorApp.red;
+                            }
+                            break;
                         }
                         con.text = modelInfoDVSC
                             .productAttr!.productAttrMaterialAttr![index].amount
@@ -893,18 +905,25 @@ listM=[];
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                       '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name} '),
                                   Row(
                                     children: [
                                       Text('Trạng thái : '),
-                                      Container(color: color,
+                                      Container(
+                                        color: color,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text('${trangthai} ',style: StyleApp.textStyle500(color: Colors.white),),
+                                          child: Text(
+                                            '${trangthai} ',
+                                            style: StyleApp.textStyle500(
+                                                color: Colors.white),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -915,40 +934,45 @@ listM=[];
                                 width: 10,
                               ),
                               Expanded(
-                                child: NumberInputPrefabbed.roundedButtons(
-                                  initialValue: modelInfoDVSC.productAttr!
-                                      .productAttrMaterialAttr![index].amount!,
-                                  incDecBgColor: ColorApp.blue00,
-                                  onChanged: (val) {
-                                    listM[index].amount = val.toInt();
+                                child: fix == true
+                                    ? NumberInputPrefabbed.roundedButtons(
+                                        initialValue: modelInfoDVSC
+                                            .productAttr!
+                                            .productAttrMaterialAttr![index]
+                                            .amount!,
+                                        incDecBgColor: ColorApp.blue00,
+                                        onChanged: (val) {
+                                          listM[index].amount = val.toInt();
 
-                                    // modelInfoDVSC
-                                    //     .productAttr!
-                                    //     .productAttrMaterialAttr![index]
-                                    //     .amount = val.toInt();
-                                  },
-                                  onDecrement: (val) {
-                                    listM[index].amount = val.toInt();
-                                    // modelInfoDVSC
-                                    //     .productAttr!
-                                    //     .productAttrMaterialAttr![index]
-                                    //     .amount = val.toInt();
-                                  },
-                                  onIncrement: (val) {
-                                    listM[index].amount = val.toInt();
-                                    // modelInfoDVSC
-                                    //     .productAttr!
-                                    //     .productAttrMaterialAttr![index]
-                                    //     .amount = val.toInt();
-                                  },
-                                  onSubmitted: (val) {
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  scaleHeight: 0.7,
-                                  scaleWidth: 0.9,
-                                  controller: con,
-                                  min: 0,
-                                ),
+                                          // modelInfoDVSC
+                                          //     .productAttr!
+                                          //     .productAttrMaterialAttr![index]
+                                          //     .amount = val.toInt();
+                                        },
+                                        onDecrement: (val) {
+                                          listM[index].amount = val.toInt();
+                                          // modelInfoDVSC
+                                          //     .productAttr!
+                                          //     .productAttrMaterialAttr![index]
+                                          //     .amount = val.toInt();
+                                        },
+                                        onIncrement: (val) {
+                                          listM[index].amount = val.toInt();
+                                          // modelInfoDVSC
+                                          //     .productAttr!
+                                          //     .productAttrMaterialAttr![index]
+                                          //     .amount = val.toInt();
+                                        },
+                                        onSubmitted: (val) {
+                                          FocusScope.of(context).unfocus();
+                                        },
+                                        scaleHeight: 0.7,
+                                        scaleWidth: 0.9,
+                                        controller: con,
+                                        min: 0,
+                                      )
+                                    : Text(
+                                        '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].amount}'),
                               )
                             ],
                           ),
@@ -963,103 +987,187 @@ listM=[];
                         showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                                  content: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.55,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    child: SingleChildScrollView(
-                                      child: BlocBuilder(
-                                        builder: (_, StateBloc state) {
-                                          if (state is LoadSuccess) {
-                                            List<ModelLinkKien> list =
-                                                state.data;
-                                            return SingleChildScrollView(
-                                              child: ListView.builder(
-                                                itemBuilder: (context, index) {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      if (list[index].amount! >
-                                                          0) {
-                                                        modelInfoDVSC
-                                                            .productAttr!
-                                                            .productAttrMaterialAttr!
-                                                            .add(
-                                                                ProductAttrMaterialAttr(
-                                                                  code: list[index].code,
-                                                                  name: list[index].name,
-                                                                  materialAttrId: list[index].id,
-                                                                  importPrice: list[index].importPrice,
-                                                                  amount: 0,
-                                                                ));
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(SnackBar(
-                                                                content: Text(
-                                                                    'Linh kiện đã hết')));
-                                                      }
+                                  content: StatefulBuilder(builder: ( BuildContext context,StateSetter setState1 ){
+                                    return Container(
+                                      height: MediaQuery.of(context).size.height *
+                                          0.75,
+                                      width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                      child: SingleChildScrollView(
+                                        child: BlocBuilder(
+                                          builder: (_, StateBloc state) {
+                                            if (state is LoadSuccess) {
+                                              List<ModelLinkKien> list =
+                                                  state.data;
+                                              return SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    InputText1(
+                                                      controller: search,
+                                                      label: 'Tìm kiếm',
+                                                      hasLeading: true,
+                                                      suffix: Icon(Icons.search),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    BlocBuilder(
+                                                      builder:
+                                                          (_, StateBloc state) {
+                                                        if (state
+                                                        is LoadSuccess) {
+                                                          List<ModelListKho>
+                                                          listKho =
+                                                              state.data;
+                                                          return PopupMenuButton(
 
-                                                      setState(() {});
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Card(
-                                                        child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            '${list[index].materialId!.code} - ${list[index].materialId!.name}',
-                                                            style: StyleApp
-                                                                .textStyle500(),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
+                                                              child:Card(
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.all(8.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(khoName),
+                                                                      Icon(Icons.keyboard_arrow_down_rounded)
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              itemBuilder:
+                                                                  (context) {
+                                                                return List.generate(
+                                                                    listKho.length,
+                                                                        (index) =>
+                                                                        PopupMenuItem(
+                                                                            value: index,
+                                                                          onTap: (){
+                                                                      setState1((){
+                                                                        khoName='${listKho[index].name}';
+                                                                        khoID=listKho[index].id;
+                                                                      });
+                                                                      blocDsLinhKien.add(GetData(keySearch: search.text,id: khoID.toString()));
+                                                                          },
+                                                                            child: Text(
+                                                                                '${listKho[index].name}')));
+                                                              });
+                                                        }
+                                                        return SizedBox();
+                                                      },
+                                                      bloc: blocFullListKho,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    ListView.builder(
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return InkWell(
+                                                          onTap: () {
+                                                            if (list[index]
+                                                                .amount! >
+                                                                0) {
+                                                              modelInfoDVSC
+                                                                  .productAttr!
+                                                                  .productAttrMaterialAttr!
+                                                                  .add(
+                                                                  ProductAttrMaterialAttr(
+                                                                    isApproved: 0,
+                                                                    code: list[index]
+                                                                        .code,
+                                                                    name: list[index]
+                                                                        .name,
+                                                                    materialAttrId:
+                                                                    list[index]
+                                                                        .id,
+                                                                    importPrice: list[
+                                                                    index]
+                                                                        .importPrice,
+                                                                    amount: 0,
+                                                                  ));
+                                                            } else {
+                                                              ScaffoldMessenger
+                                                                  .of(context)
+                                                                  .showSnackBar(
+                                                                  SnackBar(
+                                                                      content:
+                                                                      Text('Linh kiện đã hết')));
+                                                            }
 
+                                                            setState(() {});
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Card(
+                                                              child: Padding(
+                                                                padding:
+                                                                const EdgeInsets
+                                                                    .all(5.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      '${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                                      style: StyleApp
+                                                                          .textStyle500(),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 5,
+                                                                    ),
 
-                                                          list[index].amount!>0?Text('Còn hàng',style: StyleApp.textStyle500(color: Colors.green),):Text('Hết hàng',style: StyleApp.textStyle500(color: Colors.red),),
-                                                          // Text(
-                                                          //     'Số lượng : ${list[index].amount}',
-                                                          //     style: StyleApp
-                                                          //         .textStyle500()),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
-                                                              style: StyleApp
-                                                                  .textStyle500()),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              'Ghi chú: ${list[index].note}',
-                                                              style: StyleApp
-                                                                  .textStyle500())
-                                                        ],
-                                                      ),
-                                                    )),
-                                                  );
-                                                },
-                                                shrinkWrap: true,
-                                                itemCount: list.length,
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                              ),
-                                            );
-                                          }
-                                          return SizedBox();
-                                        },
-                                        bloc: blocDsLinhKien,
+                                                                    list[index].amount! >
+                                                                        0
+                                                                        ? Text(
+                                                                      'Còn hàng',
+                                                                      style: StyleApp.textStyle500(
+                                                                          color:
+                                                                          Colors.green),
+                                                                    )
+                                                                        : Text(
+                                                                      'Hết hàng',
+                                                                      style: StyleApp.textStyle500(
+                                                                          color:
+                                                                          Colors.red),
+                                                                    ),
+                                                                    // Text(
+                                                                    //     'Số lượng : ${list[index].amount}',
+                                                                    //     style: StyleApp
+                                                                    //         .textStyle500()),
+                                                                    SizedBox(
+                                                                      height: 5,
+                                                                    ),
+                                                                    Text(
+                                                                        'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
+                                                                        style: StyleApp
+                                                                            .textStyle500()),
+                                                                    SizedBox(
+                                                                      height: 5,
+                                                                    ),
+                                                                    Text(
+                                                                        'Ghi chú: ${list[index].note}',
+                                                                        style: StyleApp
+                                                                            .textStyle500())
+                                                                  ],
+                                                                ),
+                                                              )),
+                                                        );
+                                                      },
+                                                      shrinkWrap: true,
+                                                      itemCount: list.length,
+                                                      physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                            return SizedBox();
+                                          },
+                                          bloc: blocDsLinhKien,
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  }),
                                 ));
                       },
                       child: Image.asset(
@@ -1085,16 +1193,11 @@ listM=[];
                       },
                       child: Button1(
                         ontap: () {
-
-
                           blocUpdateOrder.add(UpdateOrder(
-                            id: int.parse('${widget.id}'),
-                            status: idStt,
-                            note: note.text,
-                            materialAttribute: listM
-
-                          ));
-
+                              id: int.parse('${widget.id}'),
+                              status: idStt,
+                              note: note.text,
+                              materialAttribute: listM));
                         },
                         colorButton: ColorApp.blue8F,
                         textColor: ColorApp.whiteF7,

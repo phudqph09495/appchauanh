@@ -37,15 +37,15 @@ class User {
   int? id;
   String? name;
   String? fullName;
-  Null? email;
+  String? email;
   String? phone;
   int? role;
   int? projectId;
-  Null? emailVerifiedAt;
+  String? emailVerifiedAt;
   int? status;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   User(
       {this.id,
@@ -105,7 +105,7 @@ class ProductAttrs {
   String? nextPageUrl;
   String? path;
   int? perPage;
-  Null? prevPageUrl;
+  String? prevPageUrl;
   int? to;
   int? total;
 
@@ -188,13 +188,13 @@ class Data {
   String? status;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
   List<WarehouseId>? warehouseId;
   int? typeId;
   List<UserId>? userId;
   int? customerId;
   String? customerCode;
-  Null? customerType;
+  String? customerType;
   String? customerName;
   String? customerPhone;
   String? customerAddress;
@@ -368,16 +368,16 @@ class ProductAttrMaterialAttr {
   String? salePrice;
   int? amount;
   String? note;
-  Null? customerId;
-  Null? customerCode;
-  Null? customerType;
-  Null? customerName;
-  Null? customerPhone;
-  Null? customerAddress;
+  String? customerId;
+  String? customerCode;
+  String? customerType;
+  String? customerName;
+  String? customerPhone;
+  String? customerAddress;
   int? isApproved;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   ProductAttrMaterialAttr(
       {this.id,

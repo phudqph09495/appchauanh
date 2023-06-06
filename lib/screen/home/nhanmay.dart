@@ -24,8 +24,11 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
   BlocDVSC blocDVSC2=BlocDVSC();
   BlocDVSC blocDVSC3=BlocDVSC();
   BlocDVSC blocDVSC4=BlocDVSC();
+  TextEditingController search_cus=TextEditingController();
+  String time='';
   String b = '';
   String a = '';
+  int page=1;
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
@@ -104,6 +107,28 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
               InputText1(
                 label: 'Tìm kiếm tên, số điện thoại',
                 radius: 10,
+                controller: search_cus,
+                onTap: (){
+                  blocDVSC.add(GetData(
+
+                      page: page,
+                      search_cus: search_cus.text,
+                      search_time: time));
+                  blocDVSC1.add(GetData(
+                      search_time: '',
+                      search_cus: search_cus.text));
+                  blocDVSC2.add(GetData(
+                      search_time: 'day',
+                      search_cus: search_cus.text));
+
+                  blocDVSC3.add(GetData(
+                      search_time: 'week',
+                      search_cus: search_cus.text));
+
+                  blocDVSC4.add(GetData(
+                      search_time: 'month',
+                      search_cus: search_cus.text));
+                },
                 colorBg: Colors.grey.withOpacity(0.2),
                 colorLabel: ColorApp.blue00,
                 hasLeading: true,
@@ -115,11 +140,58 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
                 color: Color(0xffF3F3F3),
                 child: TabBar(
                   onTap: (value) {
-                    print(value);
+
                     setState(() {
-                      a = value.toString();
+                      page=1;
                     });
+                    switch (value) {
+                      case 0:
+                      // do something
+                        {
+                          time = '';
+                          blocDVSC.add(GetData(
+
+                              page: page,
+                              search_cus: search_cus.text,
+                              search_time: time));
+                        }
+                        break;
+                      case 1:
+                        {
+                          time = 'day';
+                          blocDVSC.add(GetData(
+
+                              page: page,
+                              search_cus: search_cus.text,
+                              search_time: time));
+                        }
+                        // do something
+                        break;
+                      case 2:
+                        {
+                          time = 'week';
+                          blocDVSC.add(GetData(
+
+                              page: page,
+                              search_cus: search_cus.text,
+                              search_time: time));
+                        }
+                        // do something
+                        break;
+                      case 3:
+                        {
+                          time = 'month';
+                          blocDVSC.add(GetData(
+
+                              page: page,
+                              search_cus: search_cus.text,
+                              search_time: time));
+                        }
+                        // do something
+                        break;
+                    }
                   },
+                  isScrollable: true,
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   controller: _tabController,
                   indicatorColor: Colors.transparent,
@@ -178,23 +250,71 @@ class _NhanMayState extends State<NhanMay>with TickerProviderStateMixin {
               BlocBuilder(builder: (_,StateBloc state){
                 if(state is LoadSuccess){
                   ModelDVSC model=state.data;
-                  return ListView.builder(itemBuilder: (context,index){
-                    return InkWell(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
+                    children: [
+                      Row(
                         children: [
-                          Text(model.productAttrs!.data![index].customerName??'',style: StyleApp.textStyle500(color: ColorApp.blue3D,fontSize: 18),),
-                          SizedBox(height: 15,),
-                          // Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
-                          SizedBox(height: 10,),
-                          Divider()
+                          Text('Trang'),
+                          Text('${page}/'),
+                          Text('${model.productAttrs!.lastPage}'),
+                          page != 1
+                              ? InkWell(
+                            child: Icon(
+                              Icons.arrow_back_ios_outlined,
+                              color: Colors.red,
+                            ),
+                            onTap: () {
+                              page--;
+                              setState(() {});
+                              blocDVSC.add(GetData(
+
+                                  page: page,
+                                  search_cus: search_cus.text,
+                                  search_time: time));
+                            },
+                          )
+                              : Icon(Icons.arrow_back_ios_outlined,
+                              color: Colors.red.withOpacity(0.5)),
+                          page != model.productAttrs!.lastPage
+                              ? InkWell(
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.red,
+                            ),
+                            onTap: () {
+                              page++;
+                              setState(() {});
+                              blocDVSC.add(GetData(
+
+                                  page: page,
+                                  search_cus: search_cus.text,
+                                  search_time: time));
+                            },
+                          )
+                              : Icon(Icons.arrow_forward_ios,
+                              color: Colors.red.withOpacity(0.5))
                         ],
                       ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs!.data![index].id}',))).then((value) => blocDVSC.add(GetData()));
-                      },
-                    );
-                  },itemCount: model.productAttrs!.data!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),);
+                      SizedBox(height: 10,),
+                      ListView.builder(itemBuilder: (context,index){
+                        return InkWell(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(model.productAttrs!.data![index].customerName??'',style: StyleApp.textStyle500(color: ColorApp.blue3D,fontSize: 18),),
+                              SizedBox(height: 15,),
+                              // Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
+                              SizedBox(height: 10,),
+                              Divider()
+                            ],
+                          ),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoNhanMay(id: '${model.productAttrs!.data![index].id}',))).then((value) => blocDVSC.add(GetData()));
+                          },
+                        );
+                      },itemCount: model.productAttrs!.data!.length,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),
+                    ],
+                  );
                 }
                 if(state is LoadFail){
                   return Center(
