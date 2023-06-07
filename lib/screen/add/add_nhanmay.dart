@@ -33,8 +33,6 @@ import '../../widget/item/button.dart';
 import '../../widget/item/input/text_filed.dart';
 import 'add_baogia.dart';
 
-
-
 class AddNhanMay extends StatefulWidget {
   @override
   State<AddNhanMay> createState() => _AddNhanMayState();
@@ -42,6 +40,10 @@ class AddNhanMay extends StatefulWidget {
 
 class _AddNhanMayState extends State<AddNhanMay> {
   String? kho;
+
+  String khoName2='Chọn kho';
+  String khoID='';
+  TextEditingController search = TextEditingController();
   TextEditingController qrcode = TextEditingController();
   TextEditingController model = TextEditingController();
   TextEditingController gia = TextEditingController();
@@ -50,50 +52,49 @@ class _AddNhanMayState extends State<AddNhanMay> {
   TextEditingController newAddress = TextEditingController();
   String? trangthai;
   String? kh;
-  BlocFullListKH blocListKH=BlocFullListKH();
+  BlocFullListKH blocListKH = BlocFullListKH();
   List<ModelSp> list = [];
-  BlocADDKH blocADDKH=BlocADDKH();
-TextEditingController moneyBuy=TextEditingController();
-  TextEditingController type=TextEditingController();
+  BlocADDKH blocADDKH = BlocADDKH();
+  TextEditingController moneyBuy = TextEditingController();
+  TextEditingController type = TextEditingController();
   int? typeInt;
   String? customCode;
-  TextEditingController cusName=TextEditingController();
-  TextEditingController cusPhone=TextEditingController();
-  TextEditingController cusAdd=TextEditingController();
-  BlocFullListPrd blocFullListPrd=BlocFullListPrd();
-  TextEditingController proName=TextEditingController();
-  BlocFullListKho blocFullListKho=BlocFullListKho();
-  TextEditingController khoName=TextEditingController();
-  BlocFullListNV blocFullListNV=BlocFullListNV();
-  TextEditingController NV=TextEditingController();
-  TextEditingController soLuong=TextEditingController();
-TextEditingController date=TextEditingController();
+  TextEditingController cusName = TextEditingController();
+  TextEditingController cusPhone = TextEditingController();
+  TextEditingController cusAdd = TextEditingController();
+  BlocFullListPrd blocFullListPrd = BlocFullListPrd();
+  TextEditingController proName = TextEditingController();
+  BlocFullListKho blocFullListKho = BlocFullListKho();
+  TextEditingController khoName = TextEditingController();
+  BlocFullListNV blocFullListNV = BlocFullListNV();
+  TextEditingController NV = TextEditingController();
+  TextEditingController soLuong = TextEditingController();
+  TextEditingController date = TextEditingController();
 
-
-TextEditingController note=TextEditingController();
-TextEditingController title=TextEditingController();
-  BlocDsLinhKien blocDsLinhKien=BlocDsLinhKien();
+  TextEditingController note = TextEditingController();
+  TextEditingController title = TextEditingController();
+  BlocDsLinhKien blocDsLinhKien = BlocDsLinhKien();
   int? proID;
   int? warehouseID;
   int? customerID;
   int? userID;
-  BlocNhanMay blocNhanMay=BlocNhanMay();
-int sum=0;
-  List<DanhSachLK> danhsachLK=[];
+  BlocNhanMay blocNhanMay = BlocNhanMay();
+  int sum = 0;
+  List<DanhSachLK> danhsachLK = [];
 
-
-
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    date.text=Const.formatTime(DateTime.now().millisecondsSinceEpoch,format: 'yyyy-MM-dd  HH:mm:ss');
+    date.text = Const.formatTime(DateTime.now().millisecondsSinceEpoch,
+        format: 'yyyy-MM-dd  HH:mm:ss');
     blocListKH.add(GetData());
-   blocFullListPrd.add(GetData2());
+    blocFullListPrd.add(GetData2());
     blocFullListKho.add(GetData());
     blocFullListNV.add(GetData());
     blocDsLinhKien.add(GetData());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,16 +145,17 @@ int sum=0;
               ),
               InputText1(
                 controller: date,
-                onTap: (){
+                onTap: () {
                   DatePicker.showDateTimePicker(context,
                       showTitleActions: true,
-                      locale: LocaleType.vi,currentTime: DateTime.now(),
-                      onConfirm: (dateTime){
-                        setState(() {
-                          date.text=Const.formatTime(dateTime.millisecondsSinceEpoch,format: 'yyyy-MM-dd  HH:mm:ss');
-
-                        });
-                      });
+                      locale: LocaleType.vi,
+                      currentTime: DateTime.now(), onConfirm: (dateTime) {
+                    setState(() {
+                      date.text = Const.formatTime(
+                          dateTime.millisecondsSinceEpoch,
+                          format: 'yyyy-MM-dd  HH:mm:ss');
+                    });
+                  });
                 },
                 borderColor: Colors.white,
                 label: Const.formatTime(DateTime.now().millisecondsSinceEpoch),
@@ -178,56 +180,84 @@ int sum=0;
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BlocBuilder(builder: (_,StateBloc state){
-                    if (state is LoadSuccess){
-                      List<Customer> list=state.data;
-                    return Expanded(
-                      child:
-                        InputText1(
-                          controller: cusName,
-                          readOnly: true,
-                          onTap: (){
-                            showDialog(context: context, builder: (_)=>AlertDialog(
-                              title: Center(child: Text('Chọn khách hàng',style: StyleApp.textStyle500(fontSize: 16),)),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0))),
-                              content: Container(
-                                height:
-                                MediaQuery.of(context).size.height *
-                                    0.55,
-                                width: MediaQuery.of(context).size.width *
-                                    0.9,
-                                child: ListView.builder(itemBuilder: (context,index){
-                                  return InkWell(
-                                    child: Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text('${list[index].fullName} - ${list[index].address} - ${list[index].phone}',style: StyleApp.textStyle500(),),
-                                      ),
-                                    ),
-                                    onTap: (){
-                                      cusName.text=list[index].fullName??'';
-                                      customerID=list[index].id;
-                                      cusPhone.text=list[index].phone??'';
-                                      cusAdd.text=list[index].address??'';
-                                      customCode=list[index].code;
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                },shrinkWrap: true,physics: AlwaysScrollableScrollPhysics(),itemCount: list.length,),
-                              ),
-                            ));
-                          },
-                          width: 250,
-                          borderColor: Colors.white,
-                          label: 'Chọn khách hàng',
-                          radius: 0,
-                        ),);
-
-                  }
-                    return SizedBox();
-                  },bloc: blocListKH,),
+                  BlocBuilder(
+                    builder: (_, StateBloc state) {
+                      if (state is LoadSuccess) {
+                        List<Customer> list = state.data;
+                        return Expanded(
+                          child: InputText1(
+                            controller: cusName,
+                            readOnly: true,
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                        title: Center(
+                                            child: Text(
+                                          'Chọn khách hàng',
+                                          style: StyleApp.textStyle500(
+                                              fontSize: 16),
+                                        )),
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0))),
+                                        content: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.55,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: ListView.builder(
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                child: Card(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Text(
+                                                      '${list[index].fullName} - ${list[index].address} - ${list[index].phone}',
+                                                      style: StyleApp
+                                                          .textStyle500(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  cusName.text =
+                                                      list[index].fullName ??
+                                                          '';
+                                                  customerID = list[index].id;
+                                                  cusPhone.text =
+                                                      list[index].phone ?? '';
+                                                  cusAdd.text =
+                                                      list[index].address ?? '';
+                                                  customCode = list[index].code;
+                                                  Navigator.pop(context);
+                                                },
+                                              );
+                                            },
+                                            shrinkWrap: true,
+                                            physics:
+                                                AlwaysScrollableScrollPhysics(),
+                                            itemCount: list.length,
+                                          ),
+                                        ),
+                                      ));
+                            },
+                            width: 250,
+                            borderColor: Colors.white,
+                            label: 'Chọn khách hàng',
+                            radius: 0,
+                          ),
+                        );
+                      }
+                      return SizedBox();
+                    },
+                    bloc: blocListKH,
+                  ),
                   // InputText1(
                   //   onTap: (){},
                   //   width: 250,
@@ -319,31 +349,38 @@ int sum=0;
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          BlocListener(bloc: blocADDKH,
-                                            listener: (_,StateBloc state) {
-                                            Customer cus=state is LoadSuccess? state.data:Customer();
-                                            CheckLogState.check(context, state: state,msg: 'Thêm khách hàng thành công',
-                                            success: (){
-                                              customerID=cus.id;
-                                              cusName.text=cus.fullName??'';
-                                              cusPhone.text=cus.phone??'';
-                                              cusAdd.text=cus.address??'';
-                                              customCode=cus.code;
-                                              newNane.clear();
-                                              newPhone.clear();
-                                              newAddress.clear();
+                                          BlocListener(
+                                            bloc: blocADDKH,
+                                            listener: (_, StateBloc state) {
+                                              Customer cus =
+                                                  state is LoadSuccess
+                                                      ? state.data
+                                                      : Customer();
+                                              CheckLogState.check(context,
+                                                  state: state,
+                                                  msg:
+                                                      'Thêm khách hàng thành công',
+                                                  success: () {
+                                                customerID = cus.id;
+                                                cusName.text =
+                                                    cus.fullName ?? '';
+                                                cusPhone.text = cus.phone ?? '';
+                                                cusAdd.text = cus.address ?? '';
+                                                customCode = cus.code;
+                                                newNane.clear();
+                                                newPhone.clear();
+                                                newAddress.clear();
 
-                                              Navigator.pop(context);
-                                            });
+                                                Navigator.pop(context);
+                                              });
                                             },
                                             child: Button1(
                                                 ontap: () {
                                                   blocADDKH.add(AddCustomer(
-                                                    fullName: newNane.text,
-                                                    phone: newPhone.text,
-                                                    address: newAddress.text,
-                                                    types: [1]
-                                                  ));
+                                                      fullName: newNane.text,
+                                                      phone: newPhone.text,
+                                                      address: newAddress.text,
+                                                      types: [1]));
                                                 },
                                                 colorButton: ColorApp.blue8F,
                                                 textColor: Colors.white,
@@ -423,152 +460,160 @@ int sum=0;
                     style: StyleApp.textStyle500(
                         color: ColorApp.blue8F, fontSize: 18),
                   ),
-
                 ],
               ),
 
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(builder: (_,StateBloc state){
-                if (state is LoadSuccess){
-                  List<ModelListPrd> list=state.data;
-                  return InputText1(
-                    controller: proName,
-                    readOnly: true,
-                    onTap: (){
-                      showDialog(context: context, builder: (_)=>AlertDialog(
-                        title: Center(child: Text('Chọn sản phẩm',style: StyleApp.textStyle500(fontSize: 16),)),
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(10.0))),
-                        content: Container(
-                          height:
-                          MediaQuery.of(context).size.height *
-                              0.55,
-                          width: MediaQuery.of(context).size.width *
-                              0.9,
-                          child: ListView.builder(itemBuilder: (context,index){
-                            return InkWell(
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text('${list[index].code} - ${list[index].name} - ${list[index].note}',style: StyleApp.textStyle500(),),
-                                ),
-                              ),
-                              onTap: (){
-proName.text=list[index].name??'';
-proID=list[index].id;
-                                Navigator.pop(context);
-                              },
-                            );
-                          },shrinkWrap: true,physics: AlwaysScrollableScrollPhysics(),itemCount: list.length,),
-                        ),
-                      ));
-                    },
-                    width: 250,
-                    borderColor: Colors.white,
-                    label: 'Chọn sản phẩm',
-                    radius: 0,
-                  );
-
-                }
-                return SizedBox();
-              },bloc: blocFullListPrd,),
-              SizedBox(height: 10,),
-
-                Text(
-                  'Số seri',
-                  style: StyleApp.textStyle500(
-                      color: ColorApp.blue8F,
-                      fontSize: 18),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-                  children: [
-                    InputText1(
-                      controller: qrcode,
-                      width: MediaQuery.of(context)
-                          .size
-                          .width *
-                          0.5,
-                      borderColor: Colors.white,
-                      label: 'Nhập số seri',
-                      radius: 0,
-                    ),
-                    InkWell(
-                      child: Icon(
-                        Icons.qr_code_scanner,
-                        size: 40,
-                      ),
-                      onTap: () async {
-                        var res =
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                              const SimpleBarcodeScannerPage(),
-                            ));
-                        setState(() {
-                          if (res is String) {
-                            qrcode.text = res;
-                          }
-                        });
+              BlocBuilder(
+                builder: (_, StateBloc state) {
+                  if (state is LoadSuccess) {
+                    List<ModelListPrd> list = state.data;
+                    return InputText1(
+                      controller: proName,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn sản phẩm',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                '${list[index].code} - ${list[index].name} - ${list[index].note}',
+                                                style: StyleApp.textStyle500(),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            proName.text =
+                                                list[index].name ?? '';
+                                            proID = list[index].id;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: list.length,
+                                    ),
+                                  ),
+                                ));
                       },
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Model máy',
-                  style: StyleApp.textStyle500(
-                      color: ColorApp.blue8F,
-                      fontSize: 18),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                InputText1(
-                  controller: model,
-                  borderColor: Colors.white,
-                  label: 'Nhập model máy',
-                  radius: 0,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Giá dự kiến',
-                  style: StyleApp.textStyle500(
-                      color: ColorApp.blue8F,
-                      fontSize: 18),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                InputText1(
-                  controller: gia,
-                  inputformater: [
-                    ThousandsSeparatorInputFormatter()
-                  ],
-                  keyboardType: TextInputType.number,
-                  borderColor: Colors.white,
-                  label: 'Nhập giá',
-                  radius: 0,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn sản phẩm',
+                      radius: 0,
+                    );
+                  }
+                  return SizedBox();
+                },
+                bloc: blocFullListPrd,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+
+              Text(
+                'Số seri',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InputText1(
+                    controller: qrcode,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    borderColor: Colors.white,
+                    label: 'Nhập số seri',
+                    radius: 0,
+                  ),
+                  InkWell(
+                    child: Icon(
+                      Icons.qr_code_scanner,
+                      size: 40,
+                    ),
+                    onTap: () async {
+                      var res = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const SimpleBarcodeScannerPage(),
+                          ));
+                      setState(() {
+                        if (res is String) {
+                          qrcode.text = res;
+                        }
+                      });
+                    },
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Model máy',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: model,
+                borderColor: Colors.white,
+                label: 'Nhập model máy',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Giá dự kiến',
+                style:
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InputText1(
+                controller: gia,
+                inputformater: [ThousandsSeparatorInputFormatter()],
+                keyboardType: TextInputType.number,
+                borderColor: Colors.white,
+                label: 'Nhập giá',
+                radius: 0,
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'Số lượng',
                 style:
-                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
               SizedBox(
                 height: 10,
@@ -586,7 +631,7 @@ proID=list[index].id;
               Text(
                 'Tình trạng',
                 style:
-                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
               SizedBox(
                 height: 10,
@@ -613,55 +658,71 @@ proID=list[index].id;
               SizedBox(
                 height: 10,
               ),
-          BlocBuilder(builder: (_,StateBloc state){
-            if (state is LoadSuccess){
-              List<ModelListKho> list=state.data;
-              return InputText1(
-                controller: khoName,
-                readOnly: true,
-                onTap: (){
-                  showDialog(context: context, builder: (_)=>AlertDialog(
-                    title: Center(child: Text('Chọn kho định ngầm',style: StyleApp.textStyle500(fontSize: 16),)),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(10.0))),
-                    content: Container(
-                      height:
-                      MediaQuery.of(context).size.height *
-                          0.55,
-                      width: MediaQuery.of(context).size.width *
-                          0.9,
-                      child: ListView.builder(itemBuilder: (context,index){
-                        return InkWell(
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Text('${list[index].type} - ${list[index].name} - ${list[index].address}',style: StyleApp.textStyle500(),),
-                            ),
-                          ),
-                          onTap: (){
-                            khoName.text=list[index].name??'';
-                            warehouseID=list[index].id;
-                            Navigator.pop(context);
-                          },
-                        );
-                      },shrinkWrap: true,physics: AlwaysScrollableScrollPhysics(),itemCount: list.length,),
-                    ),
-                  ));
+              BlocBuilder(
+                builder: (_, StateBloc state) {
+                  if (state is LoadSuccess) {
+                    List<ModelListKho> list = state.data;
+                    return InputText1(
+                      controller: khoName,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn kho định ngầm',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                '${list[index].type} - ${list[index].name} - ${list[index].address}',
+                                                style: StyleApp.textStyle500(),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            khoName.text =
+                                                list[index].name ?? '';
+                                            warehouseID = list[index].id;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: list.length,
+                                    ),
+                                  ),
+                                ));
+                      },
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn kho định ngầm',
+                      radius: 0,
+                    );
+                  }
+                  return SizedBox();
                 },
-                width: 250,
-                borderColor: Colors.white,
-                label: 'Chọn kho định ngầm',
-                radius: 0,
-              );
-
-            }
-            return SizedBox();
-          },bloc:blocFullListKho,),
+                bloc: blocFullListKho,
+              ),
               SizedBox(
                 height: 20,
               ),
-
 
               Divider(),
               Text(
@@ -672,51 +733,68 @@ proID=list[index].id;
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(builder: (_,StateBloc state){
-                if (state is LoadSuccess){
-                  List<ModelListNV> list=state.data;
-                  return InputText1(
-                    controller: NV,
-                    readOnly: true,
-                    onTap: (){
-                      showDialog(context: context, builder: (_)=>AlertDialog(
-                        title: Center(child: Text('Chọn nhân viên',style: StyleApp.textStyle500(fontSize: 16),)),
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(10.0))),
-                        content: Container(
-                          height:
-                          MediaQuery.of(context).size.height *
-                              0.55,
-                          width: MediaQuery.of(context).size.width *
-                              0.9,
-                          child: ListView.builder(itemBuilder: (context,index){
-                            return InkWell(
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text('${list[index].fullName} - ${list[index].phone}',style: StyleApp.textStyle500(),),
-                                ),
-                              ),
-                              onTap: (){
-                                NV.text=list[index].fullName??'';
-                                userID=list[index].id;
-                                Navigator.pop(context);
-                              },
-                            );
-                          },shrinkWrap: true,physics: AlwaysScrollableScrollPhysics(),itemCount: list.length,),
-                        ),
-                      ));
-                    },
-                    width: 250,
-                    borderColor: Colors.white,
-                    label: 'Chọn nhân viên',
-                    radius: 0,
-                  );
-
-                }
-                return SizedBox();
-              },bloc: blocFullListNV,),
+              BlocBuilder(
+                builder: (_, StateBloc state) {
+                  if (state is LoadSuccess) {
+                    List<ModelListNV> list = state.data;
+                    return InputText1(
+                      controller: NV,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn nhân viên',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                '${list[index].fullName} - ${list[index].phone}',
+                                                style: StyleApp.textStyle500(),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            NV.text =
+                                                list[index].fullName ?? '';
+                                            userID = list[index].id;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: list.length,
+                                    ),
+                                  ),
+                                ));
+                      },
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn nhân viên',
+                      radius: 0,
+                    );
+                  }
+                  return SizedBox();
+                },
+                bloc: blocFullListNV,
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -742,15 +820,13 @@ proID=list[index].id;
               Text(
                 'Giá TV nhà mua',
                 style:
-                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
               SizedBox(
                 height: 10,
               ),
               InputText1(
-                inputformater: [
-                  ThousandsSeparatorInputFormatter()
-                ],
+                inputformater: [ThousandsSeparatorInputFormatter()],
                 keyboardType: TextInputType.number,
                 controller: moneyBuy,
                 borderColor: Colors.white,
@@ -764,43 +840,59 @@ proID=list[index].id;
               Text(
                 'Loại Nhập Kho',
                 style:
-                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
               SizedBox(
                 height: 10,
               ),
               InputText1(
-readOnly: true,
-                onTap: (){
-  showModalBottomSheet(context: context, builder: (context){
-    return StatefulBuilder(builder: (BuildContext context, StateSetter setState){
-      
-      return Container(height: MediaQuery.of(context).size.height*0.16,
-        child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            InkWell(onTap: (){
-              type.text='Hàng sửa chữa';
-              typeInt=1;
-              Navigator.pop(context);
-            },child: Container(color: ColorApp.whiteF0,width: double.infinity,child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text('Hàng sửa chữa',style: StyleApp.textStyle500(),),
-            ))),
-            InkWell(onTap: (){
-              type.text='Hàng nhập mới';
-              typeInt=2;
-              Navigator.pop(context);
-            },child: Container(color: ColorApp.whiteF0,width: double.infinity,child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text('Hàng nhập mới',style: StyleApp.textStyle500()),
-            ))),
-
-          ],
-        ),
-      );
-    });
-  });
+                readOnly: true,
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.16,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      type.text = 'Hàng sửa chữa';
+                                      typeInt = 1;
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                        color: ColorApp.whiteF0,
+                                        width: double.infinity,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'Hàng sửa chữa',
+                                            style: StyleApp.textStyle500(),
+                                          ),
+                                        ))),
+                                InkWell(
+                                    onTap: () {
+                                      type.text = 'Hàng nhập mới';
+                                      typeInt = 2;
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                        color: ColorApp.whiteF0,
+                                        width: double.infinity,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text('Hàng nhập mới',
+                                              style: StyleApp.textStyle500()),
+                                        ))),
+                              ],
+                            ),
+                          );
+                        });
+                      });
                 },
                 controller: type,
                 borderColor: Colors.white,
@@ -814,135 +906,330 @@ readOnly: true,
               Text(
                 'Danh sách linh kiện',
                 style:
-                StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
+                    StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
 
-            ListView.builder(itemBuilder: (context,index){
-              TextEditingController con=TextEditingController();
-              con.text=danhsachLK[index].soLuong.toString();
-              return Card(
-                child: Row(
+              ListView.builder(
+                itemBuilder: (context, index) {
+                  TextEditingController con = TextEditingController();
+                  con.text = danhsachLK[index].soLuong.toString();
+                  return Card(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            '${danhsachLK[index].modelLinkKien!.code} - ${danhsachLK[index].modelLinkKien!.name}\nGía nhập : ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(danhsachLK[index].modelLinkKien!.importPrice ?? '0'))} đ'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: NumberInputPrefabbed.roundedButtons(
+                            initialValue: danhsachLK[index].soLuong!,
+                            incDecBgColor: ColorApp.blue00,
+                            onChanged: (val) {
+                              danhsachLK[index].soLuong = val.toInt();
+                              setState(() {
+                                sum = 0;
 
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${danhsachLK[index].modelLinkKien!.code} - ${danhsachLK[index].modelLinkKien!.name}\nGía nhập : ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(danhsachLK[index].modelLinkKien!.importPrice ?? '0'))} đ'),
-                    SizedBox(width: 10,),
-                    Expanded(
-                      child: NumberInputPrefabbed.roundedButtons(
-                        initialValue: danhsachLK[index].soLuong!,
-                        incDecBgColor: ColorApp.blue00,
-                        onChanged: (val){
+                                for (var item in danhsachLK) {
+                                  sum += int.parse(
+                                          '${item.modelLinkKien!.importPrice}') *
+                                      item.soLuong!.toInt();
+                                }
+                              });
+                            },
+                            onDecrement: (val) {
+                              danhsachLK[index].soLuong = val.toInt();
+                              setState(() {
+                                sum = 0;
 
-danhsachLK[index].soLuong=val.toInt();
-setState(() {
-  sum=0;
+                                for (var item in danhsachLK) {
+                                  sum += int.parse(
+                                          '${item.modelLinkKien!.importPrice}') *
+                                      item.soLuong!.toInt();
+                                }
+                              });
+                            },
+                            onIncrement: (val) {
+                              danhsachLK[index].soLuong = val.toInt();
+                              setState(() {
+                                sum = 0;
 
-  for(var item in danhsachLK){
-
-    sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
-  }
-});
-
-                        },
-                        onDecrement: (val){
-
-                          danhsachLK[index].soLuong=val.toInt();
-                          setState(() {
-                            sum=0;
-
-                            for(var item in danhsachLK){
-
-                              sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
-                            }
-                          });
-                        },
-                        onIncrement: (val){
-
-                          danhsachLK[index].soLuong=val.toInt();
-                          setState(() {
-                            sum=0;
-
-                            for(var item in danhsachLK){
-
-                              sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
-                            }
-                          });
-                        },
-                        onSubmitted: (val){
-                          FocusScope.of(context).unfocus();
-                        },
-                        scaleHeight: 0.7,
-                        scaleWidth: 0.9,
-                        controller: con,
-                        min: 0,
-                        max: danhsachLK[index].modelLinkKien!.amount!.toInt(),
-
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },itemCount: danhsachLK.length,shrinkWrap: true,),
-              InkWell(
-                onTap: (){
-                  showDialog(context: context, builder: (_)=>AlertDialog(
-                    content: Container(
-                      height:
-                      MediaQuery.of(context).size.height *
-                          0.55,
-                      width: MediaQuery.of(context).size.width *
-                          0.8,
-                      child: SingleChildScrollView(
-                        child: BlocBuilder(builder: (_,StateBloc state){
-                          if(state is LoadSuccess){
-                            List<ModelLinkKien> list=state.data;
-                            return SingleChildScrollView(
-                              child: ListView.builder(itemBuilder: (context,index){
-                                return InkWell(
-                                  onTap: (){
-                                    if(list[index].amount!>0){
-                                      danhsachLK.add(DanhSachLK(modelLinkKien: list[index],soLuong: 0));
-                                    }else{
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Linh kiện đã hết')));
-                                    }
-
-
-
-                                    setState(() {
-
-                                });
-                                Navigator.pop(context);
-                                  },
-                                  child: Card(
-
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${list[index].materialId!.code} - ${list[index].materialId!.name}',style: StyleApp.textStyle500(),),
-                                          SizedBox(height: 5,),
-                                          Text('Đối tượng: ${list[index].customerName}',style: StyleApp.textStyle600(),),
-                                          SizedBox(height: 5,),
-                                          Text('Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',style: StyleApp.textStyle500()),
-                                          SizedBox(height: 5,), Text('Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',style: StyleApp.textStyle500()),
-                                          SizedBox(height: 5,), Text('Số lượng : ${list[index].amount}',style: StyleApp.textStyle500()),
-                                          SizedBox(height: 5,), Text('Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',style: StyleApp.textStyle500()),
-                                          SizedBox(height: 5,),  Text('Ghi chú: ${list[index].note}',style: StyleApp.textStyle500())
-                                        ],
-                                      ),
-                                    )
-                                  ),
-                                );
-                              },shrinkWrap: true,itemCount: list.length,physics: NeverScrollableScrollPhysics(),),
-                            );
-                          }
-                          return SizedBox();
-                        },bloc: blocDsLinhKien,),
-                      ),
+                                for (var item in danhsachLK) {
+                                  sum += int.parse(
+                                          '${item.modelLinkKien!.importPrice}') *
+                                      item.soLuong!.toInt();
+                                }
+                              });
+                            },
+                            onSubmitted: (val) {
+                              FocusScope.of(context).unfocus();
+                            },
+                            scaleHeight: 0.7,
+                            scaleWidth: 0.9,
+                            controller: con,
+                            min: 0,
+                            max: danhsachLK[index]
+                                .modelLinkKien!
+                                .amount!
+                                .toInt(),
+                          ),
+                        )
+                      ],
                     ),
-                  ));
+                  );
+                },
+                itemCount: danhsachLK.length,
+                shrinkWrap: true,
+              ),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                            content: StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState1) {
+                              return Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.75,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: SingleChildScrollView(
+                                  child: BlocBuilder(
+                                    builder: (_, StateBloc state) {
+                                      if (state is LoadSuccess) {
+                                        List<ModelLinkKien> list = state.data;
+                                        return SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              InputText1(
+                                                controller: search,
+                                                label: 'Tìm kiếm',
+                                                hasLeading: true,
+                                                suffix: InkWell(
+                                                    onTap: () {
+                                                      blocDsLinhKien.add(
+                                                          GetData(
+                                                              keySearch:
+                                                                  search.text,
+                                                              id: khoID
+                                                                  .toString()));
+                                                    },
+                                                    child: Icon(Icons.search)),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              BlocBuilder(
+                                                builder: (_, StateBloc state) {
+                                                  if (state is LoadSuccess) {
+                                                    List<ModelListKho> listKho =
+                                                        state.data;
+                                                    listKho.add(ModelListKho(
+                                                        name: 'Tất cả'));
+                                                    return PopupMenuButton(
+                                                        child: Card(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Row(
+                                                              children: [
+                                                                Text(khoName2),
+                                                                Icon(Icons
+                                                                    .keyboard_arrow_down_rounded)
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        itemBuilder: (context) {
+                                                          return List.generate(
+                                                              listKho.length,
+                                                              (index) =>
+                                                                  PopupMenuItem(
+                                                                      value:
+                                                                          index,
+                                                                      onTap:
+                                                                          () {
+                                                                        setState1(
+                                                                            () {
+                                                                          khoName2 =
+                                                                              '${listKho[index].name}';
+                                                                          listKho[index].id != null
+                                                                              ? khoID = listKho[index].id.toString()
+                                                                              : khoID = '';
+                                                                        });
+                                                                        blocDsLinhKien.add(GetData(
+                                                                            keySearch:
+                                                                                search.text,
+                                                                            id: khoID.toString()));
+                                                                      },
+                                                                      child: Text(
+                                                                          '${listKho[index].name}')));
+                                                        });
+                                                  }
+                                                  return SizedBox();
+                                                },
+                                                bloc: blocFullListKho,
+                                              ),
+                                              ListView.builder(
+                                                itemBuilder: (context, index) {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      if (list[index].amount! >
+                                                          0) {
+                                                        danhsachLK.add(
+                                                            DanhSachLK(
+                                                                modelLinkKien:
+                                                                    list[index],
+                                                                soLuong: 0));
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(SnackBar(
+                                                                content: Text(
+                                                                    'Linh kiện đã hết')));
+                                                      }
+
+                                                      setState(() {});
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // child: Card(
+                                                    //     child: Padding(
+                                                    //   padding:
+                                                    //       const EdgeInsets.all(
+                                                    //           5.0),
+                                                    //   child: Column(
+                                                    //     crossAxisAlignment:
+                                                    //         CrossAxisAlignment
+                                                    //             .start,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         '${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                    //         style: StyleApp
+                                                    //             .textStyle500(),
+                                                    //       ),
+                                                    //       SizedBox(
+                                                    //         height: 5,
+                                                    //       ),
+                                                    //       Text(
+                                                    //         'Đối tượng: ${list[index].customerName}',
+                                                    //         style: StyleApp
+                                                    //             .textStyle600(),
+                                                    //       ),
+                                                    //       SizedBox(
+                                                    //         height: 5,
+                                                    //       ),
+                                                    //       Text(
+                                                    //           'Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',
+                                                    //           style: StyleApp
+                                                    //               .textStyle500()),
+                                                    //       SizedBox(
+                                                    //         height: 5,
+                                                    //       ),
+                                                    //       Text(
+                                                    //           'Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',
+                                                    //           style: StyleApp
+                                                    //               .textStyle500()),
+                                                    //       SizedBox(
+                                                    //         height: 5,
+                                                    //       ),
+                                                    //       Text(
+                                                    //           'Số lượng : ${list[index].amount}',
+                                                    //           style: StyleApp
+                                                    //               .textStyle500()),
+                                                    //       SizedBox(
+                                                    //         height: 5,
+                                                    //       ),
+                                                    //       Text(
+                                                    //           'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
+                                                    //           style: StyleApp
+                                                    //               .textStyle500()),
+                                                    //       SizedBox(
+                                                    //         height: 5,
+                                                    //       ),
+                                                    //       Text(
+                                                    //           'Ghi chú: ${list[index].note}',
+                                                    //           style: StyleApp
+                                                    //               .textStyle500())
+                                                    //     ],
+                                                    //   ),
+                                                    // )),
+                                                    child: Card(
+                                                        child: Padding(
+                                                          padding:
+                                                          const EdgeInsets
+                                                              .all(5.0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Text(
+                                                                '#${list[index].id} - ${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                                style: StyleApp
+                                                                    .textStyle500(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+
+                                                              list[index].amount! >
+                                                                  0
+                                                                  ? Text(
+                                                                'Còn hàng',
+                                                                style: StyleApp.textStyle500(
+                                                                    color:
+                                                                    Colors.green),
+                                                              )
+                                                                  : Text(
+                                                                'Hết hàng',
+                                                                style: StyleApp.textStyle500(
+                                                                    color:
+                                                                    Colors.red),
+                                                              ),
+                                                              // Text(
+                                                              //     'Số lượng : ${list[index].amount}',
+                                                              //     style: StyleApp
+                                                              //         .textStyle500()),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                  'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
+                                                                  style: StyleApp
+                                                                      .textStyle500()),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                  'Ghi chú: ${list[index].note}',
+                                                                  style: StyleApp
+                                                                      .textStyle500())
+                                                            ],
+                                                          ),
+                                                        )),
+                                                  );
+                                                },
+                                                shrinkWrap: true,
+                                                itemCount: list.length,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                      return SizedBox();
+                                    },
+                                    bloc: blocDsLinhKien,
+                                  ),
+                                ),
+                              );
+                            }),
+                          ));
                 },
                 child: Image.asset(
                   ImagePath.bottomBarAdd,
@@ -950,50 +1237,51 @@ setState(() {
                   height: 50,
                 ),
               ),
-Text('Giá nhập linh kiện'),
-Text('${Const.ConvertPrice.format(sum)} đ'),
+              // Text('Giá nhập linh kiện'),
+              // Text('${Const.ConvertPrice.format(sum)} đ'),
               SizedBox(
                 height: 20,
               ),
               Divider(),
-              BlocListener(bloc: blocNhanMay,
-                listener: (_,StateBloc state) {
-                CheckLogState.check(context, state: state,msg: 'Thành công',success: (){
-                  Navigator.pop(context);
-                });
+              BlocListener(
+                bloc: blocNhanMay,
+                listener: (_, StateBloc state) {
+                  CheckLogState.check(context, state: state, msg: 'Thành công',
+                      success: () {
+                    Navigator.pop(context);
+                  });
                 },
                 child: Button1(
-
-                  ontap: (){
-                 sum=0;
-                    List<MaterialAttribute> listM=[];
-                    for(var item in danhsachLK){
-                      listM.add(MaterialAttribute(id: item.modelLinkKien!.id,amount: item.soLuong));
-                      sum+=int.parse('${ item.modelLinkKien!.importPrice}')*item.soLuong!.toInt();
+                  ontap: () {
+                    sum = 0;
+                    List<MaterialAttribute> listM = [];
+                    for (var item in danhsachLK) {
+                      listM.add(MaterialAttribute(
+                          id: item.modelLinkKien!.id, amount: item.soLuong));
+                      sum += int.parse('${item.modelLinkKien!.importPrice}') *
+                          item.soLuong!.toInt();
                     }
 
-
                     blocNhanMay.add(CreateRepairOrder(
-                      productId: proID,
-                      importPrice: sum.toString(),
-                      moneyBuy: moneyBuy.text.replaceAll(".", ""),
-                      customerCode: customCode,
-                      type: typeInt,
-                      warehouseId: warehouseID,
-                      customerId: customerID,
-                      customerName: cusName.text,
-                      customerPhone: cusPhone.text,
-                      customerAddress: cusAdd.text,
-                      userId: userID,
-                      model: model.text,
-                      serial: qrcode.text,
-                      title: title.text,
-                      materialAttribute: listM,
-                      exportPrice: gia.text.replaceAll(".", ""),
-                      amount: soLuong.text,
-                      importDate: date.text,
-                      note: note.text
-                    ));
+                        productId: proID,
+                        importPrice: sum.toString(),
+                        moneyBuy: moneyBuy.text.replaceAll(".", ""),
+                        customerCode: customCode,
+                        type: typeInt,
+                        warehouseId: warehouseID,
+                        customerId: customerID,
+                        customerName: cusName.text,
+                        customerPhone: cusPhone.text,
+                        customerAddress: cusAdd.text,
+                        userId: userID,
+                        model: model.text,
+                        serial: qrcode.text,
+                        title: title.text,
+                        materialAttribute: listM,
+                        exportPrice: gia.text.replaceAll(".", ""),
+                        amount: soLuong.text,
+                        importDate: date.text,
+                        note: note.text));
                   },
                   colorButton: ColorApp.blue8F,
                   textColor: ColorApp.whiteF7,

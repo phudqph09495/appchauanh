@@ -398,7 +398,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
     ModelLocal(id: '7', name: 'Hoàn Thành'),
   ];
   String khoName='Chọn kho';
-  int? khoID;
+  String khoID='';
   TextEditingController search = TextEditingController();
   List<MaterialAttribute> listM = [];
   String? status;
@@ -428,7 +428,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chi tiết đơn'),
+        title: Text('Thông tin sửa chữa'),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -498,7 +498,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Ngày',
+                      'Ngày nhận máy',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
@@ -519,44 +519,35 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                       height: 10,
                     ),
                     Text(
-                      'Khách hàng',
+                      'Mã Khách hàng',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BlocBuilder(
-                          builder: (_, StateBloc state) {
-                            if (state is LoadSuccess) {
-                              List<Customer> list = state.data;
-                              return Expanded(
-                                child: InputText1(
-                                  readOnly: true,
-                                  width: 250,
-                                  borderColor: Colors.white,
-                                  label: modelInfoDVSC.productAttr!
-                                          .customerId![0].fullName ??
-                                      '',
-                                  radius: 0,
-                                ),
-                              );
-                            }
-                            return SizedBox();
-                          },
-                          bloc: blocListKH,
-                        ),
-                        // InputText1(
-                        //   onTap: (){},
-                        //   width: 250,
-                        //   borderColor: Colors.white,
-                        //   label: 'Nhập khách hàng',
-                        //   radius: 0,
-                        // ),
-                      ],
+                    InputText1(
+                      readOnly: true,
+                      borderColor: Colors.white,
+                      label: modelInfoDVSC.productAttr!.customerCode ?? '',
+                      radius: 0,
+                    ),
+                    Text(
+                      'Tên khách hàng',
+                      style: StyleApp.textStyle500(
+                          color: ColorApp.blue8F, fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InputText1(
+                      readOnly: true,
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: modelInfoDVSC.productAttr!
+                          .customerId![0].fullName ??
+                          '',
+                      radius: 0,
                     ),
                     SizedBox(
                       height: 10,
@@ -579,15 +570,16 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                       label: modelInfoDVSC.productAttr!.customerAddress ?? '',
                       radius: 0,
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+
                     Divider(),
+
+
                     SizedBox(
                       height: 10,
                     ),
+
                     Text(
-                      'Số điện thoại',
+                      'Kho định ngầm ',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
@@ -596,74 +588,51 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                     ),
                     InputText1(
                       readOnly: true,
+
                       borderColor: Colors.white,
-                      label: modelInfoDVSC.productAttr!.customerPhone ?? '',
+                      label: modelInfoDVSC
+                          .productAttr!.warehouseId![0].name ??
+                          '',
                       radius: 0,
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    Divider(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Nhập thông tin sản phẩm',
-                          style: StyleApp.textStyle500(
-                              color: ColorApp.blue8F, fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    BlocBuilder(
-                      builder: (_, StateBloc state) {
-                        if (state is LoadSuccess) {
-                          List<ModelListPrd> list = state.data;
-                          return InputText1(
-                            readOnly: true,
-                            width: 250,
-                            borderColor: Colors.white,
-                            label:
-                                modelInfoDVSC.productAttr!.productId![0].name ??
-                                    '',
-                            radius: 0,
-                          );
-                        }
-                        return SizedBox();
-                      },
-                      bloc: blocFullListPrd,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Số seri',
-                      style: StyleApp.textStyle500(
-                          color: ColorApp.blue8F, fontSize: 18),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InputText1(
-                          readOnly: true,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          borderColor: Colors.white,
-                          label: modelInfoDVSC.productAttr!.serial ?? '',
-                          radius: 0,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       'Nhập thông tin sản phẩm',
+                    //       style: StyleApp.textStyle500(
+                    //           color: ColorApp.blue8F, fontSize: 18),
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // BlocBuilder(
+                    //   builder: (_, StateBloc state) {
+                    //     if (state is LoadSuccess) {
+                    //       List<ModelListPrd> list = state.data;
+                    //       return InputText1(
+                    //         readOnly: true,
+                    //         width: 250,
+                    //         borderColor: Colors.white,
+                    //         label:
+                    //             modelInfoDVSC.productAttr!.productId![0].name ??
+                    //                 '',
+                    //         radius: 0,
+                    //       );
+                    //     }
+                    //     return SizedBox();
+                    //   },
+                    //   bloc: blocFullListPrd,
+                    // ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+
                     Text(
                       'Model máy',
                       style: StyleApp.textStyle500(
@@ -677,6 +646,24 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                       borderColor: Colors.white,
                       label: modelInfoDVSC.productAttr!.imei ?? '',
                       radius: 0,
+                    ),
+                    Text(
+                      'Số seri',
+                      style: StyleApp.textStyle500(
+                          color: ColorApp.blue8F, fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InputText1(
+                      readOnly: true,
+
+                      borderColor: Colors.white,
+                      label: modelInfoDVSC.productAttr!.serial ?? '',
+                      radius: 0,
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       height: 10,
@@ -720,7 +707,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                       height: 10,
                     ),
                     Text(
-                      'Tình trạng',
+                      'Tình trạng nhận máy',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
@@ -737,41 +724,10 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                       height: 20,
                     ),
                     Divider(),
-                    SizedBox(
-                      height: 10,
-                    ),
+
+
                     Text(
-                      'Kho định ngầm ',
-                      style: StyleApp.textStyle500(
-                          color: ColorApp.blue8F, fontSize: 18),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    BlocBuilder(
-                      builder: (_, StateBloc state) {
-                        if (state is LoadSuccess) {
-                          List<ModelListKho> list = state.data;
-                          return InputText1(
-                            readOnly: true,
-                            width: 250,
-                            borderColor: Colors.white,
-                            label: modelInfoDVSC
-                                    .productAttr!.warehouseId![0].name ??
-                                '',
-                            radius: 0,
-                          );
-                        }
-                        return SizedBox();
-                      },
-                      bloc: blocFullListKho,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(),
-                    Text(
-                      'Nhân viên',
+                      'Nhân viên sửa chữa',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
@@ -805,7 +761,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                     ),
                     Divider(),
                     Text(
-                      'Diễn giải',
+                      'Ghi chú',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
@@ -861,7 +817,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                     ),
                     Divider(),
                     Text(
-                      'Danh sách linh kiện',
+                      'Linh kiện thay thế',
                       style: StyleApp.textStyle500(
                           color: ColorApp.blue8F, fontSize: 18),
                     ),
@@ -911,7 +867,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name} '),
+                                      '#${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].id}-${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name} '),
                                   Row(
                                     children: [
                                       Text('Trạng thái : '),
@@ -972,7 +928,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                         min: 0,
                                       )
                                     : Text(
-                                        '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].amount}'),
+                                        '#${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].id}-${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].amount}'),
                               )
                             ],
                           ),
@@ -1003,10 +959,14 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                 child: Column(
                                                   children: [
                                                     InputText1(
+
                                                       controller: search,
                                                       label: 'Tìm kiếm',
                                                       hasLeading: true,
-                                                      suffix: Icon(Icons.search),
+                                                      suffix: InkWell(onTap: (){
+                                                        blocDsLinhKien.add(GetData(keySearch: search.text,id: khoID.toString()));
+
+                                                      },child: Icon(Icons.search)),
                                                     ),
                                                     SizedBox(
                                                       height: 15,
@@ -1019,6 +979,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                           List<ModelListKho>
                                                           listKho =
                                                               state.data;
+                                                          listKho.add(ModelListKho(name: 'Tất cả'));
                                                           return PopupMenuButton(
 
                                                               child:Card(
@@ -1042,7 +1003,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                                           onTap: (){
                                                                       setState1((){
                                                                         khoName='${listKho[index].name}';
-                                                                        khoID=listKho[index].id;
+                                                                        listKho[index].id!=null?  khoID=listKho[index].id.toString():khoID='';
                                                                       });
                                                                       blocDsLinhKien.add(GetData(keySearch: search.text,id: khoID.toString()));
                                                                           },
@@ -1070,6 +1031,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                                   .productAttrMaterialAttr!
                                                                   .add(
                                                                   ProductAttrMaterialAttr(
+                                                                    id: list[index].id,
                                                                     isApproved: 0,
                                                                     code: list[index]
                                                                         .code,
@@ -1107,7 +1069,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                                       .start,
                                                                   children: [
                                                                     Text(
-                                                                      '${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                                      '#${list[index].id} - ${list[index].materialId!.code} - ${list[index].materialId!.name}',
                                                                       style: StyleApp
                                                                           .textStyle500(),
                                                                     ),
