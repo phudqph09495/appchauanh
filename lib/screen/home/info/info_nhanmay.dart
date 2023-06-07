@@ -1163,7 +1163,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                         },
                         colorButton: ColorApp.blue8F,
                         textColor: ColorApp.whiteF7,
-                        textButton: 'Lưu',
+                        textButton: 'Gửi đề xuất',
                         fontSize: 16,
                       ),
                     )
