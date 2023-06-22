@@ -484,6 +484,53 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           SizedBox(height: 10,),
                           ListView.builder(
                             itemBuilder: (context, index) {
+                              Color color=ColorApp.black;
+                              switch (model.productAttrs!.data![index].status) {
+                                case 'Đang xử lý':
+                                  {
+
+
+                                    color = ColorApp.blue00;
+                                  }
+                                  break;
+                                case 'Đã xử lý':
+                                  {
+
+
+                                    color = ColorApp.blue8F;
+                                  }
+                                  break;
+                                case 'Chờ linh kiện':
+                                  {
+
+                                    color = ColorApp.black;
+                                  }
+                                  break;
+                                case 'Không sửa được':
+                                  {
+
+                                    color = ColorApp.red;
+                                  }
+                                  break;
+                                case 'Nhà Mua':
+                                  {
+
+                                    color = ColorApp.orangeF0;
+                                  }
+                                  break;
+                                case 'Bảo Hành':
+                                  {
+
+                                    color = ColorApp.grey8B;
+                                  }
+                                  break;
+                                case 'Hoàn thành':
+                                  {
+
+                                    color = Colors.green;
+                                  }
+                                  break;
+                              }
                               return InkWell(
                                 onTap: () {
                                   Navigator.push(
@@ -611,8 +658,16 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                                         SizedBox(
                                           height: 15,
                                         ),
-                                        Text(model.productAttrs!.data![index].status
-                                            .toString()),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: color,borderRadius: BorderRadius.circular(12)
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                                            child: Text(model.productAttrs!.data![index].status
+                                                .toString(),style: StyleApp.textStyle600(color: Colors.white),),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

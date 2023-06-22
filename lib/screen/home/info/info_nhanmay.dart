@@ -488,7 +488,11 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                 note.text = modelInfoDVSC.productAttr!.note ?? '';
                 status = modelInfoDVSC.productAttr!.status ?? '';
                 listM = [];
-
+for(var item in listt){
+  if (status==item.name){
+    idStt=int.parse(item.id!);
+  }
+}
                 for (var item
                     in modelInfoDVSC.productAttr!.productAttrMaterialAttr!) {
                   listM.add(MaterialAttribute(
@@ -866,22 +870,44 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                      '#${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].id}-${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name} '),
+                                  Container(
+
+                                    width: MediaQuery.of(context).size.width*0.7,
+                                    child: Text(
+                                        '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].code} - ${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].name} '),
+                                  ),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Trạng thái : '),
-                                      Container(
-                                        color: color,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            '${trangthai} ',
-                                            style: StyleApp.textStyle500(
-                                                color: Colors.white),
+                                      Row(
+                                        children: [
+                                          Text('Trạng thái : '),
+                                          Container(
+                                            color: color,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                '${trangthai} ',
+                                                style: StyleApp.textStyle500(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
+                                      SizedBox(width: 20,),
+                                      fix == true?   InkWell(
+                                        onTap: (){
+                                          setState(() {
+                                            modelInfoDVSC.productAttr!.productAttrMaterialAttr!.removeAt(index);
+
+                                          });
+                                        },
+                                        child: Container(color: ColorApp.red,child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 2,vertical: 8),
+                                          child: Text('Huỷ', style: StyleApp.textStyle500(color: ColorApp.whiteF0),),
+                                        )),
+                                      ):SizedBox()
                                     ],
                                   ),
                                 ],
@@ -927,8 +953,11 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                         controller: con,
                                         min: 0,
                                       )
-                                    : Text(
-                                        '#${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].id}-${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].amount}'),
+                                    : Container(height: 30,
+                                  decoration: BoxDecoration(border: Border.all()),
+                                      child: Text(
+                                          '${modelInfoDVSC.productAttr!.productAttrMaterialAttr![index].amount}',textAlign: TextAlign.center,),
+                                    ),
                               )
                             ],
                           ),
@@ -1069,7 +1098,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                                       .start,
                                                                   children: [
                                                                     Text(
-                                                                      '#${list[index].id} - ${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                                      '${list[index].materialId!.code} - ${list[index].materialId!.name}',
                                                                       style: StyleApp
                                                                           .textStyle500(),
                                                                     ),
@@ -1105,10 +1134,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                                                                     SizedBox(
                                                                       height: 5,
                                                                     ),
-                                                                    Text(
-                                                                        'Ghi chú: ${list[index].note}',
-                                                                        style: StyleApp
-                                                                            .textStyle500())
+
                                                                   ],
                                                                 ),
                                                               )),

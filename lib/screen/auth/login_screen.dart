@@ -32,12 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     double a= MediaQuery.of(context).size.height-780;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: ColorApp.bg,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(ImagePath.loginUp),
             Center(

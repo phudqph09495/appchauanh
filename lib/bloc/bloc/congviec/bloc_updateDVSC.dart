@@ -22,12 +22,15 @@ class BlocUpdateOrder extends Bloc<EventBloc, StateBloc> {
         req['status']=event.status;
         req['note']=event.note;
         req['materialAttribute']=event.materialAttribute;
-
+for(var item in event.materialAttribute!){
+  print(item.id);
+  print(item.amount);
+}
 
         var res = await Api.postAsync(
             endPoint: ApiPath.updateJob, req: req, isToken: true,hasForm: false);
 
-
+print(res);
         if (res['status'] == true) {
 
 
