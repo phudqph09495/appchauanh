@@ -66,6 +66,7 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
   BlocFullListKho blocFullListKho = BlocFullListKho();
   TextEditingController khoName = TextEditingController();
   BlocFullListNV blocFullListNV = BlocFullListNV();
+  BlocFullListNV blocFullListNV2 = BlocFullListNV();
   TextEditingController NV = TextEditingController();
   TextEditingController NVXuatKho = TextEditingController();
   TextEditingController soLuong = TextEditingController();
@@ -85,6 +86,11 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
   List<ProductAttrMaterialAttr> productAttrMaterialAttr = [];
   BlocDVSC blocDVSC = BlocDVSC();
 
+
+
+  TextEditingController searchNVSC=TextEditingController();
+  TextEditingController searchNVXK=TextEditingController();
+  TextEditingController searchKho=TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -93,6 +99,7 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
     blocListKH.add(GetData());
     blocFullListKho.add(GetData());
     blocFullListNV.add(GetData());
+    blocFullListNV2.add(GetData());
   }
 
   @override
@@ -126,7 +133,7 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                         builder: (_) => AlertDialog(
                               title: Center(
                                   child: Text(
-                                'Chọn kho định ngầm',
+                                'Chọn mã hàng',
                                 style: StyleApp.textStyle500(fontSize: 16),
                               )),
                               shape: const RoundedRectangleBorder(
@@ -471,39 +478,57 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(
-                builder: (_, StateBloc state) {
-                  if (state is LoadSuccess) {
-                    List<ModelListKho> list = state.data;
-                    return InputText1(
-                      controller: khoName,
-                      readOnly: true,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Center(
-                                      child: Text(
-                                    'Chọn kho định ngầm',
-                                    style: StyleApp.textStyle500(fontSize: 16),
-                                  )),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                  content: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.55,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: ListView.builder(
+              InputText1(
+                controller: khoName,
+                readOnly: true,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Center(
+                            child: Text(
+                              'Chọn kho định ngầm',
+                              style: StyleApp.textStyle500(fontSize: 16),
+                            )),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(10.0))),
+                        content: Container(
+                          height: MediaQuery.of(context).size.height *
+                              0.55,
+                          width:
+                          MediaQuery.of(context).size.width * 0.9,
+                          child: SingleChildScrollView(
+                            child:BlocBuilder(builder: (_,StateBloc state){
+                              if(state is LoadSuccess){
+                                List<ModelListKho> list=state.data;
+                                return  Column(
+                                  children: [
+                                    InputText1(
+                                      controller: searchKho,
+                                      label: 'Tìm kiếm',
+                                      hasLeading: true,
+                                      suffix: InkWell(
+                                          onTap: () {
+                                            blocFullListKho.add(GetData(
+                                                keySearch:
+                                                searchKho.text));
+                                          },
+                                          child:
+                                          Icon(Icons.search)),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    ListView.builder(
                                       itemBuilder: (context, index) {
                                         return InkWell(
                                           child: Card(
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.all(12.0),
+                                              const EdgeInsets.all(12.0),
                                               child: Text(
-                                                '${list[index].type} - ${list[index].name} - ${list[index].address}',
+                                                ' ${list[index].name} - ${list[index].address}',
                                                 style: StyleApp.textStyle500(),
                                               ),
                                             ),
@@ -517,21 +542,22 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                         );
                                       },
                                       shrinkWrap: true,
-                                      physics: AlwaysScrollableScrollPhysics(),
+                                      physics: NeverScrollableScrollPhysics(),
                                       itemCount: list.length,
                                     ),
-                                  ),
-                                ));
-                      },
-                      width: 250,
-                      borderColor: Colors.white,
-                      label: 'Chọn kho định ngầm',
-                      radius: 0,
-                    );
-                  }
-                  return SizedBox();
+                                  ],
+                                );
+                              }
+                              return Container();
+                            },bloc: blocFullListKho,),
+                          ),
+                        ),
+                      ));
                 },
-                bloc: blocFullListKho,
+                width: 250,
+                borderColor: Colors.white,
+                label: 'Chọn kho định ngầm',
+                radius: 0,
               ),
               SizedBox(
                 height: 20,
@@ -545,37 +571,55 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(
-                builder: (_, StateBloc state) {
-                  if (state is LoadSuccess) {
-                    List<ModelListNV> list = state.data;
-                    return InputText1(
-                      controller: NV,
-                      readOnly: true,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Center(
-                                      child: Text(
-                                    'Chọn nhân viên',
-                                    style: StyleApp.textStyle500(fontSize: 16),
-                                  )),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                  content: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.55,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: ListView.builder(
+              InputText1(
+                controller: NV,
+                readOnly: true,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Center(
+                            child: Text(
+                              'Chọn nhân viên',
+                              style: StyleApp.textStyle500(fontSize: 16),
+                            )),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(10.0))),
+                        content: Container(
+                          height: MediaQuery.of(context).size.height *
+                              0.55,
+                          width:
+                          MediaQuery.of(context).size.width * 0.9,
+                          child: SingleChildScrollView(
+                            child: BlocBuilder(builder: (_,StateBloc state){
+                              if(state is LoadSuccess){
+                                List<ModelListNV> list=state.data;
+                                return Column(
+                                  children: [
+                                    InputText1(
+                                      controller: searchNVSC,
+                                      label: 'Tìm kiếm',
+                                      hasLeading: true,
+                                      suffix: InkWell(
+                                          onTap: () {
+                                            blocFullListNV.add(GetData(
+                                                keySearch:
+                                                searchNVSC.text));
+                                          },
+                                          child:
+                                          Icon(Icons.search)),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    ListView.builder(
                                       itemBuilder: (context, index) {
                                         return InkWell(
                                           child: Card(
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.all(12.0),
+                                              const EdgeInsets.all(12.0),
                                               child: Text(
                                                 '${list[index].fullName} - ${list[index].phone}',
                                                 style: StyleApp.textStyle500(),
@@ -591,21 +635,22 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                         );
                                       },
                                       shrinkWrap: true,
-                                      physics: AlwaysScrollableScrollPhysics(),
+                                      physics: NeverScrollableScrollPhysics(),
                                       itemCount: list.length,
                                     ),
-                                  ),
-                                ));
-                      },
-                      width: 250,
-                      borderColor: Colors.white,
-                      label: 'Chọn nhân viên',
-                      radius: 0,
-                    );
-                  }
-                  return SizedBox();
+                                  ],
+                                );
+                              }
+                              return Container();
+                            },bloc: blocFullListNV,),
+                          ),
+                        ),
+                      ));
                 },
-                bloc: blocFullListNV,
+                width: 250,
+                borderColor: Colors.white,
+                label: 'Chọn nhân viên',
+                radius: 0,
               ),
               SizedBox(
                 height: 20,
@@ -620,37 +665,39 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(
-                builder: (_, StateBloc state) {
-                  if (state is LoadSuccess) {
-                    List<ModelListNV> list = state.data;
-                    return InputText1(
-                      controller: NVXuatKho,
-                      readOnly: true,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Center(
-                                      child: Text(
-                                    'Chọn nhân viên',
-                                    style: StyleApp.textStyle500(fontSize: 16),
-                                  )),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                  content: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.55,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: ListView.builder(
+              InputText1(
+                controller: NVXuatKho,
+                readOnly: true,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Center(
+                            child: Text(
+                              'Chọn nhân viên',
+                              style: StyleApp.textStyle500(fontSize: 16),
+                            )),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(10.0))),
+                        content: Container(
+                          height: MediaQuery.of(context).size.height *
+                              0.55,
+                          width:
+                          MediaQuery.of(context).size.width * 0.9,
+                          child: SingleChildScrollView(
+                            child: BlocBuilder(builder: (_,StateBloc state){
+                              if(state is LoadSuccess){
+                                List<ModelListNV> list=state.data;
+                                return Column(
+                                  children: [
+                                    ListView.builder(
                                       itemBuilder: (context, index) {
                                         return InkWell(
                                           child: Card(
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.all(12.0),
+                                              const EdgeInsets.all(12.0),
                                               child: Text(
                                                 '${list[index].fullName} - ${list[index].phone}',
                                                 style: StyleApp.textStyle500(),
@@ -669,18 +716,20 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
                                       physics: AlwaysScrollableScrollPhysics(),
                                       itemCount: list.length,
                                     ),
-                                  ),
-                                ));
-                      },
-                      width: 250,
-                      borderColor: Colors.white,
-                      label: 'Chọn nhân viên',
-                      radius: 0,
-                    );
-                  }
-                  return SizedBox();
+                                  ],
+                                );
+                              }
+                              return Container();
+                            },
+                            bloc: blocFullListNV2,),
+                          ),
+                        ),
+                      ));
                 },
-                bloc: blocFullListNV,
+                width: 250,
+                borderColor: Colors.white,
+                label: 'Chọn nhân viên',
+                radius: 0,
               ),
               SizedBox(
                 height: 20,

@@ -70,39 +70,39 @@ class _NhanMayState extends State<NhanMay> with TickerProviderStateMixin {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                color: Color(0xffF3F3F3),
-                child: TabBar(
-                  onTap: (value) {
-                    print(value);
-                    setState(() {
-                      a = value.toString();
-                    });
-                  },
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  controller: _tabController2,
-                  indicatorColor: Colors.transparent,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.grey,
-                  labelStyle: StyleApp.textStyle500(fontSize: 16),
-                  unselectedLabelStyle: StyleApp.textStyle500(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  tabs: <Widget>[
-                    Tab(
-                      child: Text('Dịch vụ sửa chữa'),
-                    ),
-                    Tab(
-                      child: Text('Lấy linh kiện'),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   color: Color(0xffF3F3F3),
+              //   child: TabBar(
+              //     onTap: (value) {
+              //       print(value);
+              //       setState(() {
+              //         a = value.toString();
+              //       });
+              //     },
+              //     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              //     controller: _tabController2,
+              //     indicatorColor: Colors.transparent,
+              //     labelColor: Colors.black,
+              //     unselectedLabelColor: Colors.grey,
+              //     labelStyle: StyleApp.textStyle500(fontSize: 16),
+              //     unselectedLabelStyle: StyleApp.textStyle500(
+              //       fontSize: 16,
+              //       color: Colors.black,
+              //     ),
+              //     indicator: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(20),
+              //       color: Colors.white,
+              //     ),
+              //     tabs: <Widget>[
+              //       Tab(
+              //         child: Text('Dịch vụ sửa chữa'),
+              //       ),
+              //       Tab(
+              //         child: Text('Lấy linh kiện'),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               InputText1(
                 label: 'Tìm kiếm tên, số điện thoại',
                 radius: 10,
@@ -332,18 +332,21 @@ class _NhanMayState extends State<NhanMay> with TickerProviderStateMixin {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    Const.isNumeric(search_cus.text)
-                                        ? '${model.productAttrs!.data![index].customerName} -  ${model.productAttrs!.data![index].customerPhone ?? ''}'
-                                        : '${model.productAttrs!.data![index].customerName} -  ${model.productAttrs!.data![index].customerAddress ?? ''}',
+                                    '${model.productAttrs!.data![index].customerName} -  ${model.productAttrs!.data![index].customerAddress ?? ''}',
                                     style: StyleApp.textStyle500(
                                         color: ColorApp.blue3D, fontSize: 18),
                                   ),
                                   SizedBox(
-                                    height: 15,
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    '${model.productAttrs!.data![index].imei??''} -  ${model.productAttrs!.data![index].serial ?? ''}',
+                                    style: StyleApp.textStyle500(
+                                        color: ColorApp.blue3D, fontSize: 18),
                                   ),
                                   // Text('BG 000011889834',style: StyleApp.textStyle400(fontSize: 16),),
                                   SizedBox(
-                                    height: 10,
+                                    height: 5,
                                   ),
                                   Divider()
                                 ],

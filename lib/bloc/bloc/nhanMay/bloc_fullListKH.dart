@@ -21,7 +21,7 @@ class BlocFullListKH extends Bloc<EventBloc, StateBloc> {
       try {
 
         var res = await Api.getAsync(
-            endPoint: ApiPath.fullListKH,  isToken: true);
+            endPoint: ApiPath.fullListKH+'?search='+event.keySearch,  isToken: true);
 
         if (res['status'] == true) {
           List<Customer>list=[];

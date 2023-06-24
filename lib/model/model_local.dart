@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+
 class ModelLocal {
   String? id;
   String? name;
 bool? value;
-  ModelLocal({this.id, this.name,this.value=false});
+Color? color;
+  ModelLocal({this.id, this.name,this.value=false,this.color});
 }
 
 class ModelLocal2 {

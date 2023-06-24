@@ -26,21 +26,27 @@ class ItemKhachHang extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(top: 15),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
           children: [
-            Image.asset(ImagePath.notebook),
-            Column(
-              children: [
-                Text(name),
-                SizedBox(height: 5,),
-                Text(id)
-              ],
+            Expanded(flex: 1,child: Image.asset(ImagePath.notebook)),
+            Expanded(flex: 1,child: SizedBox()),
+            Expanded(flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name),
+                  SizedBox(height: 5,),
+                  Text(id)
+                ],
+              ),
             ),
-            InkWell(onTap: ()async{
+            Expanded(flex: 3,
+              child: InkWell(onTap: ()async{
 
-                _launchURL('tel:${phone}');
+                  _launchURL('tel:${phone}');
 
-            },child: Text(phone)),
+              },child: Text(phone)),
+            ),
           ],
         ),
       ),

@@ -42,10 +42,10 @@ class AddNhanMay extends StatefulWidget {
 class _AddNhanMayState extends State<AddNhanMay> {
   String? kho;
 
-  String khoName2='Chọn kho';
-  String khoID='';
+  String khoName2 = 'Chọn kho';
+  String khoID = '';
   TextEditingController search = TextEditingController();
-  TextEditingController searchKH = TextEditingController();
+
   TextEditingController qrcode = TextEditingController();
   TextEditingController model = TextEditingController();
   TextEditingController gia = TextEditingController();
@@ -84,7 +84,6 @@ class _AddNhanMayState extends State<AddNhanMay> {
   int sum = 0;
   List<DanhSachLK> danhsachLK = [];
 
-
   List<ModelLocal> checkListItems = [
     ModelLocal(
       name: 'Khách thợ',
@@ -104,6 +103,9 @@ class _AddNhanMayState extends State<AddNhanMay> {
     ),
   ];
 
+  TextEditingController searchKH = TextEditingController();
+  TextEditingController searchNV = TextEditingController();
+  TextEditingController searchKho = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -202,101 +204,107 @@ class _AddNhanMayState extends State<AddNhanMay> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BlocBuilder(
-                    builder: (_, StateBloc state) {
-                      if (state is LoadSuccess) {
-                        List<Customer> list = state.data;
-                        return Expanded(
-                          child: InputText1(
-                            controller: cusName,
-                            readOnly: true,
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                        title: Center(
-                                            child: Text(
-                                          'Chọn khách hàng',
-                                          style: StyleApp.textStyle500(
-                                              fontSize: 16),
-                                        )),
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0))),
-                                        content: Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.55,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.9,
-                                          child: Column(
-                                            children: [
-                                              InputText1(
-                                                controller: searchKH,
-                                                label: 'Tìm kiếm',
-                                                hasLeading: true,
-                                                suffix: InkWell(
-                                                    onTap: () {
-
-                                                    },
-                                                    child: Icon(Icons.search)),
-                                              ),
-                                              SizedBox(
-                                                height: 15,
-                                              ),
-                                              ListView.builder(
-
-                                                itemBuilder: (context, index) {
-                                                  return InkWell(
-                                                    child: Card(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets.all(
-                                                                10.0),
-                                                        child: Text(
-                                                          '${list[index].fullName} - ${list[index].address} - ${list[index].phone}',
-                                                          style: StyleApp
-                                                              .textStyle500(),
+                  Expanded(
+                    child: InputText1(
+                      controller: cusName,
+                      readOnly: true,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: Center(
+                                      child: Text(
+                                    'Chọn khách hàng',
+                                    style: StyleApp.textStyle500(fontSize: 16),
+                                  )),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: SingleChildScrollView(
+                                      child: BlocBuilder(
+                                        builder: (_, StateBloc state) {
+                                          if (state is LoadSuccess) {
+                                            List<Customer> list = state.data;
+                                            return Column(
+                                              children: [
+                                                InputText1(
+                                                  controller: searchKH,
+                                                  label: 'Tìm kiếm',
+                                                  hasLeading: true,
+                                                  suffix: InkWell(
+                                                      onTap: () {
+                                                        blocListKH.add(GetData(
+                                                            keySearch:
+                                                                searchKH.text));
+                                                      },
+                                                      child:
+                                                          Icon(Icons.search)),
+                                                ),
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                ListView.builder(
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return InkWell(
+                                                      child: Card(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
+                                                          child: Text(
+                                                            '${list[index].fullName} - ${list[index].address} - ${list[index].phone}',
+                                                            style: StyleApp
+                                                                .textStyle500(),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    onTap: () {
-                                                      cusName.text =
-                                                          list[index].fullName ??
-                                                              '';
-                                                      customerID = list[index].id;
-                                                      cusPhone.text =
-                                                          list[index].phone ?? '';
-                                                      cusAdd.text =
-                                                          list[index].address ?? '';
-                                                      customCode = list[index].code;
-                                                      Navigator.pop(context);
-                                                    },
-                                                  );
-                                                },
-                                                shrinkWrap: true,
-                                                physics:
-                                                    AlwaysScrollableScrollPhysics(),
-                                                itemCount: list.length,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ));
-                            },
-                            width: 250,
-                            borderColor: Colors.white,
-                            label: 'Chọn khách hàng',
-                            radius: 0,
-                          ),
-                        );
-                      }
-                      return SizedBox();
-                    },
-                    bloc: blocListKH,
+                                                      onTap: () {
+                                                        cusName.text =
+                                                            list[index]
+                                                                    .fullName ??
+                                                                '';
+                                                        customerID =
+                                                            list[index].id;
+                                                        cusPhone.text =
+                                                            list[index].phone ??
+                                                                '';
+                                                        cusAdd.text =
+                                                            list[index]
+                                                                    .address ??
+                                                                '';
+                                                        customCode =
+                                                            list[index].code;
+                                                        Navigator.pop(context);
+                                                      },
+                                                    );
+                                                  },
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  itemCount: list.length,
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                          return Container();
+                                        },
+                                        bloc: blocListKH,
+                                      ),
+                                    ),
+                                  ),
+                                ));
+                      },
+                      width: 250,
+                      borderColor: Colors.white,
+                      label: 'Chọn khách hàng',
+                      radius: 0,
+                    ),
                   ),
                   // InputText1(
                   //   onTap: (){},
@@ -319,7 +327,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
                                 content: StatefulBuilder(
-                                  builder: (context,StateSetter setState) {
+                                  builder: (context, StateSetter setState) {
                                     return Container(
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -393,31 +401,42 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                             Text(
                                               'Nhóm khách hàng',
                                               style: StyleApp.textStyle700(
-                                                  fontSize: 18, color: ColorApp.blue00),
+                                                  fontSize: 18,
+                                                  color: ColorApp.blue00),
                                             ),
                                             GridView.builder(
-                                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                mainAxisExtent: 50,
-                                                  crossAxisCount: 2,
-                                                  childAspectRatio: 4,
-                                                  crossAxisSpacing: 0),
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisExtent: 50,
+                                                      crossAxisCount: 2,
+                                                      childAspectRatio: 4,
+                                                      crossAxisSpacing: 0),
                                               shrinkWrap: true,
-                                              physics: const NeverScrollableScrollPhysics(),
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
                                               itemBuilder: (context, index) {
                                                 return CheckboxListTile(
                                                   checkboxShape: CircleBorder(),
                                                   activeColor: Colors.green,
-                                                  controlAffinity: ListTileControlAffinity.leading,
-                                                  contentPadding: EdgeInsets.zero,
+                                                  controlAffinity:
+                                                      ListTileControlAffinity
+                                                          .leading,
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
                                                   dense: true,
                                                   title: Text(
-                                                    checkListItems[index].name ?? '',
-                                                    style: StyleApp.textStyle500(),
+                                                    checkListItems[index]
+                                                            .name ??
+                                                        '',
+                                                    style:
+                                                        StyleApp.textStyle500(),
                                                   ),
-                                                  value: checkListItems[index].value,
+                                                  value: checkListItems[index]
+                                                      .value,
                                                   onChanged: (value) {
                                                     setState(() {
-                                                      checkListItems[index].value = value;
+                                                      checkListItems[index]
+                                                          .value = value;
                                                       // if (multipleSelected.contains(checkListItems[index])) {
                                                       //   multipleSelected.remove(checkListItems[index]);
                                                       // } else {
@@ -429,7 +448,9 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                               },
                                               itemCount: checkListItems.length,
                                             ),
-                                            SizedBox(height: 30,),
+                                            SizedBox(
+                                              height: 30,
+                                            ),
                                             BlocListener(
                                               bloc: blocADDKH,
                                               listener: (_, StateBloc state) {
@@ -445,8 +466,10 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                   customerID = cus.id;
                                                   cusName.text =
                                                       cus.fullName ?? '';
-                                                  cusPhone.text = cus.phone ?? '';
-                                                  cusAdd.text = cus.address ?? '';
+                                                  cusPhone.text =
+                                                      cus.phone ?? '';
+                                                  cusAdd.text =
+                                                      cus.address ?? '';
                                                   customCode = cus.code;
                                                   newNane.clear();
                                                   newPhone.clear();
@@ -458,12 +481,14 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                               child: Button1(
                                                   ontap: () {
                                                     List<int> type = [];
-                                                    for( var item in checkListItems){
-                                                      if(item.value==true){
-                                                        type.add(int.parse('${item.id}'));
+                                                    for (var item
+                                                        in checkListItems) {
+                                                      if (item.value == true) {
+                                                        type.add(int.parse(
+                                                            '${item.id}'));
                                                       }
                                                     }
-                                                    if(type.length>0) {
+                                                    if (type.length > 0) {
                                                       blocADDKH.add(AddCustomer(
                                                           fullName:
                                                               newNane.text,
@@ -471,8 +496,12 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                           address:
                                                               newAddress.text,
                                                           types: type));
-                                                    }else if(type.length==0){
-                                                      CustomToast.showToast(context: context, msg: 'Hãy chọn nhóm khách hàng');
+                                                    } else if (type.length ==
+                                                        0) {
+                                                      CustomToast.showToast(
+                                                          context: context,
+                                                          msg:
+                                                              'Hãy chọn nhóm khách hàng');
                                                     }
                                                   },
                                                   colorButton: ColorApp.blue8F,
@@ -723,7 +752,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
                 height: 10,
               ),
               Text(
-                'Tình trạng',
+                'Tình trạng nhận máy',
                 style:
                     StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
@@ -752,67 +781,84 @@ class _AddNhanMayState extends State<AddNhanMay> {
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(
-                builder: (_, StateBloc state) {
-                  if (state is LoadSuccess) {
-                    List<ModelListKho> list = state.data;
-                    return InputText1(
-                      controller: khoName,
-                      readOnly: true,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Center(
-                                      child: Text(
-                                    'Chọn kho định ngầm',
-                                    style: StyleApp.textStyle500(fontSize: 16),
-                                  )),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                  content: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.55,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: ListView.builder(
-                                      itemBuilder: (context, index) {
-                                        return InkWell(
-                                          child: Card(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
-                                              child: Text(
-                                                '${list[index].type} - ${list[index].name} - ${list[index].address}',
-                                                style: StyleApp.textStyle500(),
-                                              ),
-                                            ),
+              InputText1(
+                controller: khoName,
+                readOnly: true,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                            title: Center(
+                                child: Text(
+                              'Chọn kho định ngầm',
+                              style: StyleApp.textStyle500(fontSize: 16),
+                            )),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            content: Container(
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: SingleChildScrollView(
+                                child: BlocBuilder(
+                                  builder: (_, StateBloc state) {
+                                    if(state is LoadSuccess){
+                                      List<ModelListKho>list=state.data;
+                                      return Column(
+                                        children: [
+                                          InputText1(
+                                            controller: searchKho,
+                                            label: 'Tìm kiếm',
+                                            hasLeading: true,
+                                            suffix: InkWell(
+                                                onTap: () {
+                                                  blocFullListKho.add(GetData(keySearch: searchKho.text));
+                                                },
+                                                child: Icon(Icons.search)),
                                           ),
-                                          onTap: () {
-                                            khoName.text =
-                                                list[index].name ?? '';
-                                            warehouseID = list[index].id;
-                                            Navigator.pop(context);
-                                          },
-                                        );
-                                      },
-                                      shrinkWrap: true,
-                                      physics: AlwaysScrollableScrollPhysics(),
-                                      itemCount: list.length,
-                                    ),
-                                  ),
-                                ));
-                      },
-                      width: 250,
-                      borderColor: Colors.white,
-                      label: 'Chọn kho định ngầm',
-                      radius: 0,
-                    );
-                  }
-                  return SizedBox();
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          ListView.builder(
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                child: Card(
+                                                  child: Padding(
+                                                    padding:
+                                                    const EdgeInsets.all(12.0),
+                                                    child: Text(
+                                                      ' ${list[index].name} - ${list[index].address}',
+                                                      style: StyleApp.textStyle500(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  khoName.text =
+                                                      list[index].name ?? '';
+                                                  warehouseID = list[index].id;
+                                                  Navigator.pop(context);
+                                                },
+                                              );
+                                            },
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemCount: list.length,
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                  bloc: blocFullListKho,
+                                ),
+                              ),
+                            ),
+                          ));
                 },
-                bloc: blocFullListKho,
+                width: 250,
+                borderColor: Colors.white,
+                label: 'Chọn kho định ngầm',
+                radius: 0,
               ),
               SizedBox(
                 height: 20,
@@ -820,81 +866,101 @@ class _AddNhanMayState extends State<AddNhanMay> {
 
               Divider(),
               Text(
-                'Nhân viên',
+                'Nhân viên sửa chữa',
                 style:
                     StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
               SizedBox(
                 height: 10,
               ),
-              BlocBuilder(
-                builder: (_, StateBloc state) {
-                  if (state is LoadSuccess) {
-                    List<ModelListNV> list = state.data;
-                    return InputText1(
-                      controller: NV,
-                      readOnly: true,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Center(
-                                      child: Text(
-                                    'Chọn nhân viên',
-                                    style: StyleApp.textStyle500(fontSize: 16),
-                                  )),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                  content: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.55,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: ListView.builder(
-                                      itemBuilder: (context, index) {
-                                        return InkWell(
-                                          child: Card(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
-                                              child: Text(
-                                                '${list[index].fullName} - ${list[index].phone}',
-                                                style: StyleApp.textStyle500(),
-                                              ),
-                                            ),
+              InputText1(
+                controller: NV,
+                readOnly: true,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                            title: Center(
+                                child: Text(
+                              'Chọn nhân viên',
+                              style: StyleApp.textStyle500(fontSize: 16),
+                            )),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            content: Container(
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: SingleChildScrollView(
+                                child: BlocBuilder(
+                                  builder: (_, StateBloc state) {
+                                    if (state is LoadSuccess) {
+                                      List<ModelListNV> list = state.data;
+                                      return Column(
+                                        children: [
+                                          InputText1(
+                                            controller: searchNV,
+                                            label: 'Tìm kiếm',
+                                            hasLeading: true,
+                                            suffix: InkWell(
+                                                onTap: () {
+                                                  blocFullListNV.add(GetData(
+                                                      keySearch:
+                                                          searchNV.text));
+                                                },
+                                                child: Icon(Icons.search)),
                                           ),
-                                          onTap: () {
-                                            NV.text =
-                                                list[index].fullName ?? '';
-                                            userID = list[index].id;
-                                            Navigator.pop(context);
-                                          },
-                                        );
-                                      },
-                                      shrinkWrap: true,
-                                      physics: AlwaysScrollableScrollPhysics(),
-                                      itemCount: list.length,
-                                    ),
-                                  ),
-                                ));
-                      },
-                      width: 250,
-                      borderColor: Colors.white,
-                      label: 'Chọn nhân viên',
-                      radius: 0,
-                    );
-                  }
-                  return SizedBox();
+                                          ListView.builder(
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                child: Card(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    child: Text(
+                                                      '${list[index].fullName} - ${list[index].phone}',
+                                                      style: StyleApp
+                                                          .textStyle500(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  NV.text =
+                                                      list[index].fullName ??
+                                                          '';
+                                                  userID = list[index].id;
+                                                  Navigator.pop(context);
+                                                },
+                                              );
+                                            },
+                                            shrinkWrap: true,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemCount: list.length,
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                  bloc: blocFullListNV,
+                                ),
+                              ),
+                            ),
+                          ));
                 },
-                bloc: blocFullListNV,
+                width: 250,
+                borderColor: Colors.white,
+                label: 'Chọn nhân viên',
+                radius: 0,
               ),
               SizedBox(
                 height: 20,
               ),
               Divider(),
               Text(
-                'Diễn giải',
+                'Ghi chú',
                 style:
                     StyleApp.textStyle500(color: ColorApp.blue8F, fontSize: 18),
               ),
@@ -904,7 +970,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
               InputText1(
                 controller: note,
                 borderColor: Colors.white,
-                label: 'Nhập diễn giải',
+                label: 'Nhập ghi chú',
                 radius: 0,
               ),
               SizedBox(
@@ -1015,7 +1081,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width*0.7,
+                          width: MediaQuery.of(context).size.width * 0.7,
                           child: Text(
                               '${danhsachLK[index].modelLinkKien!.code} - ${danhsachLK[index].modelLinkKien!.name}'),
                         ),
@@ -1181,7 +1247,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                             DanhSachLK(
                                                                 modelLinkKien:
                                                                     list[index],
-                                                                soLuong: 0));
+                                                                soLuong: 1));
                                                       } else {
                                                         ScaffoldMessenger.of(
                                                                 context)
@@ -1256,55 +1322,56 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                     // )),
                                                     child: Card(
                                                         child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(5.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
-                                                            children: [
-                                                              Text(
-                                                                ' ${list[index].materialId!.code} - ${list[index].materialId!.name}',
-                                                                style: StyleApp
-                                                                    .textStyle500(),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 5,
-                                                              ),
-
-                                                              list[index].amount! >
-                                                                  0
-                                                                  ? Text(
-                                                                'Còn hàng',
-                                                                style: StyleApp.textStyle500(
-                                                                    color:
-                                                                    Colors.green),
-                                                              )
-                                                                  : Text(
-                                                                'Hết hàng',
-                                                                style: StyleApp.textStyle500(
-                                                                    color:
-                                                                    Colors.red),
-                                                              ),
-                                                              // Text(
-                                                              //     'Số lượng : ${list[index].amount}',
-                                                              //     style: StyleApp
-                                                              //         .textStyle500()),
-                                                              SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                  'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
-                                                                  style: StyleApp
-                                                                      .textStyle500()),
-                                                              SizedBox(
-                                                                height: 5,
-                                                              ),
-
-                                                            ],
+                                                        children: [
+                                                          Text(
+                                                            ' ${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                            style: StyleApp
+                                                                .textStyle500(),
                                                           ),
-                                                        )),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+
+                                                          list[index].amount! >
+                                                                  0
+                                                              ? Text(
+                                                                  'Còn hàng',
+                                                                  style: StyleApp
+                                                                      .textStyle500(
+                                                                          color:
+                                                                              Colors.green),
+                                                                )
+                                                              : Text(
+                                                                  'Hết hàng',
+                                                                  style: StyleApp
+                                                                      .textStyle500(
+                                                                          color:
+                                                                              Colors.red),
+                                                                ),
+                                                          // Text(
+                                                          //     'Số lượng : ${list[index].amount}',
+                                                          //     style: StyleApp
+                                                          //         .textStyle500()),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                              'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
+                                                              style: StyleApp
+                                                                  .textStyle500()),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )),
                                                   );
                                                 },
                                                 shrinkWrap: true,

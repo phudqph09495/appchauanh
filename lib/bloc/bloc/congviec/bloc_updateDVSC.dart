@@ -22,6 +22,7 @@ class BlocUpdateOrder extends Bloc<EventBloc, StateBloc> {
         req['status']=event.status;
         req['note']=event.note;
         req['materialAttribute']=event.materialAttribute;
+        print(req);
 for(var item in event.materialAttribute!){
   print(item.id);
   print(item.amount);

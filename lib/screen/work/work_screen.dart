@@ -197,7 +197,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                   ),
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+                    color: ColorApp.orangeFF,
                   ),
                   tabs: <Widget>[
                     Tab(
@@ -205,7 +205,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         builder: (_, StateBloc state) {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
-                            return Text('Tất cả(${model.total![0].total})');
+                            return Text('Tất cả(${model.total![0].total})',style: StyleApp.textStyle700(color: ColorApp.blue00),);
                           }
                           return Text('Tất cả');
                         },
@@ -218,7 +218,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Đang xử lý(${model.total![0].dangXuLy})');
+                                'Đang xử lý(${model.total![0].dangXuLy})',style: StyleApp.textStyle700(color: ColorApp.blue8F));
                           }
                           return Text('Đang xử lý');
                         },
@@ -230,7 +230,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         builder: (_, StateBloc state) {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
-                            return Text('Đã xử lý(${model.total![0].daXuLy})');
+                            return Text('Đã xử lý(${model.total![0].daXuLy})',style: StyleApp.textStyle700(color: ColorApp.black));
                           }
                           return Text('Đã xử lý');
                         },
@@ -243,7 +243,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Chờ linh kiện(${model.total![0].choLinhKien})');
+                                'Chờ linh kiện(${model.total![0].choLinhKien})',style: StyleApp.textStyle700(color: ColorApp.red));
                           }
                           return Text('Chờ linh kiện');
                         },
@@ -256,7 +256,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Không sửa được(${model.total![0].khongSuaDuoc})');
+                                'Không sửa được(${model.total![0].khongSuaDuoc})',style: StyleApp.textStyle700(color: ColorApp.orangeF0));
                           }
                           return Text('Không sửa được');
                         },
@@ -269,7 +269,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Máy nhà mua(${model.total![0].nhaMua})');
+                                'Máy nhà mua(${model.total![0].nhaMua})',style: StyleApp.textStyle700(color: ColorApp.grey8B));
                           }
                           return Text('Máy nhà mua');
                         },
@@ -281,7 +281,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         builder: (_, StateBloc state) {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
-                            return Text('Bảo hành(${model.total![0].baoHanh})');
+                            return Text('Bảo hành(${model.total![0].baoHanh})',style: StyleApp.textStyle700(color: Colors.green));
                           }
                           return Text('Bảo hành');
                         },
@@ -294,7 +294,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Hoàn thành(${model.total![0].hoanThanh})');
+                                'Hoàn thành(${model.total![0].hoanThanh})',style: StyleApp.textStyle700(color: ColorApp.blue00));
                           }
                           return Text('Hoàn thành');
                         },

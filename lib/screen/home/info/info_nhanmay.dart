@@ -388,20 +388,13 @@ class InfoNhanMay extends StatefulWidget {
 }
 
 class _InfoNhanMayState extends State<InfoNhanMay> {
-  List<ModelLocal> listt = [
-    ModelLocal(id: '1', name: 'Đang xử lý'),
-    ModelLocal(id: '2', name: 'Đã xử lý'),
-    ModelLocal(id: '3', name: 'Chờ linh kiện'),
-    ModelLocal(id: '4', name: 'Không sửa được'),
-    ModelLocal(id: '5', name: 'Nhà mua'),
-    ModelLocal(id: '6', name: 'Bảo hành'),
-    ModelLocal(id: '7', name: 'Hoàn Thành'),
-  ];
+
   String khoName='Chọn kho';
   String khoID='';
   TextEditingController search = TextEditingController();
   List<MaterialAttribute> listM = [];
   String? status;
+  Color? color;
   int? idStt;
   BlocInfoDVSC blocInfoDVSC = BlocInfoDVSC();
   BlocFullListNV blocFullListNV = BlocFullListNV();
@@ -412,6 +405,17 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
   BlocDsLinhKien blocDsLinhKien = BlocDsLinhKien();
   ModelInfoDVSC modelInfoDVSC = ModelInfoDVSC();
 
+
+
+  List<ModelLocal> listt = [
+    ModelLocal(id: '1', name: 'Đang xử lý',color: ColorApp.blue00),
+    ModelLocal(id: '2', name: 'Đã xử lý',color:ColorApp.blue8F ),
+    ModelLocal(id: '3', name: 'Chờ linh kiện',color:ColorApp.black ),
+    ModelLocal(id: '4', name: 'Không sửa được',color:ColorApp.red ),
+    ModelLocal(id: '5', name: 'Nhà Mua',color: ColorApp.orangeF0),
+    ModelLocal(id: '6', name: 'Bảo Hành',color: ColorApp.grey8B ),
+    ModelLocal(id: '7', name: 'Hoàn thành',color:  Colors.green),
+  ];
   @override
   void initState() {
     // TODO: implement initState
@@ -487,6 +491,52 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                 TextEditingController note = TextEditingController();
                 note.text = modelInfoDVSC.productAttr!.note ?? '';
                 status = modelInfoDVSC.productAttr!.status ?? '';
+                switch (modelInfoDVSC.productAttr!.status) {
+                  case 'Đang xử lý':
+                    {
+
+
+                      color = ColorApp.blue00;
+                    }
+                    break;
+                  case 'Đã xử lý':
+                    {
+
+
+                      color = ColorApp.blue8F;
+                    }
+                    break;
+                  case 'Chờ linh kiện':
+                    {
+
+                      color = ColorApp.black;
+                    }
+                    break;
+                  case 'Không sửa được':
+                    {
+
+                      color = ColorApp.red;
+                    }
+                    break;
+                  case 'Nhà Mua':
+                    {
+
+                      color = ColorApp.orangeF0;
+                    }
+                    break;
+                  case 'Bảo Hành':
+                    {
+
+                      color = ColorApp.grey8B;
+                    }
+                    break;
+                  case 'Hoàn thành':
+                    {
+
+                      color = Colors.green;
+                    }
+                    break;
+                }
                 listM = [];
 for(var item in listt){
   if (status==item.name){
@@ -797,7 +847,15 @@ for(var item in listt){
                       height: 10,
                     ),
                     PopupMenuButton(
-                        child: Text(status ?? ''),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: color,borderRadius: BorderRadius.circular(12)
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                            child: Text(status ?? '',style: StyleApp.textStyle600(color: Colors.white),),
+                          ),
+                        ),
                         itemBuilder: (context) {
                           return List.generate(
                               listt.length,
@@ -1072,7 +1130,7 @@ for(var item in listt){
                                                                     importPrice: list[
                                                                     index]
                                                                         .importPrice,
-                                                                    amount: 0,
+                                                                    amount: 1,
                                                                   ));
                                                             } else {
                                                               ScaffoldMessenger

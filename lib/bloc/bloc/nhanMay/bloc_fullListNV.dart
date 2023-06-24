@@ -23,7 +23,7 @@ class BlocFullListNV extends Bloc<EventBloc, StateBloc> {
       try {
 
         var res = await Api.getAsync(
-            endPoint: ApiPath.fullListNV,  isToken: true);
+            endPoint: ApiPath.fullListNV+'?search='+event.keySearch,  isToken: true);
 
         if (res['status'] == true) {
           List<ModelListNV>list=[];

@@ -22,7 +22,7 @@ class BlocFullListKho extends Bloc<EventBloc, StateBloc> {
       try {
 
         var res = await Api.getAsync(
-            endPoint: ApiPath.fullListKho,  isToken: true);
+            endPoint: ApiPath.fullListKho+'?search='+event.keySearch,  isToken: true);
 
         if (res['status'] == true) {
           List<ModelListKho>list=[];
