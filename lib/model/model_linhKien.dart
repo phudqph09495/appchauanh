@@ -58,7 +58,7 @@ class ModelLinkKien {
         ? new ProjectId.fromJson(json['unit_id'])
         : null;
     importPrice = json['import_price'];
-    salePrice = json['sale_price'];
+    salePrice = json['sale_price']!=''?json['sale_price']:'0';
     amount = json['amount']??0;
     importDate = json['import_date'];
     note = json['note'];

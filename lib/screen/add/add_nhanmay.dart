@@ -25,6 +25,7 @@ import '../../bloc/bloc/nhanMay/bloc_fullListNV.dart';
 import '../../bloc/bloc/nhanMay/bloc_fullListPrd.dart';
 import '../../bloc/event_bloc.dart';
 import '../../bloc/state_bloc.dart';
+import '../../home.dart';
 import '../../model/model_listNV.dart';
 import '../../model/model_local.dart';
 import '../../style/init_style.dart';
@@ -116,7 +117,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
     blocFullListPrd.add(GetData2());
     blocFullListKho.add(GetData());
     blocFullListNV.add(GetData());
-    blocDsLinhKien.add(GetData());
+    // blocDsLinhKien.add(GetData());
   }
 
   @override
@@ -836,6 +837,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                   khoName.text =
                                                       list[index].name ?? '';
                                                   warehouseID = list[index].id;
+                                                 
                                                   Navigator.pop(context);
                                                 },
                                               );
@@ -1160,175 +1162,173 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                     MediaQuery.of(context).size.height * 0.75,
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: SingleChildScrollView(
-                                  child: BlocBuilder(
-                                    builder: (_, StateBloc state) {
-                                      if (state is LoadSuccess) {
-                                        List<ModelLinkKien> list = state.data;
-                                        return SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              InputText1(
-                                                controller: search,
-                                                label: 'Tìm kiếm',
-                                                hasLeading: true,
-                                                suffix: InkWell(
-                                                    onTap: () {
-                                                      blocDsLinhKien.add(
-                                                          GetData(
-                                                              keySearch:
-                                                                  search.text,
-                                                              id: khoID
-                                                                  .toString()));
-                                                    },
-                                                    child: Icon(Icons.search)),
-                                              ),
-                                              SizedBox(
-                                                height: 15,
-                                              ),
-                                              BlocBuilder(
-                                                builder: (_, StateBloc state) {
-                                                  if (state is LoadSuccess) {
-                                                    List<ModelListKho> listKho =
-                                                        state.data;
-                                                    listKho.add(ModelListKho(
-                                                        name: 'Tất cả'));
-                                                    return PopupMenuButton(
-                                                        child: Card(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Row(
-                                                              children: [
-                                                                Text(khoName2),
-                                                                Icon(Icons
-                                                                    .keyboard_arrow_down_rounded)
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        itemBuilder: (context) {
-                                                          return List.generate(
-                                                              listKho.length,
-                                                              (index) =>
-                                                                  PopupMenuItem(
-                                                                      value:
-                                                                          index,
-                                                                      onTap:
-                                                                          () {
-                                                                        setState1(
-                                                                            () {
-                                                                          khoName2 =
-                                                                              '${listKho[index].name}';
-                                                                          listKho[index].id != null
-                                                                              ? khoID = listKho[index].id.toString()
-                                                                              : khoID = '';
-                                                                        });
-                                                                        blocDsLinhKien.add(GetData(
-                                                                            keySearch:
-                                                                                search.text,
-                                                                            id: khoID.toString()));
-                                                                      },
-                                                                      child: Text(
-                                                                          '${listKho[index].name}')));
-                                                        });
-                                                  }
-                                                  return SizedBox();
-                                                },
-                                                bloc: blocFullListKho,
-                                              ),
-                                              ListView.builder(
-                                                itemBuilder: (context, index) {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      if (list[index].amount! >
-                                                          0) {
-                                                        danhsachLK.add(
-                                                            DanhSachLK(
-                                                                modelLinkKien:
-                                                                    list[index],
-                                                                soLuong: 1));
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(SnackBar(
-                                                                content: Text(
-                                                                    'Linh kiện đã hết')));
-                                                      }
+                                  child: Column(
+                                    children: [
+                                      InputText1(
+                                        controller: search,
+                                        label: 'Tìm kiếm',
+                                        hasLeading: true,
+                                        suffix: InkWell(
+                                            onTap: () {
+                                              blocDsLinhKien.add(
+                                                  GetData(
+                                                      keySearch:
+                                                      search.text,
+                                                      id: khoID
+                                                          .toString()));
+                                            },
+                                            child: Icon(Icons.search)),
+                                      ),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      BlocBuilder(
+                                        builder: (_, StateBloc state) {
+                                          if (state is LoadSuccess) {
+                                            List<ModelListKho> listKho =
+                                                state.data;
 
-                                                      setState(() {});
-                                                      Navigator.pop(context);
-                                                    },
-                                                    // child: Card(
-                                                    //     child: Padding(
-                                                    //   padding:
-                                                    //       const EdgeInsets.all(
-                                                    //           5.0),
-                                                    //   child: Column(
-                                                    //     crossAxisAlignment:
-                                                    //         CrossAxisAlignment
-                                                    //             .start,
-                                                    //     children: [
-                                                    //       Text(
-                                                    //         '${list[index].materialId!.code} - ${list[index].materialId!.name}',
-                                                    //         style: StyleApp
-                                                    //             .textStyle500(),
-                                                    //       ),
-                                                    //       SizedBox(
-                                                    //         height: 5,
-                                                    //       ),
-                                                    //       Text(
-                                                    //         'Đối tượng: ${list[index].customerName}',
-                                                    //         style: StyleApp
-                                                    //             .textStyle600(),
-                                                    //       ),
-                                                    //       SizedBox(
-                                                    //         height: 5,
-                                                    //       ),
-                                                    //       Text(
-                                                    //           'Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',
-                                                    //           style: StyleApp
-                                                    //               .textStyle500()),
-                                                    //       SizedBox(
-                                                    //         height: 5,
-                                                    //       ),
-                                                    //       Text(
-                                                    //           'Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',
-                                                    //           style: StyleApp
-                                                    //               .textStyle500()),
-                                                    //       SizedBox(
-                                                    //         height: 5,
-                                                    //       ),
-                                                    //       Text(
-                                                    //           'Số lượng : ${list[index].amount}',
-                                                    //           style: StyleApp
-                                                    //               .textStyle500()),
-                                                    //       SizedBox(
-                                                    //         height: 5,
-                                                    //       ),
-                                                    //       Text(
-                                                    //           'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
-                                                    //           style: StyleApp
-                                                    //               .textStyle500()),
-                                                    //       SizedBox(
-                                                    //         height: 5,
-                                                    //       ),
-                                                    //       Text(
-                                                    //           'Ghi chú: ${list[index].note}',
-                                                    //           style: StyleApp
-                                                    //               .textStyle500())
-                                                    //     ],
-                                                    //   ),
-                                                    // )),
-                                                    child: Card(
-                                                        child: Padding(
+                                            return PopupMenuButton(
+                                                child: Card(
+                                                  child: Padding(
+                                                    padding:
+                                                    const EdgeInsets
+                                                        .all(8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(khoName2),
+                                                        Icon(Icons
+                                                            .keyboard_arrow_down_rounded)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                itemBuilder: (context) {
+                                                  return List.generate(
+                                                      listKho.length,
+                                                          (index) =>
+                                                          PopupMenuItem(
+                                                              value:
+                                                              index,
+                                                              onTap:
+                                                                  () {
+                                                                setState1(
+                                                                        () {
+                                                                      khoName2 =
+                                                                      '${listKho[index].name}';
+                                                                      listKho[index].id != null
+                                                                          ? khoID = listKho[index].id.toString()
+                                                                          : khoID = '';
+                                                                    });
+                                                                blocDsLinhKien.add(GetData(
+                                                                    keySearch:
+                                                                    search.text,
+                                                                    id: khoID.toString()));
+                                                              },
+                                                              child: Text(
+                                                                  '${listKho[index].name}')));
+                                                });
+                                          }
+
+                                          return SizedBox();
+                                        },
+                                        bloc: blocFullListKho,
+                                      ),
+                                      BlocBuilder(builder: (_,StateBloc state){
+                                        if(state is LoadSuccess){
+                                          List<ModelLinkKien> list = state.data;
+                                          return   ListView.builder(
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  if (list[index].amount! >
+                                                      0) {
+                                                    danhsachLK.add(
+                                                        DanhSachLK(
+                                                            modelLinkKien:
+                                                            list[index],
+                                                            soLuong: 1));
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                        context)
+                                                        .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            'Linh kiện đã hết')));
+                                                  }
+
+                                                  setState(() {});
+                                                  Navigator.pop(context);
+                                                },
+                                                // child: Card(
+                                                //     child: Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.all(
+                                                //           5.0),
+                                                //   child: Column(
+                                                //     crossAxisAlignment:
+                                                //         CrossAxisAlignment
+                                                //             .start,
+                                                //     children: [
+                                                //       Text(
+                                                //         '${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                //         style: StyleApp
+                                                //             .textStyle500(),
+                                                //       ),
+                                                //       SizedBox(
+                                                //         height: 5,
+                                                //       ),
+                                                //       Text(
+                                                //         'Đối tượng: ${list[index].customerName}',
+                                                //         style: StyleApp
+                                                //             .textStyle600(),
+                                                //       ),
+                                                //       SizedBox(
+                                                //         height: 5,
+                                                //       ),
+                                                //       Text(
+                                                //           'Giá nhập: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].importPrice ?? '0'))}đ',
+                                                //           style: StyleApp
+                                                //               .textStyle500()),
+                                                //       SizedBox(
+                                                //         height: 5,
+                                                //       ),
+                                                //       Text(
+                                                //           'Giá bán: ${NumberFormat("###,###.###", 'vi_VN').format(double.parse(list[index].salePrice ?? '0'))}đ',
+                                                //           style: StyleApp
+                                                //               .textStyle500()),
+                                                //       SizedBox(
+                                                //         height: 5,
+                                                //       ),
+                                                //       Text(
+                                                //           'Số lượng : ${list[index].amount}',
+                                                //           style: StyleApp
+                                                //               .textStyle500()),
+                                                //       SizedBox(
+                                                //         height: 5,
+                                                //       ),
+                                                //       Text(
+                                                //           'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
+                                                //           style: StyleApp
+                                                //               .textStyle500()),
+                                                //       SizedBox(
+                                                //         height: 5,
+                                                //       ),
+                                                //       Text(
+                                                //           'Ghi chú: ${list[index].note}',
+                                                //           style: StyleApp
+                                                //               .textStyle500())
+                                                //     ],
+                                                //   ),
+                                                // )),
+                                                child: Card(
+                                                    child: Padding(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              5.0),
+                                                      const EdgeInsets.all(
+                                                          5.0),
                                                       child: Column(
                                                         crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                         children: [
                                                           Text(
                                                             ' ${list[index].materialId!.code} - ${list[index].materialId!.name}',
@@ -1340,21 +1340,21 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                           ),
 
                                                           list[index].amount! >
-                                                                  0
+                                                              0
                                                               ? Text(
-                                                                  'Còn hàng',
-                                                                  style: StyleApp
-                                                                      .textStyle500(
-                                                                          color:
-                                                                              Colors.green),
-                                                                )
+                                                            'Còn hàng',
+                                                            style: StyleApp
+                                                                .textStyle500(
+                                                                color:
+                                                                Colors.green),
+                                                          )
                                                               : Text(
-                                                                  'Hết hàng',
-                                                                  style: StyleApp
-                                                                      .textStyle500(
-                                                                          color:
-                                                                              Colors.red),
-                                                                ),
+                                                            'Hết hàng',
+                                                            style: StyleApp
+                                                                .textStyle500(
+                                                                color:
+                                                                Colors.red),
+                                                          ),
                                                           // Text(
                                                           //     'Số lượng : ${list[index].amount}',
                                                           //     style: StyleApp
@@ -1372,20 +1372,23 @@ class _AddNhanMayState extends State<AddNhanMay> {
                                                         ],
                                                       ),
                                                     )),
-                                                  );
-                                                },
-                                                shrinkWrap: true,
-                                                itemCount: list.length,
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                      return SizedBox();
-                                    },
-                                    bloc: blocDsLinhKien,
+                                              );
+                                            },
+                                            shrinkWrap: true,
+                                            itemCount: list.length,
+                                            physics:
+                                            NeverScrollableScrollPhysics(),
+                                          );
+                                        }
+                                        if(state is Loading){
+                                          return Text('Đang load, đợi xíu..');
+                                        }
+                                        if(state is LoadFail){
+                                          return Text(state.error);
+                                        }
+                                        return SizedBox();
+                                      },bloc: blocDsLinhKien,)
+                                    ],
                                   ),
                                 ),
                               );
@@ -1409,7 +1412,7 @@ class _AddNhanMayState extends State<AddNhanMay> {
                 listener: (_, StateBloc state) {
                   CheckLogState.check(context, state: state, msg: 'Thành công',
                       success: () {
-                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(index: 1,)));
                   });
                 },
                 child: Button1(

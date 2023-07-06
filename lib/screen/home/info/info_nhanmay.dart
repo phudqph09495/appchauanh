@@ -425,7 +425,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
     blocFullListPrd.add(GetData2());
     blocFullListKho.add(GetData());
     blocFullListNV.add(GetData());
-    blocDsLinhKien.add(GetData());
+
   }
 
   @override
@@ -1037,179 +1037,180 @@ for(var item in listt){
                                       width:
                                       MediaQuery.of(context).size.width * 0.8,
                                       child: SingleChildScrollView(
-                                        child: BlocBuilder(
-                                          builder: (_, StateBloc state) {
-                                            if (state is LoadSuccess) {
-                                              List<ModelLinkKien> list =
-                                                  state.data;
-                                              return SingleChildScrollView(
-                                                child: Column(
-                                                  children: [
-                                                    InputText1(
+                                        child: Column(
+                                          children: [
+                                            InputText1(
 
-                                                      controller: search,
-                                                      label: 'Tìm kiếm',
-                                                      hasLeading: true,
-                                                      suffix: InkWell(onTap: (){
-                                                        blocDsLinhKien.add(GetData(keySearch: search.text,id: khoID.toString()));
+                                              controller: search,
+                                              label: 'Tìm kiếm',
+                                              hasLeading: true,
+                                              suffix: InkWell(onTap: (){
+                                                blocDsLinhKien.add(GetData(keySearch: search.text,id: khoID.toString()));
 
-                                                      },child: Icon(Icons.search)),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    BlocBuilder(
-                                                      builder:
-                                                          (_, StateBloc state) {
-                                                        if (state
-                                                        is LoadSuccess) {
-                                                          List<ModelListKho>
-                                                          listKho =
-                                                              state.data;
-                                                          listKho.add(ModelListKho(name: 'Tất cả'));
-                                                          return PopupMenuButton(
+                                              },child: Icon(Icons.search)),
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            BlocBuilder(
+                                              builder:
+                                                  (_, StateBloc state) {
+                                                if (state
+                                                is LoadSuccess) {
+                                                  List<ModelListKho>
+                                                  listKho =
+                                                      state.data;
 
-                                                              child:Card(
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(khoName),
-                                                                      Icon(Icons.keyboard_arrow_down_rounded)
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              itemBuilder:
-                                                                  (context) {
-                                                                return List.generate(
-                                                                    listKho.length,
-                                                                        (index) =>
-                                                                        PopupMenuItem(
-                                                                            value: index,
-                                                                          onTap: (){
+                                                  return PopupMenuButton(
+
+                                                      child:Card(
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(khoName),
+                                                              Icon(Icons.keyboard_arrow_down_rounded)
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      itemBuilder:
+                                                          (context) {
+                                                        return List.generate(
+                                                            listKho.length,
+                                                                (index) =>
+                                                                PopupMenuItem(
+                                                                    value: index,
+                                                                    onTap: (){
                                                                       setState1((){
                                                                         khoName='${listKho[index].name}';
                                                                         listKho[index].id!=null?  khoID=listKho[index].id.toString():khoID='';
                                                                       });
                                                                       blocDsLinhKien.add(GetData(keySearch: search.text,id: khoID.toString()));
-                                                                          },
-                                                                            child: Text(
-                                                                                '${listKho[index].name}')));
-                                                              });
+                                                                    },
+                                                                    child: Text(
+                                                                        '${listKho[index].name}')));
+                                                      });
+                                                }
+                                                return SizedBox();
+                                              },
+                                              bloc: blocFullListKho,
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            BlocBuilder(builder: (_,StateBloc state){
+                                              if(state is LoadSuccess){
+                                                List<ModelLinkKien> list =
+                                                    state.data;
+                                                return    ListView.builder(
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return InkWell(
+                                                      onTap: () {
+                                                        if (list[index]
+                                                            .amount! >
+                                                            0) {
+                                                          modelInfoDVSC
+                                                              .productAttr!
+                                                              .productAttrMaterialAttr!
+                                                              .add(
+                                                              ProductAttrMaterialAttr(
+                                                                id: list[index].id,
+                                                                isApproved: 0,
+                                                                code: list[index]
+                                                                    .code,
+                                                                name: list[index]
+                                                                    .name,
+                                                                materialAttrId:
+                                                                list[index]
+                                                                    .id,
+                                                                importPrice: list[
+                                                                index]
+                                                                    .importPrice,
+                                                                amount: 1,
+                                                              ));
+                                                        } else {
+                                                          ScaffoldMessenger
+                                                              .of(context)
+                                                              .showSnackBar(
+                                                              SnackBar(
+                                                                  content:
+                                                                  Text('Linh kiện đã hết')));
                                                         }
-                                                        return SizedBox();
+
+                                                        setState(() {});
+                                                        Navigator.pop(
+                                                            context);
                                                       },
-                                                      bloc: blocFullListKho,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    ListView.builder(
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return InkWell(
-                                                          onTap: () {
-                                                            if (list[index]
-                                                                .amount! >
-                                                                0) {
-                                                              modelInfoDVSC
-                                                                  .productAttr!
-                                                                  .productAttrMaterialAttr!
-                                                                  .add(
-                                                                  ProductAttrMaterialAttr(
-                                                                    id: list[index].id,
-                                                                    isApproved: 0,
-                                                                    code: list[index]
-                                                                        .code,
-                                                                    name: list[index]
-                                                                        .name,
-                                                                    materialAttrId:
-                                                                    list[index]
-                                                                        .id,
-                                                                    importPrice: list[
-                                                                    index]
-                                                                        .importPrice,
-                                                                    amount: 1,
-                                                                  ));
-                                                            } else {
-                                                              ScaffoldMessenger
-                                                                  .of(context)
-                                                                  .showSnackBar(
-                                                                  SnackBar(
-                                                                      content:
-                                                                      Text('Linh kiện đã hết')));
-                                                            }
-
-                                                            setState(() {});
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Card(
-                                                              child: Padding(
-                                                                padding:
-                                                                const EdgeInsets
-                                                                    .all(5.0),
-                                                                child: Column(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                                  children: [
-                                                                    Text(
-                                                                      '${list[index].materialId!.code} - ${list[index].materialId!.name}',
-                                                                      style: StyleApp
-                                                                          .textStyle500(),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-
-                                                                    list[index].amount! >
-                                                                        0
-                                                                        ? Text(
-                                                                      'Còn hàng',
-                                                                      style: StyleApp.textStyle500(
-                                                                          color:
-                                                                          Colors.green),
-                                                                    )
-                                                                        : Text(
-                                                                      'Hết hàng',
-                                                                      style: StyleApp.textStyle500(
-                                                                          color:
-                                                                          Colors.red),
-                                                                    ),
-                                                                    // Text(
-                                                                    //     'Số lượng : ${list[index].amount}',
-                                                                    //     style: StyleApp
-                                                                    //         .textStyle500()),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Text(
-                                                                        'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
-                                                                        style: StyleApp
-                                                                            .textStyle500()),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-
-                                                                  ],
+                                                      child: Card(
+                                                          child: Padding(
+                                                            padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                              children: [
+                                                                Text(
+                                                                  '${list[index].materialId!.code} - ${list[index].materialId!.name}',
+                                                                  style: StyleApp
+                                                                      .textStyle500(),
                                                                 ),
-                                                              )),
-                                                        );
-                                                      },
-                                                      shrinkWrap: true,
-                                                      itemCount: list.length,
-                                                      physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            }
-                                            return SizedBox();
-                                          },
-                                          bloc: blocDsLinhKien,
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+
+                                                                list[index].amount! >
+                                                                    0
+                                                                    ? Text(
+                                                                  'Còn hàng',
+                                                                  style: StyleApp.textStyle500(
+                                                                      color:
+                                                                      Colors.green),
+                                                                )
+                                                                    : Text(
+                                                                  'Hết hàng',
+                                                                  style: StyleApp.textStyle500(
+                                                                      color:
+                                                                      Colors.red),
+                                                                ),
+                                                                // Text(
+                                                                //     'Số lượng : ${list[index].amount}',
+                                                                //     style: StyleApp
+                                                                //         .textStyle500()),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Text(
+                                                                    'Kho: ${list[index].warehouseId!.name} - ${list[index].warehouseId!.projectId!.name}',
+                                                                    style: StyleApp
+                                                                        .textStyle500()),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+
+                                                              ],
+                                                            ),
+                                                          )),
+                                                    );
+                                                  },
+                                                  shrinkWrap: true,
+                                                  itemCount: list.length,
+                                                  physics:
+                                                  NeverScrollableScrollPhysics(),
+                                                );
+                                              }
+                                              if(state is Loading){
+                                                return Text('Đang load, đợi xíu..');
+                                              }
+                                              if(state is LoadFail){
+                                                return Text(state.error);
+                                              }
+
+                                              return SizedBox();},bloc: blocDsLinhKien,)
+                                          ],
                                         ),
                                       ),
                                     );

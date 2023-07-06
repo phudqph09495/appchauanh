@@ -21,17 +21,24 @@ class BlocUpdateOrder extends Bloc<EventBloc, StateBloc> {
         req['productAttr_id']=event.id;
         req['status']=event.status;
         req['note']=event.note;
-        req['materialAttribute']=event.materialAttribute;
-        print(req);
+
+       List< Map<String, dynamic>> list= [];
+        // req['materialAttribute']=event.materialAttribute;
+
 for(var item in event.materialAttribute!){
-  print(item.id);
-  print(item.amount);
+  Map<String, dynamic> req1 = Map();
+  req1['id']=item.id;
+  req1['amount']=item.amount;
+  list.add(req1);
+
 }
 
+        req['materialAttribute']=list;
+        print(req);
         var res = await Api.postAsync(
             endPoint: ApiPath.updateJob, req: req, isToken: true,hasForm: false);
 
-print(res);
+
         if (res['status'] == true) {
 
 

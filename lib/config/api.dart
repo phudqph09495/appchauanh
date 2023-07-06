@@ -40,7 +40,7 @@ final dio = Dio()
         } else if (e.response?.statusCode == 500) {
           err = ModelApiError(
               code: e.response?.statusCode,
-              error: "Có lỗi hệ thống, bạn quay lại sau");
+              error: "Có lỗi Sever, bạn quay lại sau");
         } else {
           err = ModelApiError(
               code: e.response?.statusCode,

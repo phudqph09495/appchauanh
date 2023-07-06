@@ -21,7 +21,7 @@ class BlocDVSC extends Bloc<EventBloc, StateBloc> {
       try {
         var res = await Api.getAsync(
             endPoint:
-                '${ApiPath.dvsc}?search=${event.keySearch}&search_customer=${event.search_cus}&search_time=${event.search_time}&page=${event.page}',
+                '${ApiPath.dvsc}?search=${event.keySearch}&search_customer=${event.search_cus}&search_time=${event.search_time}&page=${event.page}&search_user=${event.search_user}',
             isToken: true);
 
         if (res['status'] == true) {

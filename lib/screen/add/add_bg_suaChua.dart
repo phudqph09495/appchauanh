@@ -74,7 +74,7 @@ class _ADD_BGSuaChuaState extends State<ADD_BGSuaChua> {
 
   TextEditingController note = TextEditingController();
   TextEditingController title = TextEditingController();
-  BlocDsLinhKien blocDsLinhKien = BlocDsLinhKien();
+
   int? proID;
   int? proATRID;
   int? warehouseID;
