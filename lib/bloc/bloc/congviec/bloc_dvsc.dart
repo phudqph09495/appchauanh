@@ -23,7 +23,7 @@ class BlocDVSC extends Bloc<EventBloc, StateBloc> {
             endPoint:
                 '${ApiPath.dvsc}?search=${event.keySearch}&search_customer=${event.search_cus}&search_time=${event.search_time}&page=${event.page}&search_user=${event.search_user}',
             isToken: true);
-
+print(res);
         if (res['status'] == true) {
           ModelDVSC model = ModelDVSC.fromJson(res['data']);
 

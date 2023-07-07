@@ -41,7 +41,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
   BlocDVSC blocDVSC4 = BlocDVSC();
   int b = 0;
   TextEditingController NV = TextEditingController();
-  int? userID;
+  String userID='';
   TextEditingController searchNV = TextEditingController();
   String thoigian = 'Tất cả';
   List<ModelLocal> thList = [
@@ -64,10 +64,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
     blocDVSC.add(GetData());
     blocFullListNV.add(GetData());
 
-    blocDVSC1.add(GetData(search_time: ''));
-    blocDVSC2.add(GetData(search_time: 'day'));
-    blocDVSC3.add(GetData(search_time: 'week'));
-    blocDVSC4.add(GetData(search_time: 'month'));
+
 
     _tabController = TabController(length: 8, vsync: this);
     _tabController2 = TabController(length: 4, vsync: this);
@@ -137,24 +134,7 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                                   search_cus: search_cus.text,
                                   search_time: time,
                                   page: page));
-                              blocDVSC1.add(GetData(
-                                  search_time: '',
-                                  keySearch: trangThai,
-                                  search_cus: search_cus.text));
-                              blocDVSC2.add(GetData(
-                                  search_time: 'day',
-                                  keySearch: trangThai,
-                                  search_cus: search_cus.text));
 
-                              blocDVSC3.add(GetData(
-                                  search_time: 'week',
-                                  keySearch: trangThai,
-                                  search_cus: search_cus.text));
-
-                              blocDVSC4.add(GetData(
-                                  search_time: 'month',
-                                  keySearch: trangThai,
-                                  search_cus: search_cus.text));
                             },
                           ),
                           colorLabel: Color(0xffF3F3F3),
@@ -209,25 +189,8 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         search_cus: search_cus.text,
                         search_time: time,
                         page: page,
-                        search_user: userID.toString()));
-                    blocDVSC1.add(GetData(
-                        search_time: '',
-                        keySearch: trangThai,
-                        search_cus: search_cus.text));
-                    blocDVSC2.add(GetData(
-                        search_time: 'day',
-                        keySearch: trangThai,
-                        search_cus: search_cus.text));
+                        search_user: userID));
 
-                    blocDVSC3.add(GetData(
-                        search_time: 'week',
-                        keySearch: trangThai,
-                        search_cus: search_cus.text));
-
-                    blocDVSC4.add(GetData(
-                        search_time: 'month',
-                        keySearch: trangThai,
-                        search_cus: search_cus.text));
                   },
                   isScrollable: true,
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -579,7 +542,7 @@ SizedBox(height: 20,),
                                                           NV.text =
                                                               list[index].fullName ??
                                                                   '';
-                                                          userID = list[index].id;
+                                                          userID = list[index].id.toString();
                                                           setState(() {
                                                             page = 1;
                                                           });
@@ -648,7 +611,7 @@ SizedBox(height: 20,),
                                           page: page,
                                           search_cus: search_cus.text,
                                           search_time: time,
-                                          search_user: userID.toString()));
+                                          search_user: userID));
                                     },
                                     child: Text('${thList[index].name}')));
                           }),
@@ -702,7 +665,7 @@ SizedBox(height: 20,),
                                             page: page,
                                             search_cus: search_cus.text,
                                             search_time: time,
-                                            search_user: userID.toString()));
+                                            search_user: userID));
                                       },
                                     )
                                   : Icon(Icons.arrow_forward_ios,
@@ -763,6 +726,7 @@ SizedBox(height: 20,),
                                       GetData(
                                           keySearch: trangThai,
                                           page: page,
+                                          search_user: userID,
                                           search_cus: search_cus.text,
                                           search_time: time)));
                                 },
