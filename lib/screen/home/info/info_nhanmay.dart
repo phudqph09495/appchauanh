@@ -411,6 +411,9 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
   BlocDsLinhKien blocDsLinhKien = BlocDsLinhKien();
   ModelInfoDVSC modelInfoDVSC = ModelInfoDVSC();
 
+
+
+
   Future<Uint8List> generatePdf(String name, String address, String sdt,
       String model, String seri, String tingTr, String note) async {
     final font = await PdfGoogleFonts.beVietnamProRegular();
@@ -418,6 +421,7 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
 
     pdf.addPage(
       pw.Page(
+
         build: (pw.Context context) {
           return pw.Padding(
               padding: pw.EdgeInsets.all(8),
@@ -1319,6 +1323,8 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                           '${note.text}',
                         );
                         await Printing.layoutPdf(
+                          format: const PdfPageFormat(5*PdfPageFormat.cm,7.5*PdfPageFormat.cm),
+                          usePrinterSettings: true,
                             onLayout: (PdfPageFormat format) => pdfBytes);
                         // Page
                       },

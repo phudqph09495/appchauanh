@@ -35,10 +35,14 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
   BlocDVSC blocDVSC = BlocDVSC();
 
   int page = 1;
+  BlocDVSC blocDVSC0 = BlocDVSC();
   BlocDVSC blocDVSC1 = BlocDVSC();
   BlocDVSC blocDVSC2 = BlocDVSC();
   BlocDVSC blocDVSC3 = BlocDVSC();
   BlocDVSC blocDVSC4 = BlocDVSC();
+  BlocDVSC blocDVSC5 = BlocDVSC();
+  BlocDVSC blocDVSC6 = BlocDVSC();
+  BlocDVSC blocDVSC7 = BlocDVSC();
   int b = 0;
   TextEditingController NV = TextEditingController();
   String userID='';
@@ -47,8 +51,8 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
   List<ModelLocal> thList = [
     ModelLocal(id: '', name: 'Tất cả'),
     ModelLocal(id: 'day', name: 'Ngày'),
-    ModelLocal(id: 'month', name: 'Tuần'),
-    ModelLocal(id: 'week', name: 'Tháng')
+    ModelLocal(id: 'week', name: 'Tuần'),
+    ModelLocal(id: 'month', name: 'Tháng')
   ];
   BlocFullListNV blocFullListNV = BlocFullListNV();
   DateTime? TimeStart;
@@ -63,6 +67,16 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
     b = 0;
     blocDVSC.add(GetData());
     blocFullListNV.add(GetData());
+
+
+    blocDVSC0.add(GetData(keySearch: ''));
+    blocDVSC1.add(GetData(keySearch: '1'));
+    blocDVSC2.add(GetData(keySearch: '2'));
+    blocDVSC3.add(GetData(keySearch: '3'));
+    blocDVSC4.add(GetData(keySearch: '4'));
+    blocDVSC5.add(GetData(keySearch: '5'));
+    blocDVSC6.add(GetData(keySearch: '6'));
+    blocDVSC7.add(GetData(keySearch: '7'));
 
 
 
@@ -134,6 +148,55 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                                   search_cus: search_cus.text,
                                   search_time: time,
                                   page: page));
+
+                              blocDVSC0.add(GetData(
+                                  keySearch: '',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC1.add(GetData(
+                                  keySearch: '1',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC2.add(GetData(
+                                  keySearch: '2',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC3.add(GetData(
+                                  keySearch: '3',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC4.add(GetData(
+                                  keySearch: '4',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC5.add(GetData(
+                                  keySearch: '5',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC6.add(GetData(
+                                  keySearch: '6',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
+                              blocDVSC7.add(GetData(
+                                  keySearch: '7',
+                                  search_cus: search_cus.text,
+                                  search_time: time,
+                                  page: page,
+                                  search_user: userID));
 
                             },
                           ),
@@ -214,14 +277,14 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                              'Tất cả(${model.total![0].total})',
+                              'Tất cả(${model.productAttrs!.total})',
                               style:
                                   StyleApp.textStyle700(color: ColorApp.blue00),
                             );
                           }
                           return Text('Tất cả');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC0,
                       ),
                     ),
                     Tab(
@@ -230,13 +293,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Đang xử lý(${model.total![0].dangXuLy})',
+                                'Đang xử lý(${model.productAttrs!.total})',
                                 style: StyleApp.textStyle700(
                                     color: ColorApp.blue8F));
                           }
                           return Text('Đang xử lý');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC1,
                       ),
                     ),
                     Tab(
@@ -244,13 +307,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         builder: (_, StateBloc state) {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
-                            return Text('Đã xử lý(${model.total![0].daXuLy})',
+                            return Text('Đã xử lý(${model.productAttrs!.total})',
                                 style: StyleApp.textStyle700(
                                     color: ColorApp.black));
                           }
                           return Text('Đã xử lý');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC2,
                       ),
                     ),
                     Tab(
@@ -259,13 +322,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Chờ linh kiện(${model.total![0].choLinhKien})',
+                                'Chờ linh kiện(${model.productAttrs!.total})',
                                 style:
                                     StyleApp.textStyle700(color: ColorApp.red));
                           }
                           return Text('Chờ linh kiện');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC3,
                       ),
                     ),
                     Tab(
@@ -274,13 +337,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Không sửa được(${model.total![0].khongSuaDuoc})',
+                                'Không sửa được(${model.productAttrs!.total})',
                                 style: StyleApp.textStyle700(
                                     color: ColorApp.orangeF0));
                           }
                           return Text('Không sửa được');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC4,
                       ),
                     ),
                     Tab(
@@ -289,13 +352,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Máy nhà mua(${model.total![0].nhaMua})',
+                                'Máy nhà mua(${model.productAttrs!.total})',
                                 style: StyleApp.textStyle700(
                                     color: ColorApp.grey8B));
                           }
                           return Text('Máy nhà mua');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC5,
                       ),
                     ),
                     Tab(
@@ -303,13 +366,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                         builder: (_, StateBloc state) {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
-                            return Text('Bảo hành(${model.total![0].baoHanh})',
+                            return Text('Bảo hành(${model.productAttrs!.total})',
                                 style:
                                     StyleApp.textStyle700(color: Colors.green));
                           }
                           return Text('Bảo hành');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC6,
                       ),
                     ),
                     Tab(
@@ -318,13 +381,13 @@ class _WorkScreenState extends State<WorkScreen> with TickerProviderStateMixin {
                           if (state is LoadSuccess) {
                             ModelDVSC model = state.data;
                             return Text(
-                                'Hoàn thành(${model.total![0].hoanThanh})',
+                                'Hoàn thành(${model.productAttrs!.total})',
                                 style: StyleApp.textStyle700(
                                     color: ColorApp.blue00));
                           }
                           return Text('Hoàn thành');
                         },
-                        bloc: blocDVSC,
+                        bloc: blocDVSC7,
                       ),
                     ),
                   ],
@@ -509,6 +572,55 @@ SizedBox(height: 20,),
                                                           search_cus: search_cus.text,
                                                           search_time: time,
                                                           search_user: ''));
+
+                                                      blocDVSC0.add(GetData(
+                                                          keySearch: '',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC1.add(GetData(
+                                                          keySearch: '1',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC2.add(GetData(
+                                                          keySearch: '2',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC3.add(GetData(
+                                                          keySearch: '3',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC4.add(GetData(
+                                                          keySearch: '4',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC5.add(GetData(
+                                                          keySearch: '5',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC6.add(GetData(
+                                                          keySearch: '6',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
+                                                      blocDVSC7.add(GetData(
+                                                          keySearch: '7',
+                                                          page: page,
+                                                          search_cus: search_cus.text,
+                                                          search_time: time,
+                                                          search_user: ''));
                                                       Navigator.pop(context);
                                                     },
                                                     child: Card(
@@ -554,6 +666,72 @@ SizedBox(height: 20,),
                                                               search_time: time,
                                                               search_user:
                                                                   userID.toString()));
+
+
+                                                          blocDVSC0.add(GetData(
+                                                              keySearch: '',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC1.add(GetData(
+                                                              keySearch: '1',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC2.add(GetData(
+                                                              keySearch: '2',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC3.add(GetData(
+                                                              keySearch: '3',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC4.add(GetData(
+                                                              keySearch: '4',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC5.add(GetData(
+                                                              keySearch: '5',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC6.add(GetData(
+                                                              keySearch: '6',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
+                                                          blocDVSC7.add(GetData(
+                                                              keySearch: '7',
+                                                              page: page,
+                                                              search_cus:
+                                                              search_cus.text,
+                                                              search_time: time,
+                                                              search_user:
+                                                              userID.toString()));
                                                           Navigator.pop(context);
                                                         },
                                                       );
@@ -612,6 +790,56 @@ SizedBox(height: 20,),
                                           search_cus: search_cus.text,
                                           search_time: time,
                                           search_user: userID));
+
+
+                                      blocDVSC0.add(GetData(
+                                          keySearch: '',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC1.add(GetData(
+                                          keySearch: '1',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC2.add(GetData(
+                                          keySearch: '2',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC3.add(GetData(
+                                          keySearch: '3',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC4.add(GetData(
+                                          keySearch: '4',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC5.add(GetData(
+                                          keySearch: '5',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC6.add(GetData(
+                                          keySearch: '6',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
+                                      blocDVSC7.add(GetData(
+                                          keySearch: '7',
+                                          page: page,
+                                          search_cus: search_cus.text,
+                                          search_time: time,
+                                          search_user: userID));
                                     },
                                     child: Text('${thList[index].name}')));
                           }),
@@ -647,6 +875,8 @@ SizedBox(height: 20,),
                                             search_cus: search_cus.text,
                                             search_time: time,
                                             search_user: userID.toString()));
+
+
                                       },
                                     )
                                   : Icon(Icons.arrow_back_ios_outlined,
