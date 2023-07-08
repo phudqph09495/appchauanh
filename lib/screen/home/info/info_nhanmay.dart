@@ -384,7 +384,7 @@ import '../../../widget/item/input/text_filed.dart';
 import '../../add/add_baogia.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
-
+import 'package:share_plus/share_plus.dart';
 import 'package:printing/printing.dart';
 
 class InfoNhanMay extends StatefulWidget {
@@ -423,30 +423,29 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
       pw.Page(
 
         build: (pw.Context context) {
-          return pw.Padding(
-              padding: pw.EdgeInsets.all(8),
-              child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start,children: [
-                pw.Text('Họ tên: ${name}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-                pw.Text('Địa chỉ: ${address}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-                pw.Text('SĐT: ${sdt}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-                pw.Text('Model: ${model}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-                pw.Text('Seri: ${seri}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-                pw.Text('Tình trạng nhận máy: ${tingTr}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-                pw.Text('Ghi Chú: ${note}',style: pw.TextStyle(font: font)),
-                pw.SizedBox(height: 5),
-              ]));
+          return pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start,children: [
+            pw.Text('Họ tên: ${name}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+            pw.Text('Địa chỉ: ${address}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+            pw.Text('SĐT: ${sdt}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+            pw.Text('Model: ${model}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+            pw.Text('Seri: ${seri}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+            pw.Text('Tình trạng nhận máy: ${tingTr}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+            pw.Text('Ghi Chú: ${note}',style: pw.TextStyle(font: font,fontSize: 30)),
+            pw.SizedBox(height: 5),
+          ]);
         },
       ),
     );
 
     return pdf.save();
   }
+
 
   List<ModelLocal> listt = [
     ModelLocal(id: '1', name: 'Đang xử lý', color: ColorApp.blue00),
@@ -1312,20 +1311,87 @@ class _InfoNhanMayState extends State<InfoNhanMay> {
                           ),
                         ),
                       ),
-                      onTap: () async {
-                        final Uint8List pdfBytes = await generatePdf(
-                          '${modelInfoDVSC.productAttr!.customerName}',
-                          '${modelInfoDVSC.productAttr!.customerAddress}',
-                          '${modelInfoDVSC.productAttr!.customerPhone}',
-                          '${modelInfoDVSC.productAttr!.imei}',
-                          '${modelInfoDVSC.productAttr!.serial}',
-                          '${modelInfoDVSC.productAttr!.title}',
-                          '${note.text}',
-                        );
-                        await Printing.layoutPdf(
-                          format: const PdfPageFormat(5*PdfPageFormat.cm,7.5*PdfPageFormat.cm),
-                          usePrinterSettings: true,
-                            onLayout: (PdfPageFormat format) => pdfBytes);
+                      onTap: ()  {
+                        showDialog(context: context, builder: (context){
+                          return AlertDialog(
+                            content: Text('In hoá đơn'),
+                            actions: <Widget>[
+                              TextButton(
+                                style: TextButton.styleFrom(
+
+                                  textStyle: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                child: const Text('Cỡ to'),
+                                onPressed: ()async {
+                                  final Uint8List pdfBytes = await generatePdf(
+                                    '${modelInfoDVSC.productAttr!.customerName}',
+                                    '${modelInfoDVSC.productAttr!.customerAddress}',
+                                    '${modelInfoDVSC.productAttr!.customerPhone}',
+                                    '${modelInfoDVSC.productAttr!.imei}',
+                                    '${modelInfoDVSC.productAttr!.serial}',
+                                    '${modelInfoDVSC.productAttr!.title}',
+                                    '${note.text}',
+                                  );
+                                  await Printing.layoutPdf(
+                                    format: PdfPageFormat.a4,
+                                    usePrinterSettings: true,
+                                      onLayout: (PdfPageFormat format) => pdfBytes);
+                                  // Page
+                                },
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                child: const Text('Cỡ nhỏ'),
+                                onPressed: ()async {
+                                  final Uint8List pdfBytes = await generatePdf(
+                                    '${modelInfoDVSC.productAttr!.customerName}',
+                                    '${modelInfoDVSC.productAttr!.customerAddress}',
+                                    '${modelInfoDVSC.productAttr!.customerPhone}',
+                                    '${modelInfoDVSC.productAttr!.imei}',
+                                    '${modelInfoDVSC.productAttr!.serial}',
+                                    '${modelInfoDVSC.productAttr!.title}',
+                                    '${note.text}',
+                                  );
+
+                                  await Printing.sharePdf(bytes: pdfBytes);
+
+
+
+             //                      Share.share('''
+             // Họ tên: ${modelInfoDVSC.productAttr!.customerName}
+             //
+             // Địa chỉ: ${modelInfoDVSC.productAttr!.customerAddress}
+             //
+             // Mã KH: ${modelInfoDVSC.productAttr!.customerCode}
+             //
+             // Model: ${modelInfoDVSC.productAttr!.imei}
+             //
+             // Seri: ${modelInfoDVSC.productAttr!.serial}
+             //
+             // Tình trạng: ${modelInfoDVSC.productAttr!.title}
+             //
+             // Ghi Chú: ${note.text}
+             //                      ''');
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                        // final Uint8List pdfBytes = await generatePdf(
+                        //   '${modelInfoDVSC.productAttr!.customerName}',
+                        //   '${modelInfoDVSC.productAttr!.customerAddress}',
+                        //   '${modelInfoDVSC.productAttr!.customerPhone}',
+                        //   '${modelInfoDVSC.productAttr!.imei}',
+                        //   '${modelInfoDVSC.productAttr!.serial}',
+                        //   '${modelInfoDVSC.productAttr!.title}',
+                        //   '${note.text}',
+                        // );
+                        // await Printing.layoutPdf(
+                        //   format: const PdfPageFormat(5*PdfPageFormat.cm,7.5*PdfPageFormat.cm),
+                        //   usePrinterSettings: true,
+                        //     onLayout: (PdfPageFormat format) => pdfBytes);
                         // Page
                       },
                     ),
