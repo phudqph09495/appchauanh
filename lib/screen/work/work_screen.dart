@@ -563,6 +563,7 @@ SizedBox(height: 20,),
                                                   InkWell(
                                                     onTap: () {
                                                       NV.text = 'Tất cả';
+                                                      userID='';
                                                       setState(() {
                                                         page = 1;
                                                       });
@@ -571,7 +572,7 @@ SizedBox(height: 20,),
                                                           page: page,
                                                           search_cus: search_cus.text,
                                                           search_time: time,
-                                                          search_user: ''));
+                                                          search_user: userID));
 
                                                       blocDVSC0.add(GetData(
                                                           keySearch: '',
